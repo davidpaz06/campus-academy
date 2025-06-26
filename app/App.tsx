@@ -1,10 +1,15 @@
 import "./App.css";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import AppRouter from "./router";
 
 function App() {
   return (
-    <div className="bg-blue-400">
-      <h1 className=" text-amber-300"> Header One</h1>
-    </div>
+    <ThemeProvider>
+      <AuthProvider>
+        <AppRouter />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
