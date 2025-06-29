@@ -1,7 +1,7 @@
-import "./App.css";
-import { AuthProvider } from "./contexts/AuthContext";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import AppRouter from "./router";
+import "@/App.css";
+import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
+import AppRouter from "@/router";
 
 function App() {
   return (
