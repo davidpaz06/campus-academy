@@ -18,8 +18,8 @@ const Navbar = () => {
         >
           {theme === "light" ? "🌙" : "☀️"}
         </button>
-        {!isAuthenticated && <Link to="/login">Login</Link>}
-        {!isAuthenticated && <Link to="/register">Register</Link>}
+        {!isAuthenticated && <Link to="/signin">signin</Link>}
+        {!isAuthenticated && <Link to="/signup">signup</Link>}
         {isAuthenticated && <Link to="/dashboard">Dashboard</Link>}
       </div>
     </nav>
