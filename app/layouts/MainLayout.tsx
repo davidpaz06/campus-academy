@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 const MainLayout = ({ children }: { children: ReactNode }) => (
   <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
