@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 const Login = () => {
   const { login } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -12,29 +12,31 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-blue-400">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-80">
-        <h2 className="text-2xl font-bold mb-4 text-blue-600">Iniciar sesión</h2>
+    <div className="login-container flex flex-col items-center justify-center">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4"
+        style={{ width: "500px" }}
+      >
+        <h2>Iniciar sesión</h2>
         <input
           type="email"
           placeholder="Email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
-          className="w-full p-2 mb-4 border rounded"
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input
           type="password"
           placeholder="Contraseña"
           value={password}
-          onChange={e => setPassword(e.target.value)}
-          className="w-full p-2 mb-4 border rounded"
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Entrar</button>
-        <a href="/register" className="block mt-4 text-blue-600 hover:underline text-center">¿No tienes cuenta? Regístrate</a>
+        <button type="submit">Entrar</button>
+        <a href="/register">¿No tienes cuenta? Regístrate</a>
       </form>
-      <a href="/" className="mt-4 text-white underline">Volver al inicio</a>
+      <a href="/">Volver al inicio</a>
     </div>
   );
 };
