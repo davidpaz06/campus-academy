@@ -8,7 +8,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  signin: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -18,7 +18,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const signin = async (email: string, password: string) => {
+  const login = async (email: string, password: string) => {
+    console.log(password);
     setUser({ id: "1", email });
   };
 
@@ -26,7 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, signin, logout, isAuthenticated: !!user }}
+      value={{ user, login, logout, isAuthenticated: !!user }}
     >
       {children}
     </AuthContext.Provider>
