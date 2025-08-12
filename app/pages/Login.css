@@ -1,0 +1,120 @@
+.login-card {
+  width: 600px;
+  border-radius: var(--radius);
+  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  max-width: 95vw;
+  box-sizing: border-box;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.login-title {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-sm);
+  color: var(--charlestone-green);
+}
+
+.login-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.login-group input {
+  border: 1px solid #bbb;
+  border-radius: var(--radius);
+  font-size: var(--font-size-p);
+  background: #fff;
+}
+
+.login-group label {
+  font-size: var(--font-size-p);
+  color: var(--charlestone-green);
+  font-weight: var(--font-weight-medium);
+}
+
+.login-group input {
+  padding: 0.7rem 1rem;
+  border: 1px solid #bbb;
+  border-radius: var(--radius);
+  font-size: var(--font-size-p);
+  background: #fff;
+  color: var(--charlestone-green);
+  box-shadow: none;
+  outline: none;
+}
+
+/* Eliminar estilos de autofill/autocomplete en Chrome, Edge, Safari */
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #fff inset !important;
+  box-shadow: 0 0 0 1000px #fff inset !important;
+  -webkit-text-fill-color: var(--charlestone-green) !important;
+  color: var(--charlestone-green) !important;
+  border: 1px solid #bbb !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-internal-autofill-selected {
+  background-color: #fff !important;
+  color: var(--charlestone-green) !important;
+  border: 1px solid #bbb !important;
+}
+
+.login-options {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.remember-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-p);
+  color: var(--charlestone-green);
+}
+
+.login-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.login-btn {
+  background: var(--charlestone-green);
+  color: #fff;
+  font-size: var(--font-size-p);
+  font-weight: var(--font-weight-medium);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.7rem 2.2rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-btn:hover {
+  background: #444;
+}
+
+.login-footer {
+  padding: 1rem 0;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.login-footer p {
+  margin: 0;
+  font-size: var(--font-size-p);
+  color: var(--charlestone-green);
+}
+.login-footer a {
+  color: #217aef;
+  text-decoration: none;
+}
