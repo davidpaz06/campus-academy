@@ -14,6 +14,7 @@ const PublicLayout: React.FC = () => {
       }}
     >
       <header
+        className="color-stripe"
         style={{
           gridRow: "1",
           gridColumn: "1",
@@ -24,12 +25,14 @@ const PublicLayout: React.FC = () => {
       </header>
       <main
         style={{
-          gridRow: "2",
-          gridColumn: "1",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          gridRow: "2",
+          gridColumn: "1",
+          overflowX: "hidden",
+          overflowY: "auto",
+          scrollbarWidth: "thin",
+          scrollbarColor: "var(--charlestone-green) transparent",
         }}
       >
         <Outlet />

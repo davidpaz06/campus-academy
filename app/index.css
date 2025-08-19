@@ -1,14 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
 @import "tailwindcss";
-/* @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"); */
 
 :root {
   /* Fuentes */
   --font-primary: "Montserrat", sans-serif;
   --font-secondary: "Poppins", sans-serif;
-  font-family: var(--font-primary);
-  line-height: 1.5;
-  font-weight: 400;
 
   /* Academy Module Colors */
   --academy-primary: #217aef;
@@ -53,6 +51,9 @@
   color-scheme: light dark;
   color: var(--text-primary);
   background-color: var(--background-light);
+  font-family: var(--font-primary);
+  line-height: 1.5;
+  font-weight: 400;
 }
 
 body {
@@ -64,18 +65,23 @@ body {
   color: var(--text-primary);
 }
 
-/* Color Stripe: Borde inferior dividido en 4 colores sólidos usando pseudo-elemento */
+header {
+  box-sizing: border-box;
+  transition: all 0.5s ease;
+}
+
 .color-stripe {
   position: relative;
-  background: transparent;
+  border-bottom: 5px solid transparent;
 }
+
 .color-stripe::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 5px;
+  height: 5px; /* grosor del stripe */
   background: linear-gradient(
     to right,
     #217aef 0%,
@@ -87,6 +93,26 @@ body {
     #ff3b30 75%,
     #ff3b30 100%
   );
+  pointer-events: none;
   z-index: 1;
-  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+h1 {
+  font-size: 2.25em; /* 36px */
+  font-weight: var(--font-weight-bold);
+}
+
+h2 {
+  font-size: 1.75em; /* 28px */
+  font-weight: var(--font-weight-bold);
+}
+
+h3 {
+  font-size: 1.5em; /* 24px */
+  font-weight: var(--font-weight-medium);
+}
+
+p {
+  font-size: 1em; /* 16px */
+  font-weight: var(--font-weight-regular);
 }

@@ -3,7 +3,7 @@ import "./ExternalHeader.css";
 
 const ExternalHeader = () => {
   return (
-    <header className="external-header color-stripe">
+    <header className="external-header">
       <div className="header-content">
         <div className="logo-section">
           <Link to="/" className="logo-link">
