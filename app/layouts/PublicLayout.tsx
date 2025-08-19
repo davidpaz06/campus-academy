@@ -32,7 +32,7 @@ const PublicLayout: React.FC = () => {
           overflowX: "hidden",
           overflowY: "auto",
           scrollbarWidth: "thin",
-          scrollbarColor: "var(--charlestone-green) transparent",
+          scrollbarColor: "var(--charlestone-green) #f1f1f1",
         }}
       >
         <Outlet />
