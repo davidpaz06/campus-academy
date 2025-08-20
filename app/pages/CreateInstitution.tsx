@@ -1,27 +1,11 @@
 import { useState } from "react";
+import type { Register } from "../interfaces/register";
 import Card from "../components/Card";
+import Footer from "../components/layout/Footer";
 import "./CreateInstitution.css";
 
 const CreateInstitution = () => {
-  const [form, setForm] = useState({
-    firstName: "",
-    surname: "",
-    institutionName: "",
-    role: "",
-    institutionType: "",
-    gradingSystem: "",
-    description: "",
-    country: "",
-    region: "",
-    city: "",
-    address: "",
-    businessMail: "",
-    phone: "",
-    website: "",
-    instagram: "",
-    facebook: "",
-    twitter: "",
-  });
+  const [form, setForm] = useState<Partial<Register>>({});
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -33,7 +17,7 @@ const CreateInstitution = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Form submitted!"); // Replace with actual submission logic
+    alert(JSON.stringify(form, null, 2));
   };
 
   return (
@@ -69,34 +53,38 @@ const CreateInstitution = () => {
             <form onSubmit={handleSubmit}>
               <div className="form-row">
                 <input
-                  name="firstName"
+                  name="person_first_name"
                   placeholder="First Name"
-                  value={form.firstName}
+                  value={form.person_first_name}
                   onChange={handleChange}
                 />
                 <input
-                  name="surname"
+                  name="person_surname"
                   placeholder="Surname"
-                  value={form.surname}
+                  value={form.person_surname}
                   onChange={handleChange}
                 />
               </div>
               <input
-                name="institutionName"
+                name="institution_name"
                 placeholder="Institution name"
-                value={form.institutionName}
+                value={form.institution_name}
                 onChange={handleChange}
               />
-              <select name="role" value={form.role} onChange={handleChange}>
+              <select
+                name="profile_id"
+                value={form.profile_id}
+                onChange={handleChange}
+              >
                 <option value="">Select role</option>
-                <option value="Student">Student</option>
-                <option value="Teacher">Teacher</option>
-                <option value="Admin">Admin</option>
+                <option value="1">Student</option>
+                <option value="2">Teacher</option>
+                <option value="3">Admin</option>
               </select>
               <div className="form-row">
                 <select
-                  name="institutionType"
-                  value={form.institutionType}
+                  name="institution_type"
+                  value={form.institution_type}
                   onChange={handleChange}
                 >
                   <option value="">Select institution type</option>
@@ -104,8 +92,8 @@ const CreateInstitution = () => {
                   {/* Más opciones se agregarán desde la BDD */}
                 </select>
                 <select
-                  name="gradingSystem"
-                  value={form.gradingSystem}
+                  name="grading_system"
+                  value={form.grading_system}
                   onChange={handleChange}
                 >
                   <option value="">Select grading system</option>
@@ -114,9 +102,9 @@ const CreateInstitution = () => {
                 </select>
               </div>
               <textarea
-                name="description"
+                name="institution_description"
                 placeholder="Institution description (optional)"
-                value={form.description}
+                value={form.institution_description}
                 onChange={handleChange}
               />
             </form>
@@ -162,12 +150,11 @@ const CreateInstitution = () => {
                 />
               </div>
               <input
-                name="businessMail"
-                placeholder="Business Mail"
-                value={form.businessMail}
+                name="business_email"
+                placeholder="Business Email"
+                value={form.business_email}
                 onChange={handleChange}
               />
-
               <input
                 name="phone"
                 placeholder="Phone"
@@ -242,39 +229,7 @@ const CreateInstitution = () => {
           </p>
         </div>
       </div>
-      <footer>
-        <div className="footer-columns">
-          <div>
-            <strong>Products</strong>
-            <ul>
-              <li>Campus Academy</li>
-              <li>Campus Threads</li>
-              <li>Campus Schedule</li>
-              <li>Campus Metrics</li>
-              <li>Campus Data</li>
-            </ul>
-          </div>
-          <div>
-            <strong>Company</strong>
-            <ul>
-              <li>About</li>
-              <li>Contact us</li>
-              <li>Blog</li>
-            </ul>
-          </div>
-          <div>
-            <strong>Social</strong>
-            <ul>
-              <li>Instagram</li>
-              <li>Twitter</li>
-              <li>Youtube</li>
-            </ul>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          All rights reserved, Lodestar Solutions. 2025
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

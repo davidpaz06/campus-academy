@@ -51,10 +51,6 @@ const Register = () => {
     };
   }, [selectedRole]);
 
-  const handleContinue = () => {
-    // Aquí podrías navegar o mostrar el formulario según el rol
-  };
-
   switch (selectedRole) {
     case "school":
       return <CreateInstitution />;
