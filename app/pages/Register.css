@@ -1,0 +1,76 @@
+.register-role-container {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-role-card {
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--background-snow);
+  border-radius: var(--radius);
+  border: 3px solid var(--charlestone-green);
+  padding: var(--spacing-xl);
+}
+
+.register-role-title {
+  justify-self: flex-start;
+  font-size: var(--font-size-h1);
+  color: var(--charlestone-green);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-xl);
+}
+
+.register-role-options {
+  display: flex;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+  height: 200px;
+}
+
+.option-icon {
+  width: 80px;
+  height: 80px;
+  color: var(--charlestone-green);
+}
+
+.register-role-btn {
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px #2221;
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  height: 200px;
+  width: 200px;
+  transition: all 0.15s ease;
+}
+
+.register-role-label {
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-h2);
+  margin-top: var(--spacing-md);
+  color: var(--charlestone-green);
+}
+
+.register-role-btn:hover {
+  transform: translateY(-1px);
+  border-color: #999999;
+
+  .option-icon {
+    color: #303030;
+  }
+  .register-role-label {
+    color: #303030;
+  }
+}

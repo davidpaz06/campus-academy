@@ -1,0 +1,215 @@
+.create-institution-header {
+  border-bottom: 2px solid #808080;
+  background-color: var(--background-snow);
+}
+.create-institution-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-institution-content {
+  align-self: flex-start;
+  justify-self: flex-start;
+  height: 100%;
+  overflow-y: auto;
+  padding: 2rem;
+  background-color: var(--background-snow);
+}
+
+.institution-section {
+  display: flex;
+  height: 70vh;
+  padding: 1rem 3rem;
+  gap: 5rem;
+  margin-bottom: 2rem;
+}
+
+.institution-info {
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+  gap: 1rem;
+}
+
+.institution-card {
+  background: var(--background-lightblue);
+  border: 2px solid #bdbdbd;
+  border-radius: var(--radius);
+  padding: 2rem 1.5rem;
+  box-shadow: 0 2px 8px #0001;
+  width: 100%;
+  max-width: 700px;
+  max-height: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.institution-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.institution-card input,
+.institution-card textarea,
+.institution-card select {
+  background: #fff;
+  border: 1px solid #bdbdbd;
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.institution-card input:focus,
+.institution-card textarea:focus,
+.institution-card select:focus {
+  outline: none;
+  border-color: #217aef;
+  background: #f0f6ff;
+}
+
+.institution-card label {
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+
+.institution-card textarea {
+  min-height: 40px;
+  resize: vertical;
+}
+
+/* Location Section */
+
+.location-section {
+  display: flex;
+  padding: 1rem 3rem;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.location-card {
+  background: var(--background-lightblue);
+  border: 2px solid #bdbdbd;
+  border-radius: var(--radius);
+  padding: 2rem 1.5rem;
+  box-shadow: 0 2px 8px #0001;
+  width: 100%;
+  max-width: 700px;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.location-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.location-card select {
+  background: #fff;
+  border: 1px solid #bdbdbd;
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.location-card select:focus {
+  outline: none;
+  border-color: #217aef;
+  background: #f0f6ff;
+}
+
+.location-card input,
+.location-card select {
+  background: #fff;
+  border: 1px solid #bdbdbd;
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.location-card input:focus,
+.location-card select:focus {
+  outline: none;
+  border-color: #217aef;
+  background: #f0f6ff;
+}
+
+.location-info {
+  width: 40%;
+  margin-top: 2rem;
+  line-height: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.benefits-list {
+  list-style-type: none;
+  padding-left: 2rem;
+}
+
+.submit-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 2rem;
+}
+
+.submit-section h2 {
+  text-align: center;
+  width: 30%;
+  margin: 2rem 0;
+  align-self: center;
+}
+
+.send-btn {
+  align-self: center;
+  background: var(--threads-primary);
+  color: white;
+  border: none;
+  width: 120px;
+  border-radius: var(--radius);
+  padding: 0.2rem 1.2rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.send-btn:hover {
+  background: var(--threads-secondary);
+}
+
+.footer {
+  margin: 5rem 4rem 2rem;
+  color: #808080;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.footer-columns {
+  display: flex;
+  justify-content: space-around;
+}
+
+.footer-bottom {
+  text-align: center;
+}

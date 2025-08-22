@@ -1,13 +1,59 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
 @import "tailwindcss";
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Fuentes */
+  --font-primary: "Montserrat", sans-serif;
+  --font-secondary: "Poppins", sans-serif;
+
+  /* Academy Module Colors */
+  --academy-primary: #217aef;
+  --academy-secondary: #1753a2;
+
+  /* Threads Module Colors */
+  --threads-primary: #14ae5c;
+  --threads-secondary: #0f702e;
+
+  /* Typography Scale */
+  --font-size-h1: 2.25rem; /* 36px */
+  --font-size-h2: 1.75rem; /* 28px */
+  --font-size-h3: 1.5rem; /* 24px */
+  --font-size-p: 1rem; /* 16px */
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* Variables de espaciado */
+  --spacing-xs: 0.25rem; /* 4px */
+  --spacing-sm: 0.5rem; /* 8px */
+  --spacing-md: 1rem; /* 16px */
+  --spacing-lg: 1.5rem; /* 24px */
+  --spacing-xl: 2rem; /* 32px */
+  --spacing-xxl: 3rem; /* 48px */
+
+  /* Variables de border radius */
+  --radius: 10px;
+
+  /* Variables de transición */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* Colores adicionales */
+  --background-lightblue: #f0f0ff;
+  --background-snow: #fffafa;
+  --charlestone-green: #2a2a2a;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--text-primary);
+  background-color: var(--background-light);
+  font-family: var(--font-primary);
+  line-height: 1.5;
+  font-weight: 400;
 }
 
 body {
@@ -15,4 +61,58 @@ body {
   width: 100vw;
   height: 100vh;
   overflow-x: hidden;
+  font-family: var(--font-primary);
+  color: var(--text-primary);
+}
+
+header {
+  box-sizing: border-box;
+  transition: all 0.5s ease;
+}
+
+.color-stripe {
+  position: relative;
+  border-bottom: 5px solid transparent;
+}
+
+.color-stripe::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 5px; /* grosor del stripe */
+  background: linear-gradient(
+    to right,
+    #217aef 0%,
+    #217aef 25%,
+    #14ae5c 25%,
+    #14ae5c 50%,
+    #ffd600 50%,
+    #ffd600 75%,
+    #ff3b30 75%,
+    #ff3b30 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+h1 {
+  font-size: 2.25em; /* 36px */
+  font-weight: var(--font-weight-bold);
+}
+
+h2 {
+  font-size: 1.75em; /* 28px */
+  font-weight: var(--font-weight-bold);
+}
+
+h3 {
+  font-size: 1.5em; /* 24px */
+  font-weight: var(--font-weight-medium);
+}
+
+p {
+  font-size: 1em; /* 16px */
+  font-weight: var(--font-weight-regular);
 }
