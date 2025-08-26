@@ -3,7 +3,7 @@ type LoginForm = {
   email?: string;
   password?: string;
 };
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import Card from "../components/Card";
 import "./Login.css";
 
@@ -37,8 +37,12 @@ const Login = () => {
     setLoading(true);
     try {
       await login(form.email, form.password);
-    } catch (err: any) {
-      setError(err.message || "Login failed. Please try again.");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "Login failed. Please try again.");
+      } else {
+        setError("Login failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -77,14 +81,7 @@ const Login = () => {
               />
             </div>
             {error && (
-              <div
-                className="login-error"
-                style={{
-                  color: "#ff3b30",
-                  fontSize: "1rem",
-                  marginBottom: "1rem",
-                }}
-              >
+              <div className="login-error text-[1rem] text-[#ff3b30] mb-[1rem]">
                 {error}
               </div>
             )}

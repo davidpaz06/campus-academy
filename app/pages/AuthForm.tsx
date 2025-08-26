@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Link } from "react-router-dom";
 
-const AuthForm = ({ mode }: { mode: "signin" | "signup" }) => {
-  const { signin } = useAuth(),
+const AuthForm = ({ mode }: { mode: "login" | "signup" }) => {
+  const { login } = useAuth(),
     [email, setEmail] = useState<string>(""),
     [password, setPassword] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await signin(email, password);
+    await login(email, password);
   };
 
   return (
@@ -19,7 +19,7 @@ const AuthForm = ({ mode }: { mode: "signin" | "signup" }) => {
         className="bg-white p-8 rounded shadow-md w-80"
       >
         <h2 className="text-2xl font-bold mb-4 text-blue-600">
-          {mode === "signin" ? "Iniciar sesión" : "Registrarse"}
+          {mode === "login" ? "Iniciar sesión" : "Registrarse"}
         </h2>
         <input
           type="email"
@@ -44,10 +44,10 @@ const AuthForm = ({ mode }: { mode: "signin" | "signup" }) => {
           Entrar
         </button>
         <Link
-          to={mode === "signin" ? "/signup" : "/signin"}
+          to={mode === "login" ? "/signup" : "/login"}
           className="block mt-4 text-blue-600 hover:underline text-center"
         >
-          {mode === "signin"
+          {mode === "login"
             ? "¿No tienes cuenta? Regístrate"
             : "¿Ya tienes cuenta? Inicia sesión"}
         </Link>

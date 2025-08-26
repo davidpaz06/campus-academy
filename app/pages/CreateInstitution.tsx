@@ -75,6 +75,7 @@ const CreateInstitution = () => {
                 name="profile_id"
                 value={form.profile_id}
                 onChange={handleChange}
+                aria-label="Profile"
               >
                 <option value="">Select role</option>
                 <option value="1">Student</option>
@@ -86,6 +87,7 @@ const CreateInstitution = () => {
                   name="institution_type"
                   value={form.institution_type}
                   onChange={handleChange}
+                  aria-label="Institution Type"
                 >
                   <option value="">Select institution type</option>
                   <option value="K-12">K-12</option>
@@ -95,6 +97,7 @@ const CreateInstitution = () => {
                   name="grading_system"
                   value={form.grading_system}
                   onChange={handleChange}
+                  aria-label="Grading System"
                 >
                   <option value="">Select grading system</option>
                   <option value="20-point scale">20-point scale</option>
@@ -120,6 +123,7 @@ const CreateInstitution = () => {
                   name="country"
                   value={form.country}
                   onChange={handleChange}
+                  aria-label="Country"
                 >
                   <option value="">Select country</option>
                   <option value="Venezuela">Venezuela</option>
@@ -129,6 +133,7 @@ const CreateInstitution = () => {
                   name="region"
                   value={form.region}
                   onChange={handleChange}
+                  aria-label="Region"
                 >
                   <option value="">Select region</option>
                   <option value="Zulia">Zulia</option>
