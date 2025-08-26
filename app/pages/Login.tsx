@@ -1,4 +1,8 @@
 import { useState } from "react";
+type LoginForm = {
+  email?: string;
+  password?: string;
+};
 import { useAuth } from "../contexts/AuthContext";
 import Card from "../components/Card";
 import "./Login.css";
@@ -7,9 +11,9 @@ import { useEffect } from "react";
 
 const Login = () => {
   const { login } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  // const [remember, setRemember] = useState(false);
+  const [form, setForm] = useState<Partial<LoginForm>>({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const header = document.querySelector("header");
@@ -25,7 +29,21 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login(email, password);
+    setError(null);
+    if (!form.email || !form.password) {
+      setError("Please enter both email and password.");
+      return;
+    }
+    setLoading(true);
+    try {
+      await login(form.email, form.password);
+    } catch (err: any) {
+      setError(err.message || "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+
+    alert(JSON.stringify(form, null, 2));
   };
 
   return (
@@ -39,9 +57,11 @@ const Login = () => {
               <input
                 id="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={form.email ?? ""}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
                 required
+                autoComplete="email"
+                disabled={loading}
               />
             </div>
             <div className="login-group">
@@ -49,24 +69,28 @@ const Login = () => {
               <input
                 id="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={form.password ?? ""}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
                 required
+                autoComplete="current-password"
+                disabled={loading}
               />
             </div>
-            {/* <div className="login-options">
-          <label className="remember-label">
-            <input
-              type="checkbox"
-              checked={remember}
-              onChange={(e) => setRemember(e.target.checked)}
-            />
-            Remember me
-          </label>
-        </div> */}
+            {error && (
+              <div
+                className="login-error"
+                style={{
+                  color: "#ff3b30",
+                  fontSize: "1rem",
+                  marginBottom: "1rem",
+                }}
+              >
+                {error}
+              </div>
+            )}
             <div className="login-actions">
-              <button className="login-btn" type="submit">
-                Confirm
+              <button className="login-btn" type="submit" disabled={loading}>
+                {loading ? "Loading..." : "Confirm"}
               </button>
             </div>
           </form>
