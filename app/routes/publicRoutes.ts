@@ -1,5 +1,5 @@
-import Landing from "@/pages/Landing";
-import AuthForm from "@/pages/AuthForm";
+import Landing from "@/pages/public/Landing";
+import AuthForm from "@/pages/public/AuthForm";
 
 export const publicRoutes = [
   { path: "/", element: Landing },

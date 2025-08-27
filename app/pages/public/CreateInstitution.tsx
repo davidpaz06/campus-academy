@@ -1,7 +1,7 @@
 import { useState } from "react";
-import type { Register } from "../interfaces/register";
-import Card from "../components/Card";
-import Footer from "../components/layout/Footer";
+import type { Register } from "../../interfaces/register";
+import Card from "../../components/Card";
+import Footer from "../../components/layout/Footer";
 import "./CreateInstitution.css";
 
 const CreateInstitution = () => {

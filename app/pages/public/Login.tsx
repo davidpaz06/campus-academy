@@ -1,16 +1,19 @@
 import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+
 type LoginForm = {
   email?: string;
   password?: string;
 };
-import { useAuth } from "../context/AuthContext";
-import Card from "../components/Card";
+import { useAuth } from "../../context/AuthContext";
+import Card from "../../components/Card";
 import "./Login.css";
 
 import { useEffect } from "react";
 
 const Login = () => {
   const { login } = useAuth();
+  // const navigate = useNavigate();
   const [form, setForm] = useState<Partial<LoginForm>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,6 +51,7 @@ const Login = () => {
     }
 
     alert(JSON.stringify(form, null, 2));
+    // navigate("/academy");
   };
 
   return (

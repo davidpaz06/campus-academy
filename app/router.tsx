@@ -1,10 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Landing from "./pages/Landing";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+import Landing from "./pages/public/Landing";
+import Login from "./pages/public/Login";
+import Register from "./pages/public/Register";
+import Dashboard from "./pages/public/Dashboard";
+import InternalLayout from "./layouts/InternalLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicLayout from "./layouts/PublicLayout";
+import AcademyMain from "./pages/academy/AcademyMain";
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -14,14 +16,12 @@ const AppRouter = () => (
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
+      <Route element={<ProtectedRoute />}>
+        <Route element={<InternalLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/academy" element={<AcademyMain />} />
+        </Route>
+      </Route>
     </Routes>
   </BrowserRouter>
 );

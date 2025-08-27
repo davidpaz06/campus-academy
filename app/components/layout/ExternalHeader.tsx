@@ -12,7 +12,7 @@ const ExternalHeader = () => {
         </div>
 
         <nav className="nav">
-          <Link to="/productos" className="nav-link">
+          <Link to="/products" className="nav-link">
             Products
           </Link>
           <Link to="/solutions" className="nav-link">

@@ -1,0 +1,178 @@
+.academy-main-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.academy-main-content {
+  padding: 50px 120px 20px 80px;
+  display: flex;
+  flex-direction: column;
+}
+
+.first-view {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 110px);
+}
+
+section {
+  height: calc((100vh - 110px) / 2);
+  h1 {
+    color: var(--academy-primary);
+  }
+}
+
+.progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.progress-stats {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.stat-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 2rem;
+}
+
+.stat-value {
+  color: var(--charlestone-green);
+  font-size: 4rem;
+  font-weight: var(--font-weight-medium);
+}
+
+.stat-icon {
+  color: var(--charlestone-green);
+}
+
+.search-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  h1 {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.card {
+  background-color: var(--background-snow);
+  border: 1px solid #e9e7e9;
+}
+
+.search-box {
+  display: flex;
+  flex-direction: row;
+  height: 200px;
+  padding: var(--spacing-md);
+  gap: var(--spacing-xxl);
+}
+
+.search-input {
+  flex: 1;
+  outline: none;
+  resize: none;
+  color: var(--charlestone-green);
+  scrollbar-width: thin;
+  scrollbar-color: #d1d1d1 transparent;
+}
+
+.search-btn {
+  height: fit-content;
+  align-self: flex-end;
+  padding: var(--spacing-xs) var(--spacing-md);
+  background-color: var(--academy-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--academy-secondary);
+  }
+}
+
+.learning-section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 7rem;
+}
+
+.learning-card {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  background: var(--background-snow);
+  border: 1px solid #e9e7e9;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(60, 100, 180, 0.07);
+  padding: 0;
+  min-height: 100px;
+  overflow: hidden;
+}
+
+.learning-card {
+  height: 250px;
+}
+
+.learning-card img {
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius) 0 0 var(--radius);
+  background: #888;
+}
+
+.learning-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--spacing-lg);
+}
+
+.learning-desc {
+  font-size: 0.95rem;
+  color: #444;
+  width: 85%;
+  margin-bottom: 0.7rem;
+}
+
+.learning-progress {
+  font-size: 1rem;
+  font-weight: var(--font-weight-medium);
+  margin-bottom: 0.7rem;
+}
+
+.learning-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.7rem;
+}
+
+.learning-points {
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--academy-primary);
+}
+
+.learning-resume-btn {
+  background: var(--academy-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 1rem;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.learning-resume-btn:hover {
+  background: var(--academy-secondary);
+}
