@@ -7,6 +7,11 @@
   flex-direction: column;
 }
 
+.create-institution-container .card {
+  background-color: var(--background-lightblue);
+  border: 2px solid #bdbdbd;
+}
+
 .create-institution-content {
   align-self: flex-start;
   justify-self: flex-start;

@@ -4,6 +4,7 @@ import CreateInstitution from "./CreateInstitution";
 import "./Register.css";
 
 import { useEffect } from "react";
+import Card from "@/components/Card";
 
 const roles = [
   {
@@ -65,7 +66,7 @@ const Register = () => {
 
   return (
     <div className="register-role-container">
-      <div className="register-role-card">
+      <Card className="register-role-card">
         <h1 className="register-role-title">Select your role</h1>
         <div className="register-role-options">
           {roles.map((role) => (
@@ -81,6 +82,11 @@ const Register = () => {
             </button>
           ))}
         </div>
+      </Card>
+      <div className="login-footer">
+        <p>
+          Already have an account? <a href="/login">Log in</a>
+        </p>
       </div>
     </div>
   );

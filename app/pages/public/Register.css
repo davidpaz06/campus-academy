@@ -9,13 +9,7 @@
 .register-role-card {
   height: 400px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  background: var(--background-snow);
-  border-radius: var(--radius);
-  border: 3px solid var(--charlestone-green);
-  padding: var(--spacing-xl);
 }
 
 .register-role-title {
