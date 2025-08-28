@@ -16,6 +16,10 @@
     justify-content: center;
   }
 
+  .header-institution {
+    color: var(--charlestone-green);
+  }
+
   .header-search {
     display: flex;
     align-items: center;
@@ -55,6 +59,7 @@
   }
 
   .upgrade-btn {
+    display: none;
     background: var(--academy-primary);
     font-size: var(--font-size-p);
     color: #fff;

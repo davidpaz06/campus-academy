@@ -2,12 +2,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./pages/public/Landing";
 import Login from "./pages/public/Login";
 import Register from "./pages/public/Register";
-import Dashboard from "./pages/public/Dashboard";
+// import Dashboard from "./pages/public/Dashboard";
 import InternalLayout from "./layouts/InternalLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicLayout from "./layouts/PublicLayout";
-import AcademyMain from "./pages/academy/AcademyMain";
+import AcademyMain from "./pages/app/academy/AcademyMain";
 import CreateInstitution from "./pages/public/CreateInstitution";
+import CreateCourse from "./pages/app/academy/CreateCourse";
+import Hub from "./pages/app/Hub";
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -25,10 +27,15 @@ const AppRouter = () => (
       >
         <Route path="/create-institution" element={<CreateInstitution />} />
       </Route>
+
+      {/* RUTAS APP */}
       <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<Hub />} />
+
         <Route element={<InternalLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
           <Route path="/academy" element={<AcademyMain />} />
+          <Route path="/create-course" element={<CreateCourse />} />
         </Route>
       </Route>
     </Routes>

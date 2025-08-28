@@ -73,10 +73,19 @@
   color: var(--charlestone-green);
   text-decoration: none;
   font-weight: var(--font-weight-medium);
-  transition: color var(--transition-fast);
+  transition: all ease 0.2s;
 }
-.sidebar-content a:hover {
+.sidebar-content li:hover {
+  cursor: pointer;
+
+  a {
+    color: var(--academy-primary);
+    text-decoration: underline;
+  }
+}
+.sidebar-content li.active a {
   color: var(--academy-primary);
+  font-weight: var(--font-weight-medium);
 }
 
 .sidebar-options {

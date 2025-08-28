@@ -1,12 +1,13 @@
 import { Icon } from "@iconify/react";
 import type { FC } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 
 const Sidebar: FC = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   return (
     <div className="sidebar-modal">
       <div className="sidebar-header">
@@ -14,20 +15,29 @@ const Sidebar: FC = () => {
       </div>
       <div className="sidebar-content">
         <ul>
-          <li>
-            <a href="/academy">Return to hub</a>
+          <li className={location.pathname === "/dashboard" ? "active" : ""}>
+            <a href="/dashboard">Return to hub</a>
           </li>
-          <li>
-            <a href="/dashboard">Dashboard</a>
+          <li className={location.pathname === "/academy" ? "active" : ""}>
+            <a href="/academy">Academy</a>
           </li>
-          <li>Browse Courses</li>
-          <li>Xavier</li>
+          <li
+            className={location.pathname === "/create-course" ? "active" : ""}
+          >
+            <a href="/create-course">Create Course</a>
+          </li>
+          <li className={location.pathname === "/courses" ? "active" : ""}>
+            Browse Courses
+          </li>
+          <li className={location.pathname === "/xavier" ? "active" : ""}>
+            Xavier
+          </li>
         </ul>
       </div>
 
       <div className="sidebar-options">
         <Icon
-          className="option"
+          className={`option${location.pathname === "/" ? " active" : ""}`}
           icon="material-symbols:logout-rounded"
           onClick={() => {
             logout();
@@ -35,7 +45,9 @@ const Sidebar: FC = () => {
           }}
         />
         <Icon
-          className="option"
+          className={`option${
+            location.pathname === "/settings" ? " active" : ""
+          }`}
           icon="material-symbols:settings-rounded"
           onClick={() => navigate("/settings")}
         />

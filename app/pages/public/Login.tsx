@@ -50,7 +50,7 @@ export default function Login() {
     }
 
     alert(JSON.stringify(form, null, 2));
-    navigate("/academy");
+    navigate("/dashboard");
   };
 
   return (
