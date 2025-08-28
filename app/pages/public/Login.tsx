@@ -17,18 +17,6 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const header = document.querySelector("header");
-    if (header) {
-      header.classList.add("color-stripe");
-    }
-    return () => {
-      if (header) {
-        header.classList.remove("color-stripe");
-      }
-    };
-  }, []);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);

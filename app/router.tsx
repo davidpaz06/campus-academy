@@ -6,10 +6,10 @@ import Register from "./pages/public/Register";
 import InternalLayout from "./layouts/InternalLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicLayout from "./layouts/PublicLayout";
-import AcademyMain from "./pages/app/academy/AcademyMain";
+import AcademyMain from "./pages/private/academy/AcademyMain";
 import CreateInstitution from "./pages/public/CreateInstitution";
-import CreateCourse from "./pages/app/academy/CreateCourse";
-import Hub from "./pages/app/Hub";
+import CreateCourse from "./pages/private/academy/CreateCourse";
+import Hub from "./pages/private/Hub";
 
 const AppRouter = () => (
   <BrowserRouter>

@@ -53,7 +53,7 @@
 
   .course-skills {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 2fr 3fr;
     gap: 0.5rem;
   }
 
@@ -74,22 +74,75 @@
     justify-content: flex-start;
   }
 
+  .search-skill-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
   .skills-chips {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
   }
 
-  .chip {
+  .search-chip,
+  .course-chip {
     background: #e0eafc;
     color: #217aef;
-    border-radius: 16px;
+    border-radius: var(--radius);
     padding: 0.3rem 1rem;
     font-size: 0.95rem;
     font-weight: 500;
     border: none;
+    cursor: pointer;
   }
 
+  .search-chip:hover,
+  .new-chip:hover {
+    background: var(--academy-primary);
+    color: white;
+  }
+
+  .course-chip {
+    position: relative;
+  }
+
+  .new-chip {
+    border-radius: var(--radius);
+    background: #ddd;
+    color: #217aef;
+    padding: 0.3rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+  }
+
+  .course-chip:hover .chip-x {
+    display: flex;
+  }
+
+  .course-chip .chip-x {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.1rem;
+    color: #217aef;
+    border-radius: 50%;
+    width: 1.5em;
+    height: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    display: none;
+  }
+  .course-chip:hover {
+    background: #ddd;
+    color: transparent;
+  }
   .button-container {
     display: flex;
     justify-content: flex-end;
