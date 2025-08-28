@@ -1,12 +1,21 @@
 import { Icon } from "@iconify/react";
 import "./InternalHeader.css";
+import { useState, useRef } from "react";
+import Sidebar from "./Sidebar";
 
 const InternalHeader = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
+
   return (
     <header className="internal-header">
       <div className="header-content-grid">
         <div className="header-icon">
-          <Icon icon="material-symbols:left-panel-open-rounded" />
+          <Icon
+            className="sidebar-icon"
+            icon="material-symbols:left-panel-open-rounded"
+            onClick={() => setSidebarOpen(true)}
+          />
         </div>
         <div className="header-institution">
           <h2>Liceo Los Robles</h2>
@@ -31,6 +40,17 @@ const InternalHeader = () => {
           />
         </div>
       </div>
+      {sidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          ref={overlayRef}
+          onClick={(e) => {
+            if (e.target === overlayRef.current) setSidebarOpen(false);
+          }}
+        >
+          <Sidebar />
+        </div>
+      )}
     </header>
   );
 };

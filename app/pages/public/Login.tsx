@@ -1,19 +1,18 @@
+import { useAuth } from "@/context/AuthContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import Card from "@/components/Card";
+import "./Login.css";
 
 type LoginForm = {
   email?: string;
   password?: string;
 };
-import { useAuth } from "../../context/AuthContext";
-import Card from "../../components/Card";
-import "./Login.css";
 
-import { useEffect } from "react";
-
-const Login = () => {
+export default function Login() {
   const { login } = useAuth();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [form, setForm] = useState<Partial<LoginForm>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -51,7 +50,7 @@ const Login = () => {
     }
 
     alert(JSON.stringify(form, null, 2));
-    // navigate("/academy");
+    navigate("/academy");
   };
 
   return (
@@ -104,6 +103,4 @@ const Login = () => {
       </div>
     </div>
   );
-};
-
-export default Login;
+}

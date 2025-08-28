@@ -1,42 +1,40 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import ExternalHeader from "../components/layout/ExternalHeader";
+import ExternalHeader from "@/components/layout/ExternalHeader";
+import "./PublicLayout.css";
 
-const PublicLayout: React.FC = () => {
+interface PublicLayoutProps {
+  background?: 1 | 2;
+  stripe?: 1 | 2;
+  header?: boolean;
+  isStatic?: boolean;
+  options?: boolean;
+  children?: React.ReactNode;
+}
+
+const PublicLayout: React.FC<PublicLayoutProps> = ({
+  isStatic = true,
+  header = true,
+  background = 1,
+  stripe = 1,
+  options = true,
+  children,
+}) => {
+  header == false ? (isStatic = false) : null;
+
+  const layoutClass = isStatic === false ? "public-layout1" : "public-layout2";
+  const backgroundClass = background === 2 ? "bg-2" : "bg-1";
+
+  const headerClass = !header ? "header-hidden" : null;
+
+  const headerStripeClass = stripe === 2 ? "gray-stripe" : "color-stripe";
+
   return (
-    <div
-      style={{
-        backgroundColor: "var(--background-lightblue)",
-        height: "100vh",
-        display: "grid",
-        gridTemplateRows: "100px 1fr",
-        gridTemplateColumns: "100%",
-      }}
-    >
-      <header
-        className="color-stripe"
-        style={{
-          gridRow: "1",
-          gridColumn: "1",
-          zIndex: 1,
-        }}
-      >
-        <ExternalHeader />
+    <div className={layoutClass + " " + backgroundClass}>
+      <header className={`${headerClass} ${headerStripeClass}`}>
+        <ExternalHeader options={options} />
       </header>
-      <main
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gridRow: "2",
-          gridColumn: "1",
-          overflowX: "hidden",
-          overflowY: "auto",
-          scrollbarWidth: "thin",
-          scrollbarColor: "var(--charlestone-green) #f1f1f1",
-        }}
-      >
-        <Outlet />
-      </main>
+      <main>{children ? children : <Outlet />}</main>
     </div>
   );
 };

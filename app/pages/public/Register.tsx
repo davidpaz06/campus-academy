@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
 import CreateInstitution from "./CreateInstitution";
@@ -13,6 +14,7 @@ const roles = [
     icon: (
       <Icon icon="material-symbols:school-rounded" className="option-icon" />
     ),
+    route: "/register/student",
   },
   {
     key: "teacher",
@@ -20,6 +22,7 @@ const roles = [
     icon: (
       <Icon className="option-icon" icon="material-symbols:cases-rounded" />
     ),
+    route: "/register/teacher",
   },
   {
     key: "school",
@@ -27,42 +30,12 @@ const roles = [
     icon: (
       <Icon className="option-icon" icon="material-symbols:apartment-rounded" />
     ),
+    route: "/create-institution",
   },
 ];
 
 const Register = () => {
-  const [selectedRole, setSelectedRole] = useState<string | null>(null);
-
-  useEffect(() => {
-    const header = document.querySelector("header");
-    if (header) {
-      if (selectedRole === "school") {
-        header.classList.remove("color-stripe");
-        header.classList.add("create-institution-header");
-      } else {
-        header.classList.remove("create-institution-header");
-        header.classList.add("color-stripe");
-      }
-    }
-    return () => {
-      if (header) {
-        header.classList.remove("color-stripe");
-        header.classList.remove("gray-stripe");
-      }
-    };
-  }, [selectedRole]);
-
-  switch (selectedRole) {
-    case "school":
-      return <CreateInstitution />;
-    case "student":
-      // return <StudentRegister />; // Componente para estudiantes
-      return <div>Student registration coming soon.</div>;
-    case "teacher":
-      // return <TeacherRegister />; // Componente para profesores
-      return <div>Teacher registration coming soon.</div>;
-    default:
-  }
+  const navigate = useNavigate();
 
   return (
     <div className="register-role-container">
@@ -72,10 +45,8 @@ const Register = () => {
           {roles.map((role) => (
             <button
               key={role.key}
-              onClick={() => setSelectedRole(role.key)}
-              className={`register-role-btn${
-                selectedRole === role.key ? " selected" : ""
-              }`}
+              onClick={() => navigate(role.route)}
+              className={`register-role-btn`}
             >
               {role.icon}
               <span className="register-role-label">{role.label}</span>

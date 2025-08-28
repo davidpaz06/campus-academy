@@ -1,7 +1,17 @@
+import { useNavigate } from "react-router-dom";
+import { Icon } from "@iconify/react";
 import { Link } from "react-router-dom";
 import "./ExternalHeader.css";
 
-const ExternalHeader = () => {
+interface ExternalHeaderProps {
+  options?: boolean;
+}
+
+export default function ExternalHeader({
+  options = false,
+}: ExternalHeaderProps) {
+  const navigate = useNavigate();
+
   return (
     <header className="external-header">
       <div className="header-content">
@@ -10,7 +20,6 @@ const ExternalHeader = () => {
             <h1 className="logo">Campus</h1>
           </Link>
         </div>
-
         <nav className="nav">
           <Link to="/products" className="nav-link">
             Products
@@ -31,9 +40,19 @@ const ExternalHeader = () => {
             Contact
           </Link>
         </nav>
+        <div className="header-options">
+          {options ? (
+            <div className="options">
+              <button onClick={() => navigate("/login")}>Enter Campus</button>
+              <Icon
+                className="user-avatar"
+                icon="material-symbols:person-rounded"
+                onClick={() => navigate("/login")}
+              />
+            </div>
+          ) : null}
+        </div>
       </div>
     </header>
   );
-};
-
-export default ExternalHeader;
+}
