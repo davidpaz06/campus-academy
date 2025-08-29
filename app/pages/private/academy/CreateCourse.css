@@ -208,6 +208,7 @@
         text-overflow: unset;
         -webkit-line-clamp: unset;
         height: calc(100vh - 110px);
+        border-bottom: 1px solid #fff;
 
         .course-extras {
           display: flex;
@@ -255,7 +256,8 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       padding: 0;
-      gap: 0;
+      gap: 1px;
+      background-color: #fff;
 
       button {
         background-color: var(--academy-primary);
