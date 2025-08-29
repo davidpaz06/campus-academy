@@ -19,6 +19,6 @@ export interface CourseModule {
 
 export interface CourseLesson {
   title: string;
-  type: "Reading" | "Video" | "Test";
+  type: string;
   file: string;
 }

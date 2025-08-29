@@ -1,4 +1,4 @@
-.create-course-container {
+.create-course-step-1 {
   display: grid;
   grid-template-rows: 2fr 2fr 40px;
   font-family: var(--font-primary);
@@ -150,7 +150,7 @@
 
   .create-course-button {
     padding: 0.5rem 1.5rem;
-    background-color: #217aef;
+    background-color: var(--charlestone-green);
     color: white;
     border: none;
     border-radius: 4px;
@@ -159,6 +159,115 @@
   }
 
   .create-course-button:hover {
-    background-color: #1753a2;
+    background-color: var(--academy-primary);
+  }
+}
+
+.create-course-step-2 {
+  display: grid;
+  height: calc(100vh - 60px);
+  overflow: hidden;
+  grid-template-columns: 1fr 3fr;
+
+  aside {
+    display: grid;
+    grid-template-rows: 50px 1fr 50px;
+    height: 100%;
+    background-color: var(--background-snow);
+    border-right: 1px solid #ddd;
+    overflow: hidden;
+
+    .course-name {
+      align-self: start;
+      justify-content: flex-start;
+      padding: var(--spacing-sm);
+
+      cursor: default;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      word-spacing: normal;
+      transition: all 0.5s ease;
+      background: var(--academy-primary);
+      color: white;
+      z-index: 2;
+      height: 50px;
+
+      .course-extras {
+        display: none;
+
+        border-top: 3px solid #fff;
+        flex-direction: column;
+        padding-top: var(--spacing-md);
+        gap: var(--spacing-sm);
+      }
+
+      &:hover {
+        text-overflow: unset;
+        -webkit-line-clamp: unset;
+        height: calc(100vh - 110px);
+
+        .course-extras {
+          display: flex;
+        }
+      }
+    }
+    .module-list {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--charlestone-green) transparent;
+    }
+    .module-summary {
+      padding: var(--spacing-sm);
+      border-bottom: 1px solid #ddd;
+
+      .module-title {
+        font-weight: bold;
+        color: var(--academy-secondary);
+        font-size: var(--font-size-h3);
+      }
+
+      .module-title-l {
+        color: var(--academy-secondary);
+        font-size: 0.75rem;
+        font-weight: var(--font-weight-bold);
+        text-align: end;
+      }
+
+      .lesson-summary {
+        padding: 0 var(--spacing-md);
+
+        .lesson-type {
+          font-weight: bold;
+          font-size: var(--font-size-h4);
+        }
+        .lesson-title {
+          font-size: var(--font-size-sm);
+        }
+      }
+    }
+
+    footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 0;
+      gap: 0;
+
+      button {
+        background-color: var(--academy-primary);
+        color: white;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--academy-secondary);
+        }
+      }
+    }
   }
 }
