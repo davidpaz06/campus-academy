@@ -220,10 +220,6 @@ export default function CreateCourse() {
                   <p>{course.info.instructor}</p>
                 </label>
                 <label>
-                  <strong>Description</strong>
-                  <p>{course.info.description}</p>
-                </label>
-                <label>
                   <strong>Skills</strong>
                   <p>{course.info.skills.join(", ")}</p>
                 </label>
@@ -241,7 +237,6 @@ export default function CreateCourse() {
                             <p className="lesson">
                               <strong>{lesson.type}</strong>: {lesson.title}
                             </p>
-                            {/* <p className="lesson-title">{lesson.title}</p> */}
                           </li>
                         )
                       )}
