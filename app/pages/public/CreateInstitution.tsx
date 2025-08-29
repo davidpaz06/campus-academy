@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Register } from "@/interfaces/register";
+import type { Register } from "@/interfaces/registerInterfaces";
 import Card from "@/components/Card";
 import Footer from "@/components/layout/Footer";
 import "./CreateInstitution.css";
