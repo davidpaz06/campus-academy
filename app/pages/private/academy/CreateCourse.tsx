@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getNavClass, getModuleClass } from "@/utils/courseUtils";
 import { Icon } from "@iconify/react";
 //Interfaces
 import type {
@@ -11,88 +12,66 @@ import "./CreateCourse.css";
 //Pages
 import CreateCourseInfo from "./CreateCourseInfo";
 
-const InitialStep = 2;
+const InitialStep = 1;
 
-const mockCourse: Course = {
-  id: "1",
+const emptyCourse: Course = {
+  id: "",
   info: {
-    name: "Backend Development for rookies trying to learn Node.js on AWS instead of PHP",
-    instructor: "John Doe",
-    about: "This is a sample course.",
-    description: "Detailed description of the sample course.",
-    skills: ["JavaScript", "React"],
+    name: "",
+    instructor: "",
+    about: "",
+    description: "",
+    skills: [],
   },
   modules: [
     {
-      title: "Introduction to JavaScript",
-      lessons: [
-        {
-          title: "JavaScript Basics",
-          type: "Reading",
-          file: "This module covers the basics of JavaScript.",
-        },
-        {
-          title: "JavaScript Advanced",
-          type: "Video",
-          file: "This module dives deep into advanced JavaScript concepts.",
-        },
-      ],
-    },
-    {
-      title: "Getting Started with React",
-      lessons: [
-        {
-          title: "React Basics",
-          type: "Reading",
-          file: "This module covers the basics of React.",
-        },
-        {
-          title: "React Advanced",
-          type: "Video",
-          file: "This module dives deep into advanced React concepts.",
-        },
-      ],
-    },
-    {
-      title: "Node.js and Express",
-      lessons: [
-        {
-          title: "Node.js Basics",
-          type: "Reading",
-          file: "This module covers the basics of Node.js.",
-        },
-        {
-          title: "Node.js Advanced",
-          type: "Video",
-          file: "This module dives deep into advanced Node.js concepts.",
-        },
-      ],
+      title: "Click to edit",
+      lessons: [],
     },
   ],
 };
 
 export default function CreateCourse() {
+  const [course, setCourse] = useState<Course>(() => {
+    try {
+      const stored = localStorage.getItem("courseDraft");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        // Validate shape and ensure at least one module
+        if (
+          parsed &&
+          typeof parsed === "object" &&
+          parsed.info &&
+          typeof parsed.info === "object" &&
+          Array.isArray(parsed.modules)
+        ) {
+          if (parsed.modules.length === 0) {
+            parsed.modules = [
+              {
+                title: "> Click to edit <",
+                lessons: [],
+              },
+            ];
+          }
+          return parsed;
+        }
+      }
+    } catch (e) {
+      // ignore parse errors
+    }
+    return emptyCourse;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("courseDraft", JSON.stringify(course));
+  }, [course]);
+
   const [step, setStep] = useState(InitialStep);
   const handleStepChange = (action: string) => {
     action == "next" ? setStep(step + 1) : setStep(step - 1);
-    console.log(course);
   };
 
   const [activeModule, setActiveModule] = useState<number>(0);
-  const [course, setCourse] = useState<Course>(
-    // {
-    //   id: "",
-    //   info: {
-    //     name: "",
-    //     instructor: "",
-    //     about: "",
-    //     description: "",
-    //     skills: [],
-    //   },
-    //   modules: [],
-    // },
-    mockCourse
-  );
 
   const handleNavActions = (action: string) => {
     switch (action) {
@@ -122,29 +101,7 @@ export default function CreateCourse() {
     }
   };
 
-  const handleNavClass = (activeModule: number, modulesLength: number) => {
-    modulesLength = modulesLength - 1;
-
-    if (activeModule === 0 && modulesLength === 1) {
-      return "initial";
-    } else if (activeModule === 0 && activeModule < modulesLength) {
-      return "first";
-    } else if (activeModule > 0 && activeModule < modulesLength) {
-      return "middle";
-    } else if (activeModule === modulesLength) {
-      return "last";
-    }
-  };
-
-  const handleModuleClass = (idx: number) => {
-    if (idx < activeModule) {
-      return "prev-module";
-    } else if (idx === activeModule) {
-      return "present-module";
-    } else if (idx > activeModule) {
-      return "next-module";
-    }
-  };
+  // handleNavClass y handleModuleClass ahora se importan desde utils
 
   const handleActiveModule = (index: number) => {
     setActiveModule(index);
@@ -237,7 +194,11 @@ export default function CreateCourse() {
             <div className="module-list">
               {course.modules.map(
                 (module: CourseModule, moduleIndex: number) => (
-                  <div key={moduleIndex} className="module-summary">
+                  <div
+                    key={moduleIndex}
+                    className="module-summary"
+                    onClick={() => setActiveModule(moduleIndex)}
+                  >
                     <h3 className="module-title">{module.title}</h3>
                     <ul>
                       {module.lessons.map(
@@ -282,7 +243,7 @@ export default function CreateCourse() {
             onKeyDown={handleKeyDown}
           >
             <section
-              className={`create-course-nav ${handleNavClass(
+              className={`create-course-nav ${getNavClass(
                 activeModule,
                 course.modules.length
               )}`}
@@ -331,7 +292,10 @@ export default function CreateCourse() {
                 return (
                   <div
                     key={idx}
-                    className={`module-box ${handleModuleClass(idx)}`}
+                    className={`module-box ${getModuleClass(
+                      idx,
+                      activeModule
+                    )}`}
                     onClick={() => handleActiveModule(idx)}
                   >
                     Module {idx + 1} - {module.title}

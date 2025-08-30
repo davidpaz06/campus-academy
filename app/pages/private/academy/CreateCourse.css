@@ -226,6 +226,11 @@
       padding: var(--spacing-sm);
       border-bottom: 1px solid #ddd;
 
+      &:hover {
+        background-color: var(--background-lightblue);
+        cursor: pointer;
+      }
+
       .module-title {
         font-weight: bold;
         color: var(--academy-secondary);
@@ -369,9 +374,9 @@
         border: none;
         cursor: pointer;
 
-        /* &:hover {
+        &:hover {
           background-color: var(--academy-secondary);
-        } */
+        }
       }
     }
 
