@@ -285,10 +285,6 @@
       .nav-icon {
         font-size: 2rem;
       }
-      &:hover {
-        background-color: var(--academy-secondary);
-        cursor: pointer;
-      }
     }
 
     /* Estados de navegación */
