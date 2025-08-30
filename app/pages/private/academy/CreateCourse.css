@@ -326,10 +326,10 @@
       display: grid;
       grid-template-columns: 50px 1fr 50px;
       color: white;
+
       .create-course-active-module {
         display: flex;
         align-items: center;
-        padding: 0 var(--spacing-lg);
         font-weight: bold;
         font-size: 1.5rem;
         background-color: var(--academy-primary);

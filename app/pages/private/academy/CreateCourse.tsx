@@ -11,6 +11,7 @@ import type {
 import "./CreateCourse.css";
 //Pages
 import CreateCourseInfo from "./CreateCourseInfo";
+import CreateModule from "./CreateModule";
 
 const InitialStep = 1;
 
@@ -288,20 +289,7 @@ export default function CreateCourse() {
               </div>
             </section>
             <section className="create-course-content">
-              {course.modules.map((module, idx) => {
-                return (
-                  <div
-                    key={idx}
-                    className={`module-box ${getModuleClass(
-                      idx,
-                      activeModule
-                    )}`}
-                    onClick={() => handleActiveModule(idx)}
-                  >
-                    Module {idx + 1} - {module.title}
-                  </div>
-                );
-              })}
+              <CreateModule />
             </section>
           </form>
         </div>
