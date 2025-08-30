@@ -35,6 +35,7 @@
   transform: translateX(-40px);
   opacity: 0;
   animation: slideInSidebar 0.3s cubic-bezier(0.4, 0.8, 0.4, 1) forwards;
+  z-index: 1001;
 }
 
 .sidebar-header {
