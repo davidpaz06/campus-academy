@@ -336,10 +336,6 @@
         color: white;
         border: none;
         cursor: pointer;
-        transition: background 0.2s;
-        &:hover {
-          background-color: var(--academy-secondary);
-        }
       }
 
       .active-module-input {
@@ -347,11 +343,16 @@
         font-size: 1.25em;
         border: none;
         background: transparent;
-        color: #fff;
+        color: var(--background-snow);
         width: 100%;
         outline: none;
         padding: 0;
         margin: 0;
+
+        &:hover {
+          color: #fff;
+          text-decoration: underline;
+        }
       }
     }
 

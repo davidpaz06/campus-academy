@@ -22,3 +22,15 @@ export interface CourseLesson {
   type: string;
   file: string;
 }
+
+export interface CourseProps {
+  setCourse: React.Dispatch<React.SetStateAction<Course>>;
+  course: Course;
+  module?: number;
+  lesson?: number;
+}
+
+export interface CourseSkills {
+  skills: string[];
+  setSkills: (skills: string[]) => void;
+}

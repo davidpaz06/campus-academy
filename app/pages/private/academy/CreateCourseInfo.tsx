@@ -1,14 +1,9 @@
 import Card from "@/components/Card";
-import type { Course } from "@/interfaces/createCourseInterfaces";
+import type { CourseProps } from "@/interfaces/createCourseInterfaces";
 import "./CreateCourse.css";
-import SearchSkills from "@/components/SearchSkills";
+import SearchSkills from "@/components/createcourse/SearchSkills";
 
-interface Props {
-  course: Course;
-  setCourse: React.Dispatch<React.SetStateAction<Course>>;
-}
-
-export default function CreateCourseInfo({ course, setCourse }: Props) {
+export default function CreateCourseInfo({ course, setCourse }: CourseProps) {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement

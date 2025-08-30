@@ -1,13 +1,9 @@
 import "./SearchSkills.css";
-import Card from "./Card";
+import Card from "../Card";
 import { useState } from "react";
+import type { CourseSkills } from "@/interfaces/createCourseInterfaces";
 
-interface Props {
-  skills: string[];
-  setSkills: (skills: string[]) => void;
-}
-
-export default function SearchSkills({ skills, setSkills }: Props) {
+export default function SearchSkills({ skills, setSkills }: CourseSkills) {
   const [searchSkill, setSearchSkill] = useState("");
 
   const handleSkillSearch = (e: React.ChangeEvent<HTMLInputElement>) => {

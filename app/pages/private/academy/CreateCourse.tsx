@@ -1,6 +1,8 @@
+import React from "react";
+import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
 import { getNavClass, getModuleClass } from "@/utils/courseUtils";
-import { Icon } from "@iconify/react";
+import EditableText from "@/components/EditableText";
 //Interfaces
 import type {
   Course,
@@ -12,8 +14,9 @@ import "./CreateCourse.css";
 //Pages
 import CreateCourseInfo from "./CreateCourseInfo";
 import CreateModule from "./CreateModule";
+import CreateCourseLessonList from "@/components/createcourse/CreateCourseLessonList";
 
-const InitialStep = 1;
+const InitialStep = 2;
 
 const emptyCourse: Course = {
   id: "",
@@ -33,6 +36,8 @@ const emptyCourse: Course = {
 };
 
 export default function CreateCourse() {
+  // Ref para el contenedor de lecciones
+  const courseContentRef = React.useRef<HTMLDivElement>(null);
   const [course, setCourse] = useState<Course>(() => {
     try {
       const stored = localStorage.getItem("courseDraft");
@@ -73,6 +78,16 @@ export default function CreateCourse() {
   };
 
   const [activeModule, setActiveModule] = useState<number>(0);
+
+  // Scroll al fondo cuando se agrega una lección
+  const handleLessonAdded = () => {
+    setTimeout(() => {
+      if (courseContentRef.current) {
+        courseContentRef.current.scrollTop =
+          courseContentRef.current.scrollHeight;
+      }
+    }, 0);
+  };
 
   const handleNavActions = (action: string) => {
     switch (action) {
@@ -233,11 +248,6 @@ export default function CreateCourse() {
               </button>
             </footer>
           </aside>
-          {/* <button style={{ display: "none" }}>
-            <Icon icon="material-symbols:book-ribbon-rounded" />
-            <Icon icon="material-symbols:smart-display-rounded" />
-            <Icon icon="material-symbols:unknown-document-rounded" />
-          </button> */}
           <form
             className="create-course-form"
             onSubmit={handleSubmit}
@@ -259,19 +269,18 @@ export default function CreateCourse() {
                 />
               </div>
               <div className="create-course-active-module">
-                <input
-                  type="text"
+                <EditableText
                   value={course.modules[activeModule].title}
-                  onSubmit={(e) => e.preventDefault()}
-                  onChange={(e) => {
+                  onChange={(newTitle) => {
                     const updatedModules = [...course.modules];
                     updatedModules[activeModule] = {
                       ...updatedModules[activeModule],
-                      title: e.target.value,
+                      title: newTitle,
                     };
                     setCourse({ ...course, modules: updatedModules });
                   }}
                   className="active-module-input"
+                  placeholder="Click to edit title"
                 />
               </div>
               <div
@@ -288,8 +297,31 @@ export default function CreateCourse() {
                 />
               </div>
             </section>
-            <section className="create-course-content">
-              <CreateModule />
+            <section className="create-course-content" ref={courseContentRef}>
+              {course.modules.map((module, idx) => {
+                return (
+                  <div
+                    key={idx}
+                    className={`module-box ${getModuleClass(
+                      idx,
+                      activeModule
+                    )}`}
+                    onClick={() => handleActiveModule(idx)}
+                  >
+                    <CreateCourseLessonList
+                      module={module}
+                      course={course}
+                      setCourse={setCourse}
+                    />
+                    <CreateModule
+                      course={course}
+                      setCourse={setCourse}
+                      module={activeModule}
+                      onLessonAdded={handleLessonAdded}
+                    />
+                  </div>
+                );
+              })}
             </section>
           </form>
         </div>
