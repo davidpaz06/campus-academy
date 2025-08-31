@@ -1,0 +1,122 @@
+{
+  "id": "",
+  "info": {
+    "name": "Introduction to React Native",
+    "instructor": "Lodestar Solutions",
+    "about": "About David",
+    "description": "Guapo",
+    "skills": [
+      "React.js",
+      "React Native",
+      "TypeScript",
+      "Frontend Development",
+      "Backend Development",
+      "David"
+    ]
+  },
+  "modules": [
+    {
+      "title": "Introduction to Programming ",
+      "lessons": [
+        {
+          "title": "Introducction to the course",
+          "type": "Reading",
+          "file": "<Reading_file>"
+        },
+        {
+          "title": "Science Basics",
+          "type": "Video",
+          "file": "https://www.pexels.com/download/video/4114797/"
+        }
+      ]
+    },
+    {
+      "title": "First Step",
+      "lessons": [
+        {
+          "title": "New Reading Lesson",
+          "type": "Reading",
+          "file": "<Reading_file>"
+        }
+      ]
+    },
+    {
+      "title": "Module 3",
+      "lessons": [
+        { "title": "Lecture", "type": "Reading", "file": "<Reading_file>" },
+        {
+          "title": "101 Programing Tutorial",
+          "type": "Video",
+          "file": "https://cdn.pixabay.com/video/2019/05/06/23355-334950213_large.mp4"
+        },
+        { "title": "First Assesment", "type": "Test", "file": "<Test_file>" },
+        {
+          "title": "Visual Studio Code for Begginers (Documentation)",
+          "type": "Reading",
+          "file": "<Reading_file>"
+        },
+        {
+          "title": "New Reading Lesson",
+          "type": "Reading",
+          "file": "<Reading_file>"
+        },
+        {
+          "title": "New Reading Lesson",
+          "type": "Reading",
+          "file": "<Reading_file>"
+        },
+        {
+          "title": "New Reading Lesson",
+          "type": "Reading",
+          "file": "<Reading_file>"
+        },
+        {
+          "title": "New Reading Lesson",
+          "type": "Reading",
+          "file": "<Reading_file>"
+        },
+        {
+          "title": "New Reading Lesson",
+          "type": "Reading",
+          "file": "<Reading_file>"
+        }
+      ]
+    },
+    { "title": "Module 4", "lessons": [] },
+    { "title": "Module 5", "lessons": [] },
+    { "title": "Module 6", "lessons": [] },
+    { "title": "Module 7", "lessons": [] },
+    { "title": "Module 8", "lessons": [] },
+    { "title": "Module 9", "lessons": [] },
+    { "title": "Module 10", "lessons": [] },
+    { "title": "Module 11", "lessons": [] },
+    { "title": "Module 12", "lessons": [] },
+    { "title": "Module 13", "lessons": [] },
+    {
+      "title": "Module 14",
+      "lessons": [
+        {
+          "title": "New Video Lesson",
+          "type": "Video",
+          "file": "<Video_file>"
+        },
+        {
+          "title": "New Video Lesson",
+          "type": "Video",
+          "file": "<Video_file>"
+        },
+        {
+          "title": "New Video Lesson",
+          "type": "Video",
+          "file": "<Video_file>"
+        },
+        {
+          "title": "New Video Lesson",
+          "type": "Video",
+          "file": "<Video_file>"
+        },
+        { "title": "New Video Lesson", "type": "Video", "file": "<Video_file>" }
+      ]
+    }
+  ]
+}

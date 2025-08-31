@@ -34,3 +34,22 @@ export interface CourseSkills {
   skills: string[];
   setSkills: (skills: string[]) => void;
 }
+
+export interface LearningComponent {
+  componentName: string;
+  componentSummary: string;
+  componentTypeId: number;
+  componentDescription: string;
+  contextBody: string;
+  position: number;
+  realParentId: string;
+}
+
+export interface CreateCourseDto {
+  courseName: string;
+  courseSummary: string;
+  courseDescription: string;
+  institutionId: string;
+  courseImageId: string;
+  components: LearningComponent[];
+}

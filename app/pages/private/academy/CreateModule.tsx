@@ -65,7 +65,7 @@ export default function CreateModule({
             handleCreateLesson(module, {
               title: "New Video Lesson",
               type: "Video",
-              file: "<Video_file>",
+              file: "https://jberbbpslngklbsakuzz.supabase.co/storage/v1/object/sign/Campus%20Academy%20Storage/video/default-lesson-video.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9lYmFiZDZiNS0zZTA0LTQ0ZjQtYWExOS1hZjRjYzE3MjMxZDciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJDYW1wdXMgQWNhZGVteSBTdG9yYWdlL3ZpZGVvL2RlZmF1bHQtbGVzc29uLXZpZGVvLm1wNCIsImlhdCI6MTc1NjYwODY2NCwiZXhwIjoxNzU5MjAwNjY0fQ.7zlx3JfpH0cpR6rQlCjQBlDsqeVkhHJbS1s8l8nsHaA",
             })
           }
         />

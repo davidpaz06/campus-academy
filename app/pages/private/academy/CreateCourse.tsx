@@ -16,7 +16,7 @@ import CreateCourseInfo from "./CreateCourseInfo";
 import CreateModule from "./CreateModule";
 import CreateCourseLessonList from "@/components/createcourse/CreateCourseLessonList";
 
-const InitialStep = 2;
+const InitialStep = 1;
 
 const emptyCourse: Course = {
   id: "",

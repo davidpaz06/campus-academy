@@ -42,7 +42,22 @@ export default function CreateCourseLessonList({
                     className="lesson-title-editable"
                     placeholder="Click to edit lesson title"
                   />
-                  <p>{lesson.file}</p>
+                  {/* <p>{lesson.file}</p> */}
+                  <span></span>
+                  {/* <span>{this.videoDuration}</span> */}
+                  <span>2 Min</span>
+
+                  <video
+                    src={lesson.file}
+                    className="lesson-video-file"
+                    controls
+                    autoPlay
+                    muted
+                    loop
+                    // onLoadedMetadata={(e) => {
+                    //   videoDuration = e.currentTarget.duration;
+                    // }}
+                  ></video>
                 </div>
               )}
               {lesson.type === "Test" && (
