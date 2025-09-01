@@ -13,7 +13,7 @@ import type {
 import "./CreateCourse.css";
 //Pages
 import CreateCourseInfo from "./CreateCourseInfo";
-import CreateModule from "./CreateModule";
+import CreateModule from "../../../components/createcourse/CreateModule";
 import CreateCourseLessonList from "@/components/createcourse/CreateCourseLessonList";
 
 const InitialStep = 2;
@@ -83,8 +83,19 @@ export default function CreateCourse() {
   const handleLessonAdded = () => {
     setTimeout(() => {
       if (courseContentRef.current) {
-        courseContentRef.current.scrollTop =
-          courseContentRef.current.scrollHeight;
+        const moduleBoxes =
+          courseContentRef.current.querySelectorAll(".module-box");
+        const activeModuleBox = moduleBoxes[activeModule] as
+          | HTMLElement
+          | undefined;
+        if (activeModuleBox) {
+          const boxBottom =
+            activeModuleBox.offsetTop + activeModuleBox.offsetHeight;
+          courseContentRef.current.scrollTo({
+            top: boxBottom - courseContentRef.current.offsetHeight,
+            behavior: "smooth",
+          });
+        }
       }
     }, 0);
   };

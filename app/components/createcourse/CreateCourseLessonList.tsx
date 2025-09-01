@@ -1,30 +1,23 @@
 import "./CreateCourseLessonList.css";
 
-import type {
-  CourseModule,
-  CourseProps,
-} from "@/interfaces/createCourseInterfaces";
+import type { CourseModule, Course } from "@/interfaces/createCourseInterfaces";
 import Card from "@/components/Card";
 import EditableText from "@/components/EditableText";
 import ReadingLesson from "./lessoncard/ReadingLesson";
 import VideoLesson from "./lessoncard/VideoLesson";
+interface CreateCourseLessonListProps {
+  module: CourseModule;
+  course: Course;
+  setCourse: React.Dispatch<React.SetStateAction<Course>>;
+  moduleIndex: number;
+}
 
 export default function CreateCourseLessonList({
   module,
   course,
   setCourse,
   moduleIndex,
-}: CourseProps & { module: CourseModule }) {
-  // function secondsToMinutes(duration: number | undefined): React.ReactNode {
-  //   if (typeof duration !== "number" || isNaN(duration)) return "0:00";
-  //   const minutes = Math.floor(duration / 60);
-  //   const seconds = Math.floor(duration % 60);
-
-  //   if (minutes === 0 && seconds > 0)
-  //     return `${seconds.toString().padStart(2, "0")} seconds`;
-  //   else return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  // }
-
+}: CreateCourseLessonListProps) {
   return (
     <div className="create-course-lesson-list">
       <h2>Lessons</h2>
@@ -45,6 +38,7 @@ export default function CreateCourseLessonList({
                 <VideoLesson
                   lesson={lesson}
                   course={course}
+                  setCourse={setCourse}
                   moduleIndex={moduleIndex}
                   lessonIndex={idx}
                   onTitleChange={(newTitle) => {

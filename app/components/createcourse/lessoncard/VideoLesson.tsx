@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import EditableText from "@/components/EditableText";
-import type {
-  CourseProps,
-  CourseLesson,
-} from "@/interfaces/createCourseInterfaces";
+import type { Course, CourseLesson } from "@/interfaces/createCourseInterfaces";
+import ContextMenu from "@/components/ContextMenu";
 import { supabase } from "@/supabaseClient";
 import { getVideoStorageKey } from "@/utils/courseUtils";
+import { removeLessonFromModule } from "@/utils/courseDeleteUtils";
 import "./lessonCard.css";
 type VideoLessonProps = {
   lesson: CourseLesson;
   onTitleChange: (newTitle: string) => void;
   onDurationChange?: (duration: number) => void;
-} & Pick<CourseProps, "course" | "moduleIndex" | "lessonIndex">;
+  course: Course;
+  setCourse: React.Dispatch<React.SetStateAction<Course>>;
+  moduleIndex: number;
+  lessonIndex: number;
+};
 
 function secondsToMinutes(duration: number | undefined): React.ReactNode {
   if (typeof duration !== "number" || isNaN(duration)) return "0:00";
@@ -31,6 +34,7 @@ export default function VideoLesson(props: VideoLessonProps) {
     onTitleChange,
     onDurationChange,
     course,
+    setCourse,
     moduleIndex,
     lessonIndex,
   } = props;
@@ -74,7 +78,7 @@ export default function VideoLesson(props: VideoLessonProps) {
                 setUploading(true);
                 setLoading(true);
                 const filePath = getVideoStorageKey({
-                  courseName: course?.info?.name ?? "course",
+                  courseName: course.info?.name ?? "course",
                   moduleIndex: moduleIndex ?? 0,
                   lessonIndex: lessonIndex ?? 0,
                   fileName: file.name,
@@ -106,13 +110,32 @@ export default function VideoLesson(props: VideoLessonProps) {
         <span className="lesson-video-duration">
           {secondsToMinutes(duration)}
         </span>
-        <span className="video-chip--secondary">
-          <strong>:</strong>
-        </span>
+        <ContextMenu
+          options={[
+            { label: "Delete", value: "delete", className: "lesson-delete" },
+            { label: "Alert", value: "alert" },
+          ]}
+          position="top"
+          direction="left"
+          onSelect={(value) => {
+            if (value === "delete") {
+              const newModules = removeLessonFromModule(
+                course.modules,
+                moduleIndex,
+                lessonIndex
+              );
+              setCourse({ ...course, modules: newModules });
+            } else if (value === "alert") {
+              alert(`Module: ${moduleIndex}, Lesson: ${lessonIndex}`);
+            }
+          }}
+        />
       </span>
 
       {loading ? (
-        <div className="lesson-video-file">Loading video...</div>
+        <div className="lesson-video-file">
+          <div className="loader"></div>
+        </div>
       ) : (
         <video
           src={lesson.file}
