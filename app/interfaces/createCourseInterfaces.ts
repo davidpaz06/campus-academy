@@ -21,13 +21,15 @@ export interface CourseLesson {
   title: string;
   type: string;
   file: string;
+  questions?: string[];
+  duration?: number;
 }
 
 export interface CourseProps {
   setCourse: React.Dispatch<React.SetStateAction<Course>>;
   course: Course;
-  module?: number;
-  lesson?: number;
+  moduleIndex?: number;
+  lessonIndex?: number;
 }
 
 export interface CourseSkills {

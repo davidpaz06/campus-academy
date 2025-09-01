@@ -44,35 +44,7 @@
   .lesson-reading {
     padding: 1rem;
   }
-  .lesson-video {
-    display: grid;
-    grid-template-rows: 1fr 2fr 1fr;
-    grid-template-columns: 5fr 8fr;
 
-    .lesson-title-editable {
-      padding: var(--spacing-md);
-      font-size: 1rem;
-      font-weight: var(--font-weight-bold);
-      outline: none;
-      /* border-radius: var(--radius); */
-      transition: background 0.2s;
-    }
-    .lesson-title-editable:focus {
-      background: #e6f7ff;
-    }
-
-    .lesson-video-file {
-      grid-row: 1/4;
-      grid-column: 2/3;
-      border: 1px solid #ddd;
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  }
   .lesson-test {
     display: flex;
     flex-direction: column;

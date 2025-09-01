@@ -16,7 +16,7 @@ import CreateCourseInfo from "./CreateCourseInfo";
 import CreateModule from "./CreateModule";
 import CreateCourseLessonList from "@/components/createcourse/CreateCourseLessonList";
 
-const InitialStep = 1;
+const InitialStep = 2;
 
 const emptyCourse: Course = {
   id: "",
@@ -312,6 +312,7 @@ export default function CreateCourse() {
                       module={module}
                       course={course}
                       setCourse={setCourse}
+                      moduleIndex={idx}
                     />
                     <CreateModule
                       course={course}

@@ -1,4 +1,24 @@
-// Utils for course navigation and module class
+// Utilidad para generar el key del video en Supabase Storage
+export function getVideoStorageKey({
+  courseName,
+  moduleIndex,
+  lessonIndex,
+  fileName,
+}: {
+  courseName: string;
+  moduleIndex: number;
+  lessonIndex: number;
+  fileName: string;
+}): string {
+  const timestamp = Date.now();
+  // Limpiar entradas antes de codificar
+  const clean = (str: string) => str.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const encodedCourseName = encodeURIComponent(clean(courseName));
+  const encodedModule = encodeURIComponent(moduleIndex.toString());
+  const encodedLesson = encodeURIComponent(lessonIndex.toString());
+  const encodedFileName = encodeURIComponent(clean(fileName));
+  return `videos/${timestamp}_${encodedCourseName}_m${encodedModule}_l${encodedLesson}_${encodedFileName}`;
+}
 
 export function getNavClass(
   activeModule: number,

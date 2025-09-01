@@ -8,7 +8,7 @@ export default function CreateModule({
   setCourse,
   module = 0,
   onLessonAdded,
-}: CourseProps & { onLessonAdded?: () => void }) {
+}: CourseProps & { module?: number; onLessonAdded?: () => void }) {
   const handleCreateLesson = (module: number, lesson: CourseLesson) => {
     setCourse((prevCourse) => {
       const updatedModules = [...prevCourse.modules];
