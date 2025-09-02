@@ -367,10 +367,10 @@
       scrollbar-width: thin;
       scrollbar-color: var(--charlestone-green) transparent;
       --module-box-width: calc(100% - 100px);
+
       .module-box {
         position: absolute;
         width: var(--module-box-width);
-        transition: all 0.5s ease;
       }
       .prev-module {
         left: calc(-100% + 90px);
@@ -378,6 +378,7 @@
       .present-module {
         transform: translateX(-50%);
         left: 50%;
+        transition: left 0.5s ease;
       }
       .next-module {
         left: calc(var(--module-box-width) + 110px);

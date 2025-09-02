@@ -41,10 +41,6 @@
     background: #e6f7ff;
   } */
 
-  .lesson-reading {
-    padding: 1rem;
-  }
-
   .lesson-test {
     display: flex;
     flex-direction: column;

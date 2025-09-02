@@ -1,23 +1,17 @@
 import "./CreateCourseLessonList.css";
 
-import type { CourseModule, Course } from "@/interfaces/createCourseInterfaces";
+import type { CourseProps } from "@/interfaces/createCourseInterfaces";
 import Card from "@/components/Card";
 import EditableText from "@/components/EditableText";
 import ReadingLesson from "./lessoncard/ReadingLesson";
 import VideoLesson from "./lessoncard/VideoLesson";
-interface CreateCourseLessonListProps {
-  module: CourseModule;
-  course: Course;
-  setCourse: React.Dispatch<React.SetStateAction<Course>>;
-  moduleIndex: number;
-}
 
 export default function CreateCourseLessonList({
-  module,
-  course,
   setCourse,
+  course,
   moduleIndex,
-}: CreateCourseLessonListProps) {
+}: CourseProps) {
+  const module = course.modules[moduleIndex ? moduleIndex : 0];
   return (
     <div className="create-course-lesson-list">
       <h2>Lessons</h2>
@@ -27,28 +21,18 @@ export default function CreateCourseLessonList({
             <li>
               {lesson.type === "Reading" && (
                 <ReadingLesson
-                  lesson={lesson}
-                  onTitleChange={(newTitle) => {
-                    module.lessons[idx].title = newTitle;
-                    setCourse({ ...course });
-                  }}
-                />
-              )}
-              {lesson.type === "Video" && (
-                <VideoLesson
-                  lesson={lesson}
                   course={course}
                   setCourse={setCourse}
                   moduleIndex={moduleIndex}
                   lessonIndex={idx}
-                  onTitleChange={(newTitle) => {
-                    module.lessons[idx].title = newTitle;
-                    setCourse({ ...course });
-                  }}
-                  onDurationChange={(duration) => {
-                    module.lessons[idx].duration = duration;
-                    setCourse({ ...course });
-                  }}
+                />
+              )}
+              {lesson.type === "Video" && (
+                <VideoLesson
+                  setCourse={setCourse}
+                  course={course}
+                  moduleIndex={moduleIndex}
+                  lessonIndex={idx}
                 />
               )}
               {lesson.type === "Test" && (

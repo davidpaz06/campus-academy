@@ -70,7 +70,7 @@ const ContextMenu: React.FC<ContextMenuProps> = ({
       style={{ position: "relative", display: "inline-block" }}
     >
       <span
-        className="video-chip--secondary"
+        className="context-menu-icon"
         style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
         onClick={() => setOpen((o) => !o)}
       >

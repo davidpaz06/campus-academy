@@ -1,20 +1,14 @@
 import React, { useState } from "react";
 import EditableText from "@/components/EditableText";
-import type { Course, CourseLesson } from "@/interfaces/createCourseInterfaces";
+import type { CourseProps } from "@/interfaces/createCourseInterfaces";
 import ContextMenu from "@/components/ContextMenu";
 import { supabase } from "@/supabaseClient";
-import { getVideoStorageKey } from "@/utils/courseUtils";
-import { removeLessonFromModule } from "@/utils/courseDeleteUtils";
+import {
+  getVideoStorageKey,
+  getLesson,
+  removeLessonFromModule,
+} from "@/utils/courseUtils";
 import "./lessonCard.css";
-type VideoLessonProps = {
-  lesson: CourseLesson;
-  onTitleChange: (newTitle: string) => void;
-  onDurationChange?: (duration: number) => void;
-  course: Course;
-  setCourse: React.Dispatch<React.SetStateAction<Course>>;
-  moduleIndex: number;
-  lessonIndex: number;
-};
 
 function secondsToMinutes(duration: number | undefined): React.ReactNode {
   if (typeof duration !== "number" || isNaN(duration)) return "0:00";
@@ -28,31 +22,40 @@ function secondsToMinutes(duration: number | undefined): React.ReactNode {
       .padStart(2, "0")}`;
 }
 
-export default function VideoLesson(props: VideoLessonProps) {
-  const {
-    lesson,
-    onTitleChange,
-    onDurationChange,
-    course,
-    setCourse,
-    moduleIndex,
-    lessonIndex,
-  } = props;
-  const [duration, setDuration] = useState<number | undefined>(lesson.duration);
+export default function VideoLesson({
+  setCourse,
+  course,
+  moduleIndex,
+  lessonIndex,
+}: CourseProps) {
+  const lesson = getLesson({ course, moduleIndex, lessonIndex });
+
+  const [duration, setDuration] = useState<number | undefined>(0);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleLoadedMetadata = (e: React.SyntheticEvent<HTMLVideoElement>) => {
     const videoDuration = e.currentTarget.duration;
     setDuration(videoDuration);
-    if (onDurationChange) onDurationChange(videoDuration);
+  };
+
+  const handleRemoveLesson = () => {
+    const newModules = removeLessonFromModule(
+      course.modules,
+      moduleIndex ?? 0,
+      lessonIndex ?? 0
+    );
+    setCourse({ ...course, modules: newModules });
   };
 
   return (
     <div className="lesson-video">
       <EditableText
         value={lesson.title}
-        onChange={onTitleChange}
+        onChange={(newTitle) => {
+          lesson.title = newTitle;
+          setCourse({ ...course });
+        }}
         className="lesson-title-editable"
         placeholder="Click to edit lesson title"
       />
@@ -106,7 +109,7 @@ export default function VideoLesson(props: VideoLessonProps) {
           />
         </label>
       </span>
-      <span className="lesson-video-footer">
+      <div className="lesson-video-footer">
         <span className="lesson-video-duration">
           {secondsToMinutes(duration)}
         </span>
@@ -119,18 +122,11 @@ export default function VideoLesson(props: VideoLessonProps) {
           direction="left"
           onSelect={(value) => {
             if (value === "delete") {
-              const newModules = removeLessonFromModule(
-                course.modules,
-                moduleIndex,
-                lessonIndex
-              );
-              setCourse({ ...course, modules: newModules });
-            } else if (value === "alert") {
-              alert(`Module: ${moduleIndex}, Lesson: ${lessonIndex}`);
+              handleRemoveLesson();
             }
           }}
         />
-      </span>
+      </div>
 
       {loading ? (
         <div className="lesson-video-file">

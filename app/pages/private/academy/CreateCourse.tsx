@@ -1,8 +1,12 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
-import { getNavClass, getModuleClass } from "@/utils/courseUtils";
-import EditableText from "@/components/EditableText";
+import {
+  getNavClass,
+  getModuleClass,
+  handleSubmit,
+  handleKeyDown,
+} from "@/utils/courseUtils";
 //Interfaces
 import type {
   Course,
@@ -15,6 +19,8 @@ import "./CreateCourse.css";
 import CreateCourseInfo from "./CreateCourseInfo";
 import CreateModule from "../../../components/createcourse/CreateModule";
 import CreateCourseLessonList from "@/components/createcourse/CreateCourseLessonList";
+// Components
+import EditableText from "@/components/EditableText";
 
 const InitialStep = 2;
 
@@ -36,8 +42,9 @@ const emptyCourse: Course = {
 };
 
 export default function CreateCourse() {
-  // Ref para el contenedor de lecciones
-  const courseContentRef = React.useRef<HTMLDivElement>(null);
+  const courseContentRef = React.useRef<HTMLDivElement>(
+    null
+  ) as React.RefObject<HTMLDivElement>;
   const [course, setCourse] = useState<Course>(() => {
     try {
       const stored = localStorage.getItem("courseDraft");
@@ -73,103 +80,9 @@ export default function CreateCourse() {
   }, [course]);
 
   const [step, setStep] = useState(InitialStep);
-  const handleStepChange = (action: string) => {
-    action == "next" ? setStep(step + 1) : setStep(step - 1);
-  };
 
+  // Local wrappers for imported utils
   const [activeModule, setActiveModule] = useState<number>(0);
-
-  // Scroll al fondo cuando se agrega una lección
-  const handleLessonAdded = () => {
-    setTimeout(() => {
-      if (courseContentRef.current) {
-        const moduleBoxes =
-          courseContentRef.current.querySelectorAll(".module-box");
-        const activeModuleBox = moduleBoxes[activeModule] as
-          | HTMLElement
-          | undefined;
-        if (activeModuleBox) {
-          const boxBottom =
-            activeModuleBox.offsetTop + activeModuleBox.offsetHeight;
-          courseContentRef.current.scrollTo({
-            top: boxBottom - courseContentRef.current.offsetHeight,
-            behavior: "smooth",
-          });
-        }
-      }
-    }, 0);
-  };
-
-  const handleNavActions = (action: string) => {
-    switch (action) {
-      case "prev":
-        // Navigate to the previous module
-        if (activeModule > 0) {
-          setActiveModule(activeModule - 1);
-        }
-        break;
-
-      case "next":
-        // Navigate to the next module
-        if (activeModule < course.modules.length - 1) {
-          setActiveModule(activeModule + 1);
-        }
-
-        if (activeModule === course.modules.length - 1) {
-          //add new module
-          const newModule: CourseModule = {
-            title: "Module " + (course.modules.length + 1),
-            lessons: [],
-          };
-          setCourse({ ...course, modules: [...course.modules, newModule] });
-          setActiveModule(course.modules.length);
-          break;
-        }
-    }
-  };
-
-  // handleNavClass y handleModuleClass ahora se importan desde utils
-
-  const handleActiveModule = (index: number) => {
-    setActiveModule(index);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-  };
-
-  interface HandleKeyDownEvent extends React.KeyboardEvent<HTMLFormElement> {
-    target: HTMLInputElement | HTMLTextAreaElement;
-    currentTarget: HTMLFormElement;
-  }
-
-  type HandleKeyDown = (e: HandleKeyDownEvent) => void;
-
-  const handleKeyDown: HandleKeyDown = (e) => {
-    if (
-      e.key === "Enter" &&
-      (e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement)
-    ) {
-      e.preventDefault();
-      // Buscar el siguiente input o textarea visible y enfocar
-      const form = e.currentTarget as HTMLFormElement;
-      const elements = Array.from(form.elements) as HTMLElement[];
-      const idx = elements.indexOf(e.target as HTMLElement);
-      for (let i = idx + 1; i < elements.length; i++) {
-        const el = elements[i];
-        if (
-          (el instanceof HTMLInputElement ||
-            el instanceof HTMLTextAreaElement) &&
-          !el.disabled &&
-          el.offsetParent !== null
-        ) {
-          el.focus();
-          break;
-        }
-      }
-    }
-  };
 
   switch (step) {
     case 1:
@@ -179,11 +92,12 @@ export default function CreateCourse() {
           onSubmit={handleSubmit}
           onKeyDown={handleKeyDown}
         >
-          <CreateCourseInfo course={course} setCourse={setCourse} />
+          <CreateCourseInfo setCourse={setCourse} course={course} />
           <section className="button-container">
             <button
               className="create-course-button"
-              onClick={() => handleStepChange("next")}
+              type="button"
+              onClick={() => setStep(step + 1)}
             >
               Next
             </button>
@@ -247,13 +161,15 @@ export default function CreateCourse() {
             <footer className="create-course-summary-footer">
               <button
                 className="create-course-button"
-                onClick={() => handleStepChange("prev")}
+                type="button"
+                onClick={() => setStep(step - 1)}
               >
                 Back
               </button>
               <button
                 className="create-course-button"
-                onClick={() => handleStepChange("next")}
+                type="button"
+                onClick={() => setStep(step + 1)}
               >
                 Next
               </button>
@@ -272,7 +188,7 @@ export default function CreateCourse() {
             >
               <div
                 className="nav-button prev-module-button"
-                onClick={() => handleNavActions("prev")}
+                onClick={() => setActiveModule(activeModule - 1)}
               >
                 <Icon
                   className="nav-icon prev-icon"
@@ -296,7 +212,7 @@ export default function CreateCourse() {
               </div>
               <div
                 className="nav-button next-module-button"
-                onClick={() => handleNavActions("next")}
+                onClick={() => setActiveModule(activeModule + 1)}
               >
                 <Icon
                   className="nav-icon next-icon"
@@ -309,31 +225,23 @@ export default function CreateCourse() {
               </div>
             </section>
             <section className="create-course-content" ref={courseContentRef}>
-              {course.modules.map((module, idx) => {
-                return (
-                  <div
-                    key={idx}
-                    className={`module-box ${getModuleClass(
-                      idx,
-                      activeModule
-                    )}`}
-                    onClick={() => handleActiveModule(idx)}
-                  >
-                    <CreateCourseLessonList
-                      module={module}
-                      course={course}
-                      setCourse={setCourse}
-                      moduleIndex={idx}
-                    />
-                    <CreateModule
-                      course={course}
-                      setCourse={setCourse}
-                      module={activeModule}
-                      onLessonAdded={handleLessonAdded}
-                    />
-                  </div>
-                );
-              })}
+              {course.modules.map((_, idx) => (
+                <div
+                  key={idx}
+                  className={`module-box ${getModuleClass(idx, activeModule)}`}
+                >
+                  <CreateCourseLessonList
+                    setCourse={setCourse}
+                    course={course}
+                    moduleIndex={idx}
+                  />
+                  <CreateModule
+                    setCourse={setCourse}
+                    course={course}
+                    moduleIndex={activeModule}
+                  />
+                </div>
+              ))}
             </section>
           </form>
         </div>
