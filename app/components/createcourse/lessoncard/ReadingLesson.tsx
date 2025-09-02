@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ReactDOM from "react-dom";
 import ReactMde from "react-mde";
 import ReactMarkdown from "react-markdown";
 import "react-mde/lib/styles/css/react-mde-all.css";
@@ -24,6 +25,9 @@ export default function ReadingLesson({
     "preview"
   );
 
+  // const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+
   const handleMarkdownChange = (value: string) => {
     setMarkdown(value);
     if (
@@ -39,7 +43,6 @@ export default function ReadingLesson({
 
   const duration = lesson?.file ? calculateReadingTime(lesson.file) : "";
   const [loading, setLoading] = useState(false);
-
   return (
     <div className="lesson-reading">
       <EditableText
@@ -80,9 +83,7 @@ export default function ReadingLesson({
         </label>
         <label
           className="lesson-reading-chip"
-          onClick={() =>
-            setSelectedTab("write")
-          }
+          onClick={() => setShowModal(true)}
         >
           {selectedTab === "preview" && lesson?.file
             ? "Edit File"
@@ -123,29 +124,120 @@ export default function ReadingLesson({
         <div className="lesson-reading-file">
           <ReactMde
             value={markdown}
-            onChange={handleMarkdownChange}
             selectedTab="preview"
             generateMarkdownPreview={(markdown) =>
               Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
             }
-            childProps={{
-              writeButton: { tabIndex: -1 },
-              textArea: {
-                onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-                  if (e.key === "Enter") {
-                    e.stopPropagation();
-                  }
-                },
-              },
-            }}
-            toolbarCommands={[
-              ["bold", "italic", "strikethrough", "link"],
-              ["unordered-list", "ordered-list"],
-            ]}
           />
         </div>
       )}
       <div className="lesson-reading-file-options"></div>
+
+      {/* ////////////////////////////////////////////////////// */}
+      {showModal &&
+        ReactDOM.createPortal(
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              background: "rgba(0,0,0,0.5)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 1000,
+            }}
+          >
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gridTemplateRows: "1fr 50px",
+                background: "#fff",
+                borderRadius: 8,
+                padding: 32,
+                width: "90vw",
+                height: "80vh",
+                boxShadow: "0 2px 16px rgba(0,0,0,0.2)",
+                overflow: "hidden",
+              }}
+            >
+              {/* <div
+                style={{
+                  gridColumn: "1 / 2",
+                  padding: "16px",
+                }}
+                className="reading-modal-editor"
+              > */}
+              <ReactMde
+                value={markdown}
+                onChange={handleMarkdownChange}
+                selectedTab="write"
+                generateMarkdownPreview={(markdown) =>
+                  Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
+                }
+                childProps={{
+                  writeButton: { tabIndex: -1 },
+                  textArea: {
+                    onKeyDown: (
+                      e: React.KeyboardEvent<HTMLTextAreaElement>
+                    ) => {
+                      if (e.key === "Enter") {
+                        e.stopPropagation();
+                      }
+                    },
+                  },
+                }}
+                toolbarCommands={[
+                  ["bold", "italic", "strikethrough", "link", "quote"],
+                  ["unordered-list", "ordered-list", "image", "code"],
+                ]}
+              />
+              {/* </div> */}
+              <div className="lesson-reading-file preview">
+                <ReactMde
+                  value={markdown}
+                  selectedTab="preview"
+                  generateMarkdownPreview={(markdown) =>
+                    Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
+                  }
+                />
+              </div>
+              <div
+                className="reading-modal-edit-footer"
+                style={{ gridColumn: "1 / 2", padding: "16px" }}
+              >
+                Edit button
+              </div>
+              <div
+                className="reading-modal-preview-footer"
+                style={{ gridColumn: "2 / 3", padding: "16px" }}
+              >
+                View
+              </div>
+              <button
+                style={{
+                  position: "absolute",
+                  top: 16,
+                  right: 16,
+                  background: "#eee",
+                  border: "none",
+                  borderRadius: 4,
+                  padding: "4px 8px",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+                onClick={() => setShowModal(false)}
+              >
+                X
+              </button>
+            </div>
+          </div>,
+          document.body
+        )}
+      {/* ////////////////////////////////////////////////////// */}
     </div>
   );
 }
