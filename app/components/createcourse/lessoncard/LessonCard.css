@@ -17,6 +17,12 @@
   color: #c62828 !important;
 }
 
+.lesson-title-editable {
+  font-size: 1.25rem;
+  /* color: var(--academy-primary); */
+}
+
+/* VIDEO */
 .lesson-video {
   display: grid;
   grid-template-rows: 2fr 2fr 1fr;
@@ -131,7 +137,4 @@
   color: #666;
 }
 
-.lesson-title-editable {
-  font-size: 1.25rem;
-  /* color: var(--academy-primary); */
-}
+/* READING */

@@ -113,7 +113,7 @@ export default function VideoLesson(props: VideoLessonProps) {
         <ContextMenu
           options={[
             { label: "Delete", value: "delete", className: "lesson-delete" },
-            { label: "Alert", value: "alert" },
+            // { label: "Alert", value: "alert" },
           ]}
           position="top"
           direction="left"
