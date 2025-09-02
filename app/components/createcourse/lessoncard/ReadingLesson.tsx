@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import ReactMde from "react-mde";
+
 import ReactMarkdown from "react-markdown";
 import "react-mde/lib/styles/css/react-mde-all.css";
+import "@/components/markdown.css";
 
 import type { CourseProps } from "@/interfaces/createCourseInterfaces";
 import { calculateReadingTime, getLesson } from "@/utils/courseUtils";
 import EditableText from "@/components/EditableText";
 import ContextMenu from "@/components/ContextMenu";
-import { preview } from "vite";
 
 export default function ReadingLesson({
   setCourse,
@@ -20,9 +21,6 @@ export default function ReadingLesson({
 
   const [markdown, setMarkdown] = useState<string>(
     lesson?.file || "Upload a File or Start writing your lesson..."
-  );
-  const [selectedTab, setSelectedTab] = useState<"write" | "preview">(
-    "preview"
   );
 
   // const [showModal, setShowModal] = useState(true);
@@ -85,9 +83,7 @@ export default function ReadingLesson({
           className="lesson-reading-chip"
           onClick={() => setShowModal(true)}
         >
-          {selectedTab === "preview" && lesson?.file
-            ? "Edit File"
-            : "Create File"}
+          {lesson?.file ? "Edit File" : "Create File"}
         </label>
       </span>
       <div className="lesson-reading-footer">
