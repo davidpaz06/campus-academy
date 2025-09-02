@@ -1,11 +1,10 @@
+import React, { useState } from "react";
 import ReactMde from "react-mde";
 import ReactMarkdown from "react-markdown";
-
-import React, { useState } from "react";
 import "react-mde/lib/styles/css/react-mde-all.css";
 
 import type { CourseProps } from "@/interfaces/createCourseInterfaces";
-import { calculateReadingTime } from "@/utils/courseUtils";
+import { calculateReadingTime, getLesson } from "@/utils/courseUtils";
 import EditableText from "@/components/EditableText";
 import ContextMenu from "@/components/ContextMenu";
 
@@ -15,15 +14,7 @@ export default function ReadingLesson({
   moduleIndex,
   lessonIndex,
 }: CourseProps) {
-  const lesson =
-    course.modules[moduleIndex ? moduleIndex : 0] &&
-    course.modules[moduleIndex ? moduleIndex : 0].lessons[
-      lessonIndex ? lessonIndex : 0
-    ]
-      ? course.modules[moduleIndex ? moduleIndex : 0].lessons[
-          lessonIndex ? lessonIndex : 0
-        ]
-      : undefined;
+  const lesson = getLesson({ course, moduleIndex, lessonIndex });
 
   const [markdown, setMarkdown] = useState<string>(
     lesson?.file || "Start writing your lesson..."
@@ -114,7 +105,7 @@ export default function ReadingLesson({
               }
             }
             if (value === "full-screen") {
-              setShowModal(true);
+              // setShowModal(true);
             }
           }}
         />
@@ -131,7 +122,7 @@ export default function ReadingLesson({
             selectedTab={selectedTab}
             onTabChange={(tab) => {
               setSelectedTab(tab);
-              if (tab === "preview") setShowModal(true);
+              // if (tab === "preview") setShowModal(true);
             }}
             generateMarkdownPreview={(markdown) =>
               Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)

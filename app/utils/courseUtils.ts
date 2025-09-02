@@ -15,14 +15,20 @@ export function getLesson({
   lessonIndex?: number;
 }): CourseLesson {
   if (!course || !course.modules)
-    return { title: "", type: "Video", file: "", duration: 0 };
+    return { title: "Lesson", type: "Lesson", file: "Lesson", duration: 0 };
+
   const modIdx = typeof moduleIndex === "number" ? moduleIndex : 0;
+
   const lessonIdx = typeof lessonIndex === "number" ? lessonIndex : 0;
+
   const module = course.modules[modIdx];
+
   if (!module || !module.lessons)
-    return { title: "", type: "Video", file: "", duration: 0 };
+    return { title: "Lesson", type: "Lesson", file: "Lesson", duration: 0 };
+
   return module.lessons[lessonIdx];
 }
+
 // Scroll to bottom when lesson is added
 export function handleLessonAdded(
   courseContentRef: React.RefObject<HTMLDivElement>,
