@@ -345,9 +345,18 @@
         background: transparent;
         color: var(--background-snow);
         width: 100%;
+        height: 50px;
         outline: none;
         padding: 0;
         margin: 0;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        display: -webkit-box;
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
 
         &:hover {
           color: #fff;

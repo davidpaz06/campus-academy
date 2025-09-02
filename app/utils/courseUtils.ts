@@ -179,11 +179,11 @@ export function getModuleClass(idx: number, activeModule: number): string {
 }
 
 export function calculateReadingTime(text: string): string {
-  const wordsPerMinute = 200; // Average reading speed
+  const wordsPerMinute = 100;
   const textLength = text.split(" ").length;
   const readingTimeInMinutes = Math.ceil(textLength / wordsPerMinute);
 
-  const readingTimeRounded = Math.round(readingTimeInMinutes / 5) * 5;
+  const readingTimeRounded = Math.round(readingTimeInMinutes / 5) * 10;
 
   return intToTime(readingTimeRounded * 60);
 }

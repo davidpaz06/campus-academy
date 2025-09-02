@@ -46,7 +46,7 @@ export default function CreateModule({ setCourse, moduleIndex }: CourseProps) {
             handleCreateLesson({
               title: "New Reading Lesson",
               type: "Reading",
-              file: "<Reading_file>",
+              file: "",
             })
           }
         />

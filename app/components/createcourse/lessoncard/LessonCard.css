@@ -72,24 +72,23 @@
   }
 
   .video-chips {
+    grid-row: 2/3;
+    grid-column: 1/2;
     display: flex;
     flex-direction: column;
-    width: max-content;
-    align-items: center;
-    justify-content: center;
-
     gap: 0.5rem;
-    padding: 0 var(--spacing-md);
+    padding: var(--spacing-md);
   }
 
   .video-chip {
     background: #e3f2fd;
     color: #1976d2;
     border: none;
-    border-radius: var(--radius);
+    border-radius: 16px;
     padding: 0.25rem 1rem;
     font-size: 0.95rem;
     font-weight: 500;
+    height: fit-content;
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
   }
@@ -128,14 +127,19 @@
 /* READING */
 
 .lesson-reading {
+  --rh-height: 80px;
+  --rta-height: 150px;
+  --rf-height: 50px;
+
   display: grid;
-  grid-template-rows: 2fr 2fr 1fr;
+  grid-template-rows: var(--rh-height) var(--rta-height) var(--rf-height);
   grid-template-columns: 5fr 8fr;
-  height: 250px;
 
   .lesson-title-editable {
     grid-row: 1/2;
     grid-column: 1/2;
+
+    align-content: center;
     padding: var(--spacing-md);
     font-size: 1rem;
     font-weight: var(--font-weight-bold);
@@ -152,25 +156,26 @@
   }
   .lesson-title-editable:focus {
     background: #e6f7ff;
+    align-content: center;
   }
 
   .lesson-reading-chips {
     grid-row: 2/3;
     grid-column: 1/2;
     display: flex;
+    flex-direction: column;
     gap: 0.5rem;
-    padding: 0 var(--spacing-md);
+    padding: var(--spacing-md);
   }
   .lesson-reading-chip {
     background: #e3f2fd;
-    color: #1976d2;
+    color: var(--academy-primary);
     border: none;
-    border-radius: var(--radius);
+    border-radius: 16px;
     padding: 0.25rem 1rem;
     font-size: 0.95rem;
     font-weight: 500;
     height: fit-content;
-    width: fit-content;
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
   }
@@ -180,133 +185,77 @@
   }
 
   .lesson-reading-footer {
+    grid-row: 3/4;
+    grid-column: 1/2;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 0 1rem;
   }
-
-  .lesson-reading-file {
-    grid-row: 1/3;
-    grid-column: 2/3;
-    background-color: #e6f7ff;
-    border: 1px solid #eee;
-    width: 100%;
-    height: 100%;
-  }
-  .lesson-reading-file-options {
-    grid-row: 3/4;
-    grid-column: 2/3;
-  }
-
-  /* Make ReactMde fill parent */
-  .lesson-reading-file {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    min-width: 0;
-    overflow: hidden;
-  }
-  .lesson-reading-file .react-mde {
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    border: none;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-  /* Mantener la barra del editor pegada arriba */
-  .lesson-reading-file .react-mde .mde-header {
-    flex: 0 0 auto;
-    width: 100%;
-    box-sizing: border-box;
-    z-index: 1;
-  }
-  .lesson-reading-file .react-mde .mde-text {
-    flex: 1 1 auto;
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    min-width: 0;
-    max-width: 100%;
-    max-height: 100%;
-    gap: 0.5rem;
-    padding: 0 var(--spacing-md);
-    border: none;
-    outline: none;
-    box-sizing: border-box;
-    resize: none;
-    overflow: auto;
-    /* Evita que el textarea se meta debajo de la barra */
-    margin-top: 0;
-  }
-
   .lesson-reading-duration {
     font-size: 0.85rem;
     color: #666;
   }
 
-  /* Modal styles for reading preview */
-  .lesson-reading-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.35);
-    z-index: 9999;
+  .lesson-reading-file {
+    grid-row: 1/4;
+    grid-column: 2/3;
+  }
+
+  .lesson-reading-file-options {
+    grid-row: 3/4;
+    grid-column: 2/3;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    background-color: var(--academy-primary);
+    display: none;
   }
-  .lesson-reading-modal {
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.12);
-    max-width: 800px;
-    width: 90vw;
-    max-height: 90vh;
-    padding: 2rem 2.5rem 1.5rem 2.5rem;
-    position: relative;
-    overflow-y: auto;
-  }
-  .lesson-reading-modal-close {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: #e3f2fd;
-    color: #1976d2;
+
+  /* Make ReactMde */
+  .lesson-reading-file .react-mde {
     border: none;
-    border-radius: 50%;
-    width: 2.5rem;
-    height: 2.5rem;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-    z-index: 2;
+    border-left: 2px solid #ccc;
   }
-  .lesson-reading-modal-close:hover {
-    background: #1976d2;
-    color: #fff;
+
+  /* Mantener la barra del editor pegada arriba */
+  .lesson-reading-file .react-mde .mde-header {
+    display: none;
   }
-  .lesson-reading-modal-content {
-    font-size: 1.1rem;
+
+  .lesson-reading-file .react-mde .mde-text {
+    height: calc(var(--rh-height) + var(--rta-height));
+    padding: var(--spacing-md);
+    overflow-y: scroll;
+    border: none;
+    outline: none;
+    resize: none;
+  }
+
+  /* Estilos para la vista previa de Markdown */
+
+  /* .mini-preview { */
+  .lesson-reading-file .react-mde .mde-preview {
+    background: #fff;
+    height: calc(var(--rh-height) + var(--rta-height) + var(--rf-height));
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    padding: 0.5rem;
+    font-size: 0.75rem;
     color: #222;
-    line-height: 1.7;
+    overflow-y: scroll;
   }
-  .lesson-reading-modal-content h1,
-  .lesson-reading-modal-content h2,
-  .lesson-reading-modal-content h3 {
+
+  .lesson-reading-file .react-mde .mde-preview h1,
+  .lesson-reading-file .react-mde .mde-preview h2,
+  .lesson-reading-file .react-mde .mde-preview h3 {
     color: #1976d2;
     margin-top: 1.2em;
     margin-bottom: 0.5em;
     font-weight: 700;
   }
-  .lesson-reading-modal-content blockquote {
+
+  .lesson-reading-file .react-mde .mde-preview blockquote {
     border-left: 4px solid #1976d2;
     background: #e3f2fd;
     padding: 0.5em 1em;
@@ -314,52 +263,17 @@
     color: #333;
     font-style: italic;
   }
-  .lesson-reading-modal-content ul,
-  .lesson-reading-modal-content ol {
+
+  .lesson-reading-file .react-mde .mde-preview ul,
+  .lesson-reading-file .react-mde .mde-preview ol {
     margin-left: 2em;
     margin-bottom: 1em;
   }
-  .lesson-reading-modal-content hr {
+
+  .lesson-reading-file .react-mde .mde-preview hr {
     border: none;
     border-top: 2px solid #e3f2fd;
     margin: 2em 0;
   }
 }
-
-/* Markdown preview */
-.lesson-reading-file .react-mde .mde-preview {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  padding: 1.5rem;
-  font-size: 1.05rem;
-  color: #222;
-  max-height: 100%;
-  overflow-y: auto;
-}
-.lesson-reading-file .react-mde .mde-preview h1,
-.lesson-reading-file .react-mde .mde-preview h2,
-.lesson-reading-file .react-mde .mde-preview h3 {
-  color: #1976d2;
-  margin-top: 1.2em;
-  margin-bottom: 0.5em;
-  font-weight: 700;
-}
-.lesson-reading-file .react-mde .mde-preview blockquote {
-  border-left: 4px solid #1976d2;
-  background: #e3f2fd;
-  padding: 0.5em 1em;
-  margin: 1em 0;
-  color: #333;
-  font-style: italic;
-}
-.lesson-reading-file .react-mde .mde-preview ul,
-.lesson-reading-file .react-mde .mde-preview ol {
-  margin-left: 2em;
-  margin-bottom: 1em;
-}
-.lesson-reading-file .react-mde .mde-preview hr {
-  border: none;
-  border-top: 2px solid #e3f2fd;
-  margin: 2em 0;
-}
+/* } */

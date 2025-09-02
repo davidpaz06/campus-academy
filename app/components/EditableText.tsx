@@ -5,7 +5,7 @@ interface EditableTextProps {
   onChange: (newValue: string) => void;
   className?: string;
   placeholder?: string;
-  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  inputProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 }
 
 const EditableText: React.FC<EditableTextProps> = ({
@@ -17,7 +17,7 @@ const EditableText: React.FC<EditableTextProps> = ({
 }) => {
   const [editing, setEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   // Sync tempValue with value prop when value changes externally
   React.useEffect(() => {
@@ -40,12 +40,13 @@ const EditableText: React.FC<EditableTextProps> = ({
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
       setEditing(false);
       if (tempValue !== value) {
         onChange(tempValue);
       }
+      e.preventDefault();
     } else if (e.key === "Escape") {
       setEditing(false);
       setTempValue(value);
@@ -53,9 +54,8 @@ const EditableText: React.FC<EditableTextProps> = ({
   };
 
   return editing ? (
-    <input
+    <textarea
       ref={inputRef}
-      type="text"
       value={tempValue}
       onChange={(e) => setTempValue(e.target.value)}
       onBlur={handleBlur}
@@ -63,6 +63,7 @@ const EditableText: React.FC<EditableTextProps> = ({
       className={className}
       style={{
         width: "100%",
+        resize: "none",
         textDecoration: editing ? "none" : "line-through",
       }}
       placeholder={placeholder}

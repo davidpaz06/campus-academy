@@ -7,6 +7,7 @@ import type { CourseProps } from "@/interfaces/createCourseInterfaces";
 import { calculateReadingTime, getLesson } from "@/utils/courseUtils";
 import EditableText from "@/components/EditableText";
 import ContextMenu from "@/components/ContextMenu";
+import { preview } from "vite";
 
 export default function ReadingLesson({
   setCourse,
@@ -17,16 +18,18 @@ export default function ReadingLesson({
   const lesson = getLesson({ course, moduleIndex, lessonIndex });
 
   const [markdown, setMarkdown] = useState<string>(
-    lesson?.file || "Start writing your lesson..."
+    lesson?.file || "Upload a File or Start writing your lesson..."
   );
-  const [selectedTab, setSelectedTab] = useState<"write" | "preview">("write");
+  const [selectedTab, setSelectedTab] = useState<"write" | "preview">(
+    "preview"
+  );
 
   const handleMarkdownChange = (value: string) => {
     setMarkdown(value);
     if (
+      setCourse &&
       typeof moduleIndex === "number" &&
-      typeof lessonIndex === "number" &&
-      setCourse
+      typeof lessonIndex === "number"
     ) {
       const updatedCourse: CourseProps["course"] = { ...course };
       updatedCourse.modules[moduleIndex].lessons[lessonIndex].file = value;
@@ -75,17 +78,22 @@ export default function ReadingLesson({
             }}
           />
         </label>
+        <label
+          className="lesson-reading-chip"
+          onClick={() =>
+            setSelectedTab("write")
+          }
+        >
+          {selectedTab === "preview" && lesson?.file
+            ? "Edit File"
+            : "Create File"}
+        </label>
       </span>
       <div className="lesson-reading-footer">
         <span className="lesson-reading-duration">{duration}</span>
         <ContextMenu
           options={[
             { label: "Delete", value: "delete", className: "lesson-delete" },
-            {
-              label: "Full Screen",
-              value: "full-screen",
-              className: "full-screen-lesson",
-            },
           ]}
           position="top"
           direction="left"
@@ -104,9 +112,6 @@ export default function ReadingLesson({
                 setCourse(updatedCourse);
               }
             }
-            if (value === "full-screen") {
-              // setShowModal(true);
-            }
           }}
         />
       </div>
@@ -119,11 +124,7 @@ export default function ReadingLesson({
           <ReactMde
             value={markdown}
             onChange={handleMarkdownChange}
-            selectedTab={selectedTab}
-            onTabChange={(tab) => {
-              setSelectedTab(tab);
-              // if (tab === "preview") setShowModal(true);
-            }}
+            selectedTab="preview"
             generateMarkdownPreview={(markdown) =>
               Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
             }
@@ -144,7 +145,7 @@ export default function ReadingLesson({
           />
         </div>
       )}
-      <div className="lesson-reading-file-options">Options</div>
+      <div className="lesson-reading-file-options"></div>
     </div>
   );
 }
