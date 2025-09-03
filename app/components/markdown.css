@@ -24,6 +24,7 @@
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   padding: 0.5rem;
+  font-size: 0.7rem;
   color: #222;
   overflow-y: auto;
 }
@@ -93,8 +94,48 @@
   margin: 2em 0;
 }
 
+/* Estilos para la vista previa completa */
+
 .full-preview .react-mde .mde-preview {
   font-size: 1rem;
-  height: 60vh;
+  height: 75vh;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--charlestone-green) transparent;
+}
+
+/* Estilos para el modal de edición */
+
+.reading-modal-edit {
+  .react-mde {
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    resize: none;
+  }
+
+  .react-mde .mde-text {
+    padding: 0;
+    margin: 0;
+  }
+
+  .react-mde .mde-header {
+    display: flex;
+    align-content: center;
+    height: 7vh;
+    box-sizing: border-box;
+  }
+
+  .custom-mde-textarea {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    height: 68vh !important;
+    scrollbar-width: thin;
+    scrollbar-color: var(--charlestone-green) transparent;
+    outline: none;
+    border: none;
+    resize: none;
+  }
 }

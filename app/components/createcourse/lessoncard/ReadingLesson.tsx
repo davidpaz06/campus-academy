@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ReactDOM from "react-dom";
 import ReactMde from "react-mde";
 
@@ -41,6 +41,7 @@ export default function ReadingLesson({
 
   const duration = lesson?.file ? calculateReadingTime(lesson.file) : "";
   const [loading, setLoading] = useState(false);
+
   return (
     <div className="lesson-reading">
       <EditableText
@@ -127,104 +128,73 @@ export default function ReadingLesson({
           />
         </div>
       )}
-      <div className="lesson-reading-file-options"></div>
 
-      {/* ////////////////////////////////////////////////////// */}
       {showModal &&
         ReactDOM.createPortal(
-          <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              background: "rgba(0,0,0,0.5)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 1000,
-            }}
-          >
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gridTemplateRows: "1fr 50px",
-                background: "#fff",
-                borderRadius: 8,
-                padding: 32,
-                width: "90vw",
-                height: "80vh",
-                boxShadow: "0 2px 16px rgba(0,0,0,0.2)",
-                overflow: "hidden",
-              }}
-            >
-              {/* <div
-                style={{
-                  gridColumn: "1 / 2",
-                  padding: "16px",
+          <div className="reading-modal">
+            <div className="reading-modal-content">
+              <div
+                className="reading-modal-edit"
+                onKeyDown={(e) => {
+                  if (
+                    e.key === "Enter" &&
+                    document.activeElement &&
+                    document.activeElement.classList.contains("mde-text")
+                  ) {
+                    e.preventDefault();
+                    const textarea =
+                      document.activeElement as HTMLTextAreaElement;
+                    const value = textarea.value;
+                    const { selectionStart, selectionEnd } = textarea;
+                    const before = value.slice(0, selectionStart);
+                    const after = value.slice(selectionEnd);
+                    const newValue = before + "\n" + after;
+                    setMarkdown(newValue);
+                    setTimeout(() => {
+                      textarea.selectionStart = textarea.selectionEnd =
+                        selectionStart + 1;
+                    }, 0);
+                  }
                 }}
-                className="reading-modal-editor"
-              > */}
-              <ReactMde
-                value={markdown}
-                onChange={handleMarkdownChange}
-                selectedTab="write"
-                generateMarkdownPreview={(markdown) =>
-                  Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
-                }
-                childProps={{
-                  writeButton: { tabIndex: -1 },
-                  textArea: {
-                    onKeyDown: (
-                      e: React.KeyboardEvent<HTMLTextAreaElement>
-                    ) => {
-                      if (e.key === "Enter") {
-                        e.stopPropagation();
-                      }
-                    },
-                  },
-                }}
-                toolbarCommands={[
-                  ["bold", "italic", "strikethrough", "link", "quote"],
-                  ["unordered-list", "ordered-list", "image", "code"],
-                ]}
-              />
-              {/* </div> */}
-              <div className="lesson-reading-file preview">
+              >
+                <ReactMde
+                  value={markdown}
+                  onChange={setMarkdown}
+                  toolbarButtonComponent={[[]]}
+                  disablePreview
+                  toolbarCommands={[
+                    ["header"],
+                    ["bold", "italic", "strikethrough"],
+                    ["link", "code", "quote"],
+                    ["image"],
+                    ["unordered-list", "ordered-list"],
+                  ]}
+                  classes={{
+                    textArea: "custom-mde-textarea",
+                  }}
+                />
+              </div>
+
+              <div className="lesson-reading-file full-preview">
                 <ReactMde
                   value={markdown}
                   selectedTab="preview"
+                  classes={{
+                    preview: "preview",
+                  }}
                   generateMarkdownPreview={(markdown) =>
                     Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
                   }
                 />
               </div>
-              <div
-                className="reading-modal-edit-footer"
-                style={{ gridColumn: "1 / 2", padding: "16px" }}
-              >
-                Edit button
+              <div className="reading-modal-edit-footer lesson-reading-chips">
+                <span className="lesson-reading-chip">
+                  {lesson.file.split(" ").length} words
+                </span>
               </div>
-              <div
-                className="reading-modal-preview-footer"
-                style={{ gridColumn: "2 / 3", padding: "16px" }}
-              >
-                View
-              </div>
+              <div className="reading-modal-preview-footer">View</div>
               <button
-                style={{
-                  position: "absolute",
-                  top: 16,
-                  right: 16,
-                  background: "#eee",
-                  border: "none",
-                  borderRadius: 4,
-                  padding: "4px 8px",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                }}
+                className="reading-modal-close-button"
                 onClick={() => setShowModal(false)}
               >
                 X
@@ -233,7 +203,6 @@ export default function ReadingLesson({
           </div>,
           document.body
         )}
-      {/* ////////////////////////////////////////////////////// */}
     </div>
   );
 }
