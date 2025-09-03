@@ -254,24 +254,64 @@
 
   .reading-modal-edit-footer {
     display: flex;
-    justify-content: space-between;
     grid-column: 1 / 2;
+    margin: 5px 10px 0 0;
     background: var(--academy-primary);
-    border: 1px solid var(--academy-primary);
+
     gap: 8px;
     padding: var(--spacing-sm);
-    margin: 5px 10px 0 0;
     border-radius: var(--radius);
+    align-items: center;
+    justify-content: space-between;
+
+    .modal-chip-primary {
+      background: #fff;
+      color: var(--academy-primary);
+      border: none;
+      border-radius: 16px;
+      padding: 0.25rem 1rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      height: fit-content;
+      transition: background 0.2s, color 0.2s;
+    }
   }
 
   .reading-modal-preview-footer {
-    grid-column: 2 / 3;
     display: flex;
-    align-items: center;
-    background-color: #ccc;
+    grid-column: 2 / 3;
     margin: 5px 10px 0 20px;
+    background-color: var(--charlestone-green);
 
+    gap: 8px;
+    padding: var(--spacing-sm);
     border-radius: var(--radius);
+    align-items: center;
+    justify-content: space-between;
+
+    .modal-chip-secondary {
+      background: var(--academy-primary);
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      padding: 0.25rem 1rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      height: fit-content;
+      transition: background 0.2s, color 0.2s;
+    }
+    .modal-chip-secondary:hover {
+      background-color: var(--academy-primary);
+      color: #fff;
+      cursor: pointer;
+    }
+    .back {
+      background-color: #fafafa;
+      color: #666;
+    }
+    .save {
+      background-color: var(--threads-primary);
+    }
   }
 
   .reading-modal-close-button {
@@ -282,7 +322,7 @@
     color: white;
     border: none;
     border-radius: 4px;
-    padding: 4px 8px;
+    padding: 5px 10px;
     cursor: pointer;
     font-weight: bold;
     &:hover {

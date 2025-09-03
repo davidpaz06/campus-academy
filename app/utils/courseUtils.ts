@@ -4,6 +4,7 @@ import type {
   CourseLesson,
   CourseModule,
 } from "@/interfaces/createCourseInterfaces";
+import { getWordCount } from "./markdownUtils";
 
 export function getLesson({
   course,
@@ -180,7 +181,7 @@ export function getModuleClass(idx: number, activeModule: number): string {
 
 export function calculateReadingTime(text: string): string {
   const wordsPerMinute = 100;
-  const textLength = text.split(" ").length;
+  const textLength = getWordCount(text);
   const readingTimeInMinutes = Math.ceil(textLength / wordsPerMinute);
 
   const readingTimeRounded = Math.round(readingTimeInMinutes / 5) * 10;
@@ -192,13 +193,16 @@ export function intToTime(int: number): string {
   const hours = Math.floor(int / 3600);
   const minutes = Math.floor((int % 3600) / 60);
 
+  if (hours === 0 && minutes === 0) {
+    return ``;
+  }
   if (hours === 0 && minutes > 0) {
-    return `0:${minutes}`;
+    return `${minutes}min`;
   }
   if (hours > 0 && minutes === 0) {
     return `${hours}h`;
   }
-  return `${hours}:${minutes} min`;
+  return `${hours}:${minutes}min`;
 }
 
 export function removeLessonFromModule(

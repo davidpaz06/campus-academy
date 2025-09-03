@@ -8,6 +8,8 @@ import "@/components/markdown.css";
 
 import type { CourseProps } from "@/interfaces/createCourseInterfaces";
 import { calculateReadingTime, getLesson } from "@/utils/courseUtils";
+import { getWordCount } from "@/utils/markdownUtils";
+
 import EditableText from "@/components/EditableText";
 import ContextMenu from "@/components/ContextMenu";
 
@@ -18,12 +20,10 @@ export default function ReadingLesson({
   lessonIndex,
 }: CourseProps) {
   const lesson = getLesson({ course, moduleIndex, lessonIndex });
-
   const [markdown, setMarkdown] = useState<string>(
     lesson?.file || "Upload a File or Start writing your lesson..."
   );
-
-  // const [showModal, setShowModal] = useState(true);
+  const [content, setContent] = useState<string>(markdown);
   const [showModal, setShowModal] = useState(false);
 
   const handleMarkdownChange = (value: string) => {
@@ -38,9 +38,8 @@ export default function ReadingLesson({
       setCourse(updatedCourse);
     }
   };
-
-  const duration = lesson?.file ? calculateReadingTime(lesson.file) : "";
   const [loading, setLoading] = useState(false);
+  const duration = lesson?.file ? calculateReadingTime(lesson.file) : "";
 
   return (
     <div className="lesson-reading">
@@ -82,7 +81,10 @@ export default function ReadingLesson({
         </label>
         <label
           className="lesson-reading-chip"
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            setShowModal(true);
+            setContent(lesson?.file);
+          }}
         >
           {lesson?.file ? "Edit File" : "Create File"}
         </label>
@@ -187,12 +189,35 @@ export default function ReadingLesson({
                   }
                 />
               </div>
-              <div className="reading-modal-edit-footer lesson-reading-chips">
-                <span className="lesson-reading-chip">
-                  {lesson.file.split(" ").length} words
+              <div className="reading-modal-edit-footer">
+                <span className="modal-chip-primary">
+                  {getWordCount(markdown)} words
+                </span>
+                {calculateReadingTime(markdown) !== "" ? (
+                  <span className="modal-chip-primary">
+                    {calculateReadingTime(markdown)} read
+                  </span>
+                ) : null}
+              </div>
+              <div className="reading-modal-preview-footer">
+                <span
+                  className="modal-chip-secondary back"
+                  onClick={() => {
+                    setShowModal(false);
+                    setMarkdown(content);
+                  }}
+                >
+                  Cancel
+                </span>
+                <span
+                  className="modal-chip-secondary save"
+                  onClick={() => {
+                    setShowModal(false);
+                  }}
+                >
+                  Save
                 </span>
               </div>
-              <div className="reading-modal-preview-footer">View</div>
               <button
                 className="reading-modal-close-button"
                 onClick={() => setShowModal(false)}
