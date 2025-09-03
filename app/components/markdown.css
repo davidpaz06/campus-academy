@@ -1,34 +1,4 @@
-/* Make ReactMde */
-.react-mde {
-  border: none;
-  border-left: 2px solid #ccc;
-}
-
-.react-mde .mde-header {
-  display: none;
-}
-
-.react-mde .mde-text {
-  height: calc(var(--rh-height) + var(--rta-height));
-  padding: var(--spacing-md);
-  overflow-y: scroll;
-  border: none;
-  outline: none;
-  resize: none;
-}
-
-/* Estilos para la vista previa de Markdown */
-.react-mde .mde-preview {
-  background: #fff;
-  height: calc(var(--rh-height) + var(--rta-height) + var(--rf-height));
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  padding: 0.5rem;
-  font-size: 0.7rem;
-  color: #222;
-  overflow-y: auto;
-}
-
+/* COMMON STYLES */
 .react-mde .mde-preview h1,
 .react-mde .mde-preview h2,
 .react-mde .mde-preview h3 {
@@ -94,14 +64,53 @@
   margin: 2em 0;
 }
 
-/* Estilos para la vista previa completa */
+/* LESSON CARD */
+.lesson-card {
+  .react-mde {
+    border: none;
+    border-left: 2px solid transparent;
+  }
 
-.full-preview .react-mde .mde-preview {
-  font-size: 1rem;
-  height: 75vh;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--charlestone-green) transparent;
+  .react-mde .mde-header {
+    display: none;
+  }
+
+  .react-mde .mde-text {
+    padding: var(--spacing-md);
+    border: none;
+    outline: none;
+    resize: none;
+  }
+
+  .react-mde .mde-preview {
+    background: #fff;
+    min-height: var(--lesson-card-height) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    padding: 0.5rem;
+    font-size: 0.7rem;
+    color: #222;
+  }
+}
+
+/* FULL PREVIEW - (MODAL) */
+
+.full-preview {
+  overflow-y: hidden;
+
+  .react-mde .mde-header {
+    display: none;
+    overflow-y: hidden;
+  }
+
+  .react-mde .mde-preview {
+    font-size: 1rem;
+    height: inherit;
+    overflow-y: hidden;
+  }
+
+  .custom-mde-textarea {
+    overflow-y: hidden;
+  }
 }
 
 /* Estilos para el modal de edición */
@@ -111,13 +120,13 @@
     padding: 0;
     margin: 0;
     border: none;
-    outline: none;
-    resize: none;
   }
 
   .react-mde .mde-text {
     padding: 0;
     margin: 0;
+    resize: none;
+    border: 1px solid #eee;
   }
 
   .react-mde .mde-header {

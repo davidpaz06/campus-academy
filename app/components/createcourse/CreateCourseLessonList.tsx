@@ -18,38 +18,36 @@ export default function CreateCourseLessonList({
       <ul>
         {module.lessons.map((lesson, idx) => (
           <Card key={idx} className="lesson-card">
-            <li>
-              {lesson.type === "Reading" && (
-                <ReadingLesson
-                  course={course}
-                  setCourse={setCourse}
-                  moduleIndex={moduleIndex}
-                  lessonIndex={idx}
+            {lesson.type === "Reading" && (
+              <ReadingLesson
+                course={course}
+                setCourse={setCourse}
+                moduleIndex={moduleIndex}
+                lessonIndex={idx}
+              />
+            )}
+            {lesson.type === "Video" && (
+              <VideoLesson
+                setCourse={setCourse}
+                course={course}
+                moduleIndex={moduleIndex}
+                lessonIndex={idx}
+              />
+            )}
+            {lesson.type === "Test" && (
+              <div className="lesson-test">
+                <EditableText
+                  value={lesson.title}
+                  onChange={(newTitle) => {
+                    module.lessons[idx].title = newTitle;
+                    setCourse({ ...course });
+                  }}
+                  className="lesson-title-editable"
+                  placeholder="Click to edit lesson title"
                 />
-              )}
-              {lesson.type === "Video" && (
-                <VideoLesson
-                  setCourse={setCourse}
-                  course={course}
-                  moduleIndex={moduleIndex}
-                  lessonIndex={idx}
-                />
-              )}
-              {lesson.type === "Test" && (
-                <div className="lesson-test">
-                  <EditableText
-                    value={lesson.title}
-                    onChange={(newTitle) => {
-                      module.lessons[idx].title = newTitle;
-                      setCourse({ ...course });
-                    }}
-                    className="lesson-title-editable"
-                    placeholder="Click to edit lesson title"
-                  />
-                  <p>{lesson.file}</p>
-                </div>
-              )}
-            </li>
+                <p>{lesson.file}</p>
+              </div>
+            )}
           </Card>
         ))}
       </ul>

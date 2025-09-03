@@ -1,3 +1,4 @@
+import "./lessonCard.css";
 import { useState } from "react";
 import ReactDOM from "react-dom";
 import ReactMde from "react-mde";
@@ -42,7 +43,7 @@ export default function ReadingLesson({
   const duration = lesson?.file ? calculateReadingTime(lesson.file) : "";
 
   return (
-    <div className="lesson-reading">
+    <>
       <EditableText
         value={lesson?.title || ""}
         onChange={(newTitle) => {
@@ -60,8 +61,8 @@ export default function ReadingLesson({
         className="lesson-title-editable"
         placeholder="Click to edit lesson title"
       />
-      <span className="lesson-reading-chips">
-        <label className="lesson-reading-chip">
+      <span className="lesson-chips">
+        <label className="lesson-chip">
           {loading ? "Uploading..." : "Upload file"}
           <input
             type="file"
@@ -80,7 +81,7 @@ export default function ReadingLesson({
           />
         </label>
         <label
-          className="lesson-reading-chip"
+          className="lesson-chip"
           onClick={() => {
             setShowModal(true);
             setContent(lesson?.file);
@@ -89,8 +90,8 @@ export default function ReadingLesson({
           {lesson?.file ? "Edit File" : "Create File"}
         </label>
       </span>
-      <div className="lesson-reading-footer">
-        <span className="lesson-reading-duration">{duration}</span>
+      <div className="lesson-footer">
+        <span className="lesson-duration">{duration}</span>
         <ContextMenu
           options={[
             { label: "Delete", value: "delete", className: "lesson-delete" },
@@ -116,11 +117,11 @@ export default function ReadingLesson({
         />
       </div>
       {loading ? (
-        <div className="lesson-reading-file">
+        <div className="lesson-file">
           <div className="loader"></div>
         </div>
       ) : (
-        <div className="lesson-reading-file">
+        <div className="lesson-file">
           <ReactMde
             value={markdown}
             selectedTab="preview"
@@ -177,7 +178,7 @@ export default function ReadingLesson({
                 />
               </div>
 
-              <div className="lesson-reading-file full-preview">
+              <div className="full-preview">
                 <ReactMde
                   value={markdown}
                   selectedTab="preview"
@@ -189,7 +190,7 @@ export default function ReadingLesson({
                   }
                 />
               </div>
-              <div className="reading-modal-edit-footer">
+              <div className="modal-edit-reading-footer">
                 <span className="modal-chip-primary">
                   {getWordCount(markdown)} words
                 </span>
@@ -228,6 +229,6 @@ export default function ReadingLesson({
           </div>,
           document.body
         )}
-    </div>
+    </>
   );
 }

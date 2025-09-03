@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import EditableText from "@/components/EditableText";
-import type { CourseProps } from "@/interfaces/createCourseInterfaces";
-import ContextMenu from "@/components/ContextMenu";
 import { supabase } from "@/supabaseClient";
+
+import type { CourseProps } from "@/interfaces/createCourseInterfaces";
 import {
   getVideoStorageKey,
   getLesson,
   removeLessonFromModule,
 } from "@/utils/courseUtils";
+
+import EditableText from "@/components/EditableText";
+import ContextMenu from "@/components/ContextMenu";
 import "./lessonCard.css";
 
 function secondsToMinutes(duration: number | undefined): React.ReactNode {
@@ -49,7 +51,7 @@ export default function VideoLesson({
   };
 
   return (
-    <div className="lesson-video">
+    <>
       <EditableText
         value={lesson.title}
         onChange={(newTitle) => {
@@ -59,9 +61,9 @@ export default function VideoLesson({
         className="lesson-title-editable"
         placeholder="Click to edit lesson title"
       />
-      <span className="video-chips">
+      <span className="lesson-chips">
         <label
-          className="video-chip"
+          className="lesson-chip"
           style={{
             cursor: "pointer",
             position: "relative",
@@ -109,10 +111,8 @@ export default function VideoLesson({
           />
         </label>
       </span>
-      <div className="lesson-video-footer">
-        <span className="lesson-video-duration">
-          {secondsToMinutes(duration)}
-        </span>
+      <div className="lesson-footer">
+        <span className="lesson-duration">{secondsToMinutes(duration)}</span>
         <ContextMenu
           options={[
             { label: "Delete", value: "delete", className: "lesson-delete" },
@@ -129,13 +129,13 @@ export default function VideoLesson({
       </div>
 
       {loading ? (
-        <div className="lesson-video-file">
+        <div className="lesson-file">
           <div className="loader"></div>
         </div>
       ) : (
         <video
           src={lesson.file}
-          className="lesson-video-file"
+          className="lesson-file"
           controls
           autoPlay
           muted
@@ -144,6 +144,6 @@ export default function VideoLesson({
           onCanPlay={() => setLoading(false)}
         ></video>
       )}
-    </div>
+    </>
   );
 }

@@ -30,6 +30,10 @@ const EditableText: React.FC<EditableTextProps> = ({
   React.useEffect(() => {
     if (editing && inputRef.current) {
       inputRef.current.focus();
+      // Posicionar el cursor al final del texto
+      const len = inputRef.current.value.length;
+      inputRef.current.selectionStart = len;
+      inputRef.current.selectionEnd = len;
     }
   }, [editing]);
 
