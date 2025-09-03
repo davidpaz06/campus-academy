@@ -6,19 +6,24 @@ import {
   getModuleClass,
   handleSubmit,
   handleKeyDown,
+  nextModule,
 } from "@/utils/courseUtils";
+
 //Interfaces
 import type {
   Course,
   CourseModule,
   CourseLesson,
 } from "@/interfaces/createCourseInterfaces";
+
 //Styles
 import "./CreateCourse.css";
+
 //Pages
 import CreateCourseInfo from "./CreateCourseInfo";
-import CreateModule from "../../../components/createcourse/CreateModule";
+import CreateModule from "@/components/createcourse/CreateModule";
 import CreateCourseLessonList from "@/components/createcourse/CreateCourseLessonList";
+
 // Components
 import EditableText from "@/components/EditableText";
 
@@ -28,14 +33,14 @@ const emptyCourse: Course = {
   id: "",
   info: {
     name: "",
-    instructor: "",
     about: "",
     description: "",
+    instructor: "",
     skills: [],
   },
   modules: [
     {
-      title: "Click to edit",
+      title: "> Click to edit <",
       lessons: [],
     },
   ],
@@ -81,8 +86,11 @@ export default function CreateCourse() {
 
   const [step, setStep] = useState(InitialStep);
 
-  // Local wrappers for imported utils
   const [activeModule, setActiveModule] = useState<number>(0);
+
+  const handleNextModule = () => {
+    nextModule(setCourse, course, setActiveModule, activeModule);
+  };
 
   switch (step) {
     case 1:
@@ -196,23 +204,25 @@ export default function CreateCourse() {
                 />
               </div>
               <div className="create-course-active-module">
-                <EditableText
-                  value={course.modules[activeModule].title}
-                  onChange={(newTitle) => {
-                    const updatedModules = [...course.modules];
-                    updatedModules[activeModule] = {
-                      ...updatedModules[activeModule],
-                      title: newTitle,
-                    };
-                    setCourse({ ...course, modules: updatedModules });
-                  }}
-                  className="active-module-input"
-                  placeholder="Click to edit title"
-                />
+                {course.modules[activeModule] ? (
+                  <EditableText
+                    value={course.modules[activeModule].title}
+                    onChange={(newTitle) => {
+                      const updatedModules = [...course.modules];
+                      updatedModules[activeModule] = {
+                        ...updatedModules[activeModule],
+                        title: newTitle,
+                      };
+                      setCourse({ ...course, modules: updatedModules });
+                    }}
+                    className="active-module-input"
+                    placeholder="Click to edit title"
+                  />
+                ) : null}
               </div>
               <div
                 className="nav-button next-module-button"
-                onClick={() => setActiveModule(activeModule + 1)}
+                onClick={() => handleNextModule()}
               >
                 <Icon
                   className="nav-icon next-icon"
@@ -239,6 +249,7 @@ export default function CreateCourse() {
                     setCourse={setCourse}
                     course={course}
                     moduleIndex={activeModule}
+                    setActiveModule={setActiveModule}
                   />
                 </div>
               ))}

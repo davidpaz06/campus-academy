@@ -1,3 +1,42 @@
+// Maneja la creación de módulos y navegación al siguiente módulo
+export function nextModule(
+  setCourse: (course: any) => void,
+  course: any,
+  setActiveModule: (idx: number) => void,
+  activeModule: number
+) {
+  if (activeModule === course.modules.length - 1) {
+    const newModule = {
+      title: `Module ${course.modules.length + 1}`,
+      lessons: [],
+    };
+    setCourse((prevCourse: any) => {
+      const updatedModules = [...prevCourse.modules, newModule];
+      // setActiveModule con el nuevo length
+      setActiveModule(updatedModules.length - 1);
+      return { ...prevCourse, modules: updatedModules };
+    });
+  } else {
+    setActiveModule(activeModule + 1);
+  }
+}
+
+export function deleteModule(
+  setCourse: (course: any) => void,
+  setActiveModule: (idx: number) => void,
+  moduleIndex?: number
+) {
+  setCourse((prevCourse: any) => {
+    const updatedModules = [...prevCourse.modules];
+    const index = typeof moduleIndex === "number" ? moduleIndex : 0;
+    updatedModules.splice(index, 1);
+
+    index > 0 ? setActiveModule(index - 1) : setActiveModule(0);
+
+    return { ...prevCourse, modules: updatedModules };
+  });
+}
+
 // Devuelve la lección correspondiente a los índices dados
 import type {
   Course,
@@ -217,11 +256,4 @@ export function removeLessonFromModule(
       lessons: mod.lessons.filter((_, lIdx) => lIdx !== lessonIndex),
     };
   });
-}
-
-export function removeModule(
-  modules: CourseModule[],
-  moduleIndex: number
-): CourseModule[] {
-  return modules.filter((_, idx) => idx !== moduleIndex);
 }

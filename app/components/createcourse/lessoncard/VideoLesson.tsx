@@ -129,7 +129,15 @@ export default function VideoLesson({
       </div>
 
       {loading ? (
-        <div className="lesson-file">
+        <div
+          className="lesson-file"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
           <div className="loader"></div>
         </div>
       ) : (
@@ -137,9 +145,7 @@ export default function VideoLesson({
           src={lesson.file}
           className="lesson-file"
           controls
-          autoPlay
           muted
-          loop
           onLoadedMetadata={handleLoadedMetadata}
           onCanPlay={() => setLoading(false)}
         ></video>

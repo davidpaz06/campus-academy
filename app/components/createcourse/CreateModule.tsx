@@ -4,7 +4,13 @@ import type {
   CourseLesson,
 } from "@/interfaces/createCourseInterfaces";
 
-export default function CreateModule({ setCourse, moduleIndex }: CourseProps) {
+import { deleteModule } from "@/utils/courseUtils";
+
+export default function CreateModule({
+  setCourse,
+  moduleIndex,
+  setActiveModule,
+}: CourseProps & { setActiveModule: (idx: number) => void }) {
   const handleCreateLesson = (lesson: CourseLesson) => {
     setCourse((prevCourse) => {
       const updatedModules = [...prevCourse.modules];
@@ -81,6 +87,18 @@ export default function CreateModule({ setCourse, moduleIndex }: CourseProps) {
             })
           }
         /> */}
+
+        <Icon
+          style={{
+            color: "var(--charlestone--green)",
+            fontSize: "2rem",
+            cursor: "pointer",
+          }}
+          icon="material-symbols:delete-rounded"
+          onClick={() => {
+            deleteModule(setCourse, setActiveModule, moduleIndex);
+          }}
+        />
       </div>
     </>
   );
