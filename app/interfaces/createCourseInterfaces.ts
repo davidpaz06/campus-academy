@@ -32,6 +32,8 @@ export interface CourseProps {
   lessonIndex?: number;
 }
 
+
+
 export interface CourseSkills {
   skills: string[];
   setSkills: (skills: string[]) => void;

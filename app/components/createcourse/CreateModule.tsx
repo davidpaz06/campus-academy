@@ -4,25 +4,19 @@ import type {
   CourseLesson,
 } from "@/interfaces/createCourseInterfaces";
 
-import { deleteModule } from "@/utils/courseUtils";
+import { deleteModule, handleLessonAdded } from "@/utils/courseUtils";
 
 export default function CreateModule({
   setCourse,
   moduleIndex,
   setActiveModule,
-}: CourseProps & { setActiveModule: (idx: number) => void }) {
+  courseContentRef,
+}: CourseProps & {
+  setActiveModule: (idx: number) => void;
+  courseContentRef?: React.RefObject<HTMLDivElement>;
+}) {
   const handleCreateLesson = (lesson: CourseLesson) => {
-    setCourse((prevCourse) => {
-      const updatedModules = [...prevCourse.modules];
-      updatedModules[moduleIndex ? moduleIndex : 0] = {
-        ...updatedModules[moduleIndex ? moduleIndex : 0],
-        lessons: [
-          ...updatedModules[moduleIndex ? moduleIndex : 0].lessons,
-          lesson,
-        ],
-      };
-      return { ...prevCourse, modules: updatedModules };
-    });
+    handleLessonAdded(setCourse, moduleIndex ?? 0, lesson, courseContentRef);
   };
 
   return (

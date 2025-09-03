@@ -1,3 +1,39 @@
+// Utilidad para leer el curso desde localStorage
+export function getCourseFromLocalStorage(emptyCourse: any): any {
+  try {
+    const stored = localStorage.getItem("courseDraft");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      // Validar estructura y asegurar al menos un módulo
+      if (
+        parsed &&
+        typeof parsed === "object" &&
+        parsed.info &&
+        typeof parsed.info === "object" &&
+        Array.isArray(parsed.modules)
+      ) {
+        if (parsed.modules.length === 0) {
+          parsed.modules = [
+            {
+              title: "> Click to edit <",
+              lessons: [],
+            },
+          ];
+        }
+        return parsed;
+      }
+    }
+  } catch (e) {
+    // ignorar errores de parseo
+  }
+  return emptyCourse;
+}
+
+// Utilidad para guardar el curso en localStorage
+export function saveCourseToLocalStorage(course: any) {
+  localStorage.setItem("courseDraft", JSON.stringify(course));
+}
+
 // Maneja la creación de módulos y navegación al siguiente módulo
 export function nextModule(
   setCourse: (course: any) => void,
@@ -38,11 +74,7 @@ export function deleteModule(
 }
 
 // Devuelve la lección correspondiente a los índices dados
-import type {
-  Course,
-  CourseLesson,
-  CourseModule,
-} from "@/interfaces/createCourseInterfaces";
+import type { Course, CourseLesson, CourseModule } from "@/interfaces/createCourseInterfaces";
 import { getWordCount } from "./markdownUtils";
 
 export function getLesson({
@@ -54,8 +86,7 @@ export function getLesson({
   moduleIndex?: number;
   lessonIndex?: number;
 }): CourseLesson {
-  if (!course || !course.modules)
-    return { title: "Lesson", type: "Lesson", file: "Lesson", duration: 0 };
+  if (!course || !course.modules) return { title: "Lesson", type: "Lesson", file: "Lesson", duration: 0 };
 
   const modIdx = typeof moduleIndex === "number" ? moduleIndex : 0;
 
@@ -63,34 +94,41 @@ export function getLesson({
 
   const module = course.modules[modIdx];
 
-  if (!module || !module.lessons)
-    return { title: "Lesson", type: "Lesson", file: "Lesson", duration: 0 };
+  if (!module || !module.lessons) return { title: "Lesson", type: "Lesson", file: "Lesson", duration: 0 };
 
   return module.lessons[lessonIdx];
 }
 
-// Scroll to bottom when lesson is added
+// Agrega una lección al módulo correspondiente y hace scroll al final
 export function handleLessonAdded(
-  courseContentRef: React.RefObject<HTMLDivElement>,
-  activeModule: number
+  setCourse: (course: any) => void,
+  moduleIndex: number,
+  lesson: any,
+  courseContentRef?: React.RefObject<HTMLDivElement>
 ) {
-  setTimeout(() => {
-    if (courseContentRef.current) {
-      const moduleBoxes =
-        courseContentRef.current.querySelectorAll(".module-box");
-      const activeModuleBox = moduleBoxes[activeModule] as
-        | HTMLElement
-        | undefined;
-      if (activeModuleBox) {
-        const boxBottom =
-          activeModuleBox.offsetTop + activeModuleBox.offsetHeight;
-        courseContentRef.current.scrollTo({
-          top: boxBottom - courseContentRef.current.offsetHeight,
-          behavior: "smooth",
-        });
-      }
+  setCourse((prevCourse: any) => {
+    const updatedModules = [...prevCourse.modules];
+    const idx = typeof moduleIndex === "number" ? moduleIndex : 0;
+    updatedModules[idx] = {
+      ...updatedModules[idx],
+      lessons: [...updatedModules[idx].lessons, lesson],
+    };
+    // Hacer scroll al final del módulo si se provee el ref
+    if (courseContentRef && courseContentRef.current) {
+      setTimeout(() => {
+        const moduleBoxes = courseContentRef.current!.querySelectorAll(".module-box");
+        const activeModuleBox = moduleBoxes[idx] as HTMLElement | undefined;
+        if (activeModuleBox) {
+          const boxBottom = activeModuleBox.offsetTop + activeModuleBox.offsetHeight;
+          courseContentRef.current!.scrollTo({
+            top: boxBottom - courseContentRef.current!.offsetHeight,
+            behavior: "smooth",
+          });
+        }
+      }, 0);
     }
-  }, 0);
+    return { ...prevCourse, modules: updatedModules };
+  });
 }
 
 // Navigation actions for modules
@@ -124,10 +162,7 @@ export function handleNavActions(
 }
 
 // Set active module
-export function handleActiveModule(
-  index: number,
-  setActiveModule: (idx: number) => void
-) {
+export function handleActiveModule(index: number, setActiveModule: (idx: number) => void) {
   setActiveModule(index);
 }
 
@@ -137,8 +172,7 @@ export function handleSubmit(e: React.FormEvent) {
 }
 
 // KeyDown handler for form navigation
-export interface HandleKeyDownEvent
-  extends React.KeyboardEvent<HTMLFormElement> {
+export interface HandleKeyDownEvent extends React.KeyboardEvent<HTMLFormElement> {
   target: HTMLInputElement | HTMLTextAreaElement;
   currentTarget: HTMLFormElement;
 }
@@ -146,11 +180,7 @@ export interface HandleKeyDownEvent
 export type HandleKeyDown = (e: HandleKeyDownEvent) => void;
 
 export const handleKeyDown: HandleKeyDown = (e) => {
-  if (
-    e.key === "Enter" &&
-    (e.target instanceof HTMLInputElement ||
-      e.target instanceof HTMLTextAreaElement)
-  ) {
+  if (e.key === "Enter" && (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)) {
     e.preventDefault();
     const form = e.currentTarget as HTMLFormElement;
     const elements = Array.from(form.elements) as HTMLElement[];
@@ -190,10 +220,7 @@ export function getVideoStorageKey({
   return `videos/${timestamp}_${encodedCourseName}_m${encodedModule}_l${encodedLesson}_${encodedFileName}`;
 }
 
-export function getNavClass(
-  activeModule: number,
-  modulesLength: number
-): string {
+export function getNavClass(activeModule: number, modulesLength: number): string {
   const lastIndex = modulesLength - 1;
   if (activeModule === 0 && lastIndex === 0) {
     return "initial";

@@ -158,6 +158,7 @@
 
   aside {
     display: grid;
+    grid-column: 1 / 2;
     grid-template-rows: 50px 1fr 50px;
     height: 100%;
     background-color: var(--background-snow);
@@ -272,6 +273,7 @@
 
   .create-course-form {
     display: grid;
+    grid-column: 2 / 3;
     grid-template-rows: 50px 1fr;
 
     /* Botones de navegación */
@@ -383,6 +385,8 @@
       }
       .prev-module {
         left: calc(-100% + 90px);
+        max-height: 100vh;
+        overflow: hidden;
       }
       .present-module {
         transform: translateX(-50%);
@@ -391,6 +395,8 @@
       }
       .next-module {
         left: calc(var(--module-box-width) + 110px);
+        max-height: 100vh;
+        overflow: hidden;
       }
     }
   }

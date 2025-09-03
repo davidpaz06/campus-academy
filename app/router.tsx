@@ -8,7 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PublicLayout from "./layouts/PublicLayout";
 import AcademyMain from "./pages/private/academy/AcademyMain";
 import CreateInstitution from "./pages/public/CreateInstitution";
-import CreateCourse from "./pages/private/academy/CreateCourse";
+import CreateCourse from "./pages/private/create-course/CreateCourse";
 import Hub from "./pages/private/Hub";
 
 const AppRouter = () => (

@@ -2,11 +2,7 @@ import React, { useState } from "react";
 import { supabase } from "@/supabaseClient";
 
 import type { CourseProps } from "@/interfaces/createCourseInterfaces";
-import {
-  getVideoStorageKey,
-  getLesson,
-  removeLessonFromModule,
-} from "@/utils/courseUtils";
+import { getVideoStorageKey, getLesson, removeLessonFromModule } from "@/utils/courseUtils";
 
 import EditableText from "@/components/EditableText";
 import ContextMenu from "@/components/ContextMenu";
@@ -16,20 +12,11 @@ function secondsToMinutes(duration: number | undefined): React.ReactNode {
   if (typeof duration !== "number" || isNaN(duration)) return "0:00";
   const minutes = Math.floor(duration / 60);
   const seconds = Math.floor(duration % 60);
-  if (minutes === 0 && seconds > 0)
-    return `${seconds.toString().padStart(2, "0")} seconds`;
-  else
-    return `${minutes.toString().padStart(2, "0")}:${seconds
-      .toString()
-      .padStart(2, "0")}`;
+  if (minutes === 0 && seconds > 0) return `${seconds.toString().padStart(2, "0")} seconds`;
+  else return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 }
 
-export default function VideoLesson({
-  setCourse,
-  course,
-  moduleIndex,
-  lessonIndex,
-}: CourseProps) {
+export default function VideoLesson({ setCourse, course, moduleIndex, lessonIndex }: CourseProps) {
   const lesson = getLesson({ course, moduleIndex, lessonIndex });
 
   const [duration, setDuration] = useState<number | undefined>(0);
@@ -42,11 +29,7 @@ export default function VideoLesson({
   };
 
   const handleRemoveLesson = () => {
-    const newModules = removeLessonFromModule(
-      course.modules,
-      moduleIndex ?? 0,
-      lessonIndex ?? 0
-    );
+    const newModules = removeLessonFromModule(course.modules, moduleIndex ?? 0, lessonIndex ?? 0);
     setCourse({ ...course, modules: newModules });
   };
 
@@ -88,18 +71,14 @@ export default function VideoLesson({
                   lessonIndex: lessonIndex ?? 0,
                   fileName: file.name,
                 });
-                const { data, error } = await supabase.storage
-                  .from("Campus Academy Storage")
-                  .upload(filePath, file, {
-                    cacheControl: "3600",
-                    upsert: false,
-                  });
+                const { data, error } = await supabase.storage.from("Campus Academy Storage").upload(filePath, file, {
+                  cacheControl: "3600",
+                  upsert: false,
+                });
                 setUploading(false);
                 setLoading(false);
                 if (!error && data && data.path) {
-                  const { data: urlData } = supabase.storage
-                    .from("Campus Academy Storage")
-                    .getPublicUrl(data.path);
+                  const { data: urlData } = supabase.storage.from("Campus Academy Storage").getPublicUrl(data.path);
                   if (urlData?.publicUrl) {
                     if (typeof lesson.file !== "undefined") {
                       lesson.file = urlData.publicUrl;
