@@ -4,11 +4,7 @@ import "./CreateCourse.css";
 import SearchSkills from "@/components/createcourse/SearchSkills";
 
 export default function CreateCourseInfo({ course, setCourse }: CourseProps) {
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setCourse({
       ...course,
       info: {
@@ -26,13 +22,7 @@ export default function CreateCourseInfo({ course, setCourse }: CourseProps) {
           <div className="course-details-grid">
             <div>
               <label htmlFor="courseName">Course name</label>
-              <input
-                type="text"
-                id="courseName"
-                name="name"
-                value={course.info.name}
-                onChange={handleChange}
-              />
+              <input type="text" id="courseName" name="name" value={course.info.name} onChange={handleChange} />
             </div>
             <div>
               <label htmlFor="instructor">Instructor</label>
@@ -45,22 +35,12 @@ export default function CreateCourseInfo({ course, setCourse }: CourseProps) {
               />
             </div>
             <div>
-              <label htmlFor="about">About</label>
-              <textarea
-                id="about"
-                name="about"
-                value={course.info.about}
-                onChange={handleChange}
-              />
+              <label htmlFor="description">Description</label>
+              <textarea id="description" name="description" value={course.info.description} onChange={handleChange} />
             </div>
             <div>
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                value={course.info.description}
-                onChange={handleChange}
-              />
+              <label htmlFor="about">About</label>
+              <textarea id="about" name="about" value={course.info.about} onChange={handleChange} />
             </div>
           </div>
         </Card>

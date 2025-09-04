@@ -1,3 +1,8 @@
+export function handleCreateCourse(course: any) {
+  alert("Curso creado: " + JSON.stringify(course));
+  console.log("Curso creado: ", course);
+}
+
 // Utilidad para leer el curso desde localStorage
 export function getCourseFromLocalStorage(emptyCourse: any): any {
   try {
