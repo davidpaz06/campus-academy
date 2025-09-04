@@ -5,14 +5,7 @@
     "instructor": "Lodestar Solutions",
     "about": "About David",
     "description": "Guapo",
-    "skills": [
-      "React.js",
-      "React Native",
-      "TypeScript",
-      "Frontend Development",
-      "Backend Development",
-      "David"
-    ]
+    "skills": ["React.js", "React Native", "TypeScript", "Frontend Development", "Backend Development", "David"]
   },
   "modules": [
     {
@@ -83,40 +76,6 @@
       ]
     },
     { "title": "Module 4", "lessons": [] },
-    { "title": "Module 5", "lessons": [] },
-    { "title": "Module 6", "lessons": [] },
-    { "title": "Module 7", "lessons": [] },
-    { "title": "Module 8", "lessons": [] },
-    { "title": "Module 9", "lessons": [] },
-    { "title": "Module 10", "lessons": [] },
-    { "title": "Module 11", "lessons": [] },
-    { "title": "Module 12", "lessons": [] },
-    { "title": "Module 13", "lessons": [] },
-    {
-      "title": "Module 14",
-      "lessons": [
-        {
-          "title": "New Video Lesson",
-          "type": "Video",
-          "file": "<Video_file>"
-        },
-        {
-          "title": "New Video Lesson",
-          "type": "Video",
-          "file": "<Video_file>"
-        },
-        {
-          "title": "New Video Lesson",
-          "type": "Video",
-          "file": "<Video_file>"
-        },
-        {
-          "title": "New Video Lesson",
-          "type": "Video",
-          "file": "<Video_file>"
-        },
-        { "title": "New Video Lesson", "type": "Video", "file": "<Video_file>" }
-      ]
-    }
+    { "title": "Module 5", "lessons": [] }
   ]
 }

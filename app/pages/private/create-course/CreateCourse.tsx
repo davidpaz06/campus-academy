@@ -32,7 +32,7 @@ const emptyCourse: Course = {
   ],
 };
 
-const InitialStep = 3;
+const InitialStep = 1;
 
 export default function CreateCourse() {
   const [step, setStep] = useState(InitialStep);

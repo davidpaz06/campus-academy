@@ -1,0 +1,72 @@
+{
+  "courseName": "Introduction to React",
+  "courseSummary": "Are you ready to start a rewarding career in front-end development? This Professional Certificate Program, brought to you by Microsoft, is designed to give you the skills and tools to succeed in web development. Whether you're just starting out or looking to expand your knowledge, this program will guide you through essential front-end concepts and practices. ",
+  "courseDescription": "Launch your Career in Front-End Development. Start your journey as a front-end developer. Develop job-ready AI-powered skills and earn a certificate from Microsoft. No experience required.",
+  "institutionId": "1",
+  "courseImageId": "1",
+  "components": [
+    {
+      "componentName": "React 101",
+      "componentSummary": "React 101",
+      "componentTypeId": 1,
+      "componentDescription": "Deja este string y luego me encargaré de llenarlo",
+      "contextBody": "Deja este string y luego me encargaré de llenarlo",
+      "position": 1,
+      "realParentId": null
+    },
+    {
+      "componentName": "Introduccion al Curso",
+      "componentSummary": "Introduccion al Curso",
+      "componentTypeId": 4,
+      "componentDescription": "Deja este string y luego me encargaré de llenarlo",
+      "contextBody": "Deja este string y luego me encargaré de llenarlo",
+      "position": 1,
+      "realParentId": "React 101"
+    },
+    {
+      "componentName": "Introduccion a React",
+      "componentSummary": "Introduccion a React",
+      "componentTypeId": 3,
+      "componentDescription": "Deja este string y luego me encargaré de llenarlo",
+      "contextBody": "Deja este string y luego me encargaré de llenarlo",
+      "position": 2,
+      "realParentId": "React 101"
+    },
+    {
+      "componentName": "Requisitos previos",
+      "componentSummary": "Requisitos previos",
+      "componentTypeId": 4,
+      "componentDescription": "Deja este string y luego me encargaré de llenarlo",
+      "contextBody": "Deja este string y luego me encargaré de llenarlo",
+      "position": 3,
+      "realParentId": "React 101"
+    },
+    {
+      "componentName": "Componentes en React",
+      "componentSummary": "Componentes en React",
+      "componentTypeId": 1,
+      "componentDescription": "Deja este string y luego me encargaré de llenarlo",
+      "contextBody": "Deja este string y luego me encargaré de llenarlo",
+      "position": 2,
+      "realParentId": null
+    },
+    {
+      "componentName": "React Component",
+      "componentSummary": "React Component",
+      "componentTypeId": 4,
+      "componentDescription": "Deja este string y luego me encargaré de llenarlo",
+      "contextBody": "Deja este string y luego me encargaré de llenarlo",
+      "position": 1,
+      "realParentId": "Componentes en React"
+    },
+    {
+      "componentName": "Que es un componente?",
+      "componentSummary": "Que es un componente?",
+      "componentTypeId": 3,
+      "componentDescription": "Deja este string y luego me encargaré de llenarlo",
+      "contextBody": "Deja este string y luego me encargaré de llenarlo",
+      "position": 2,
+      "realParentId": "Componentes en React"
+    }
+  ]
+}

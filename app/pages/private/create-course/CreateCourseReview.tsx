@@ -1,13 +1,19 @@
-import "./CreateCourse.css";
+import { useState } from "react";
 
+import "./CreateCourse.css";
 import type { CourseProps } from "@/interfaces/createCourseInterfaces";
-import { handleCreateCourse } from "@/utils/courseUtils";
+
+import { courseToCreateCourseDto } from "@/helpers/courseDtoHelper";
+
+import ModalShowJSON from "@/components/ModalShowJSON";
 
 export default function CreateCourseReview({
   course,
   setStep,
   step,
 }: CourseProps & { setStep: (step: number) => void; step: number }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <>
       <div className="summary">
@@ -71,12 +77,22 @@ export default function CreateCourseReview({
           <button className="create-course-review-button back-button" onClick={() => setStep(step - 1)}>
             <h3>Back</h3>
           </button>
-          <button className="create-course-review-button create-button" onClick={() => handleCreateCourse(course)}>
+          <button
+            className="create-course-review-button create-button"
+            onClick={() => {
+              setIsModalOpen(true);
+            }}
+          >
             <h3>Create Course</h3>
           </button>
         </div>
         <h4 className="disclaimer">Once created, you will not be able to edit the course.</h4>
       </div>
+      <ModalShowJSON
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        message={courseToCreateCourseDto(course, "1", "1")}
+      />
     </>
   );
 }
