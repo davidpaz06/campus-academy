@@ -1,21 +1,19 @@
-// import React from "react";
 import { useState, useEffect } from "react";
-import { handleSubmit, handleKeyDown, getCourseFromLocalStorage, saveCourseToLocalStorage } from "@/utils/courseUtils";
 
-//Interfaces
-import type { Course } from "@/interfaces/createCourseInterfaces";
-
-//Styles
+// Styles
 import "./CreateCourse.css";
 
-//Pages
-import CreateCourseInfo from "./CreateCourseInfo";
+// Interfaces
+import type { Course } from "@/interfaces/createCourseInterfaces";
+
+// Pages
 import CreateCourseContent from "./CreateCourseContent";
 
 // Components
+import CreateCourseInfo from "./CreateCourseInfo";
 import CourseSummary from "./CourseSummary";
-
-const InitialStep = 2;
+// Utils
+import { handleSubmit, handleKeyDown, getCourseFromLocalStorage, saveCourseToLocalStorage } from "@/utils/courseUtils";
 
 const emptyCourse: Course = {
   id: "",
@@ -34,6 +32,8 @@ const emptyCourse: Course = {
   ],
 };
 
+const InitialStep = 1;
+
 export default function CreateCourse() {
   const [step, setStep] = useState(InitialStep);
 
@@ -45,6 +45,9 @@ export default function CreateCourse() {
   const [activeModule, setActiveModule] = useState<number>(0);
   switch (step) {
     case 1:
+      {
+        /* - - - - - - - - - - - - Course Information - - - - - - - - - - - - */
+      }
       return (
         <form className="create-course-step-1" onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
           <CreateCourseInfo setCourse={setCourse} course={course} />
@@ -57,6 +60,9 @@ export default function CreateCourse() {
       );
 
     case 2:
+      {
+        /* - - - - - - - - - - - - Course Content - - - - - - - - - - - - */
+      }
       return (
         <div className="create-course-step-2">
           <CourseSummary
@@ -76,6 +82,30 @@ export default function CreateCourse() {
       );
 
     case 3:
-      return <div className="create-course-step-2"></div>;
+      {
+        /* - - - - - - - - - - - - Course Review - - - - - - - - - - - - */
+      }
+      return (
+        <div className="create-course-step-3">
+          <div className="summary">
+            <div className="name">Course name</div>
+            <div className="basic-info">Basic Information</div>
+            <div className="modules">
+              <ul>
+                {course.modules.map((module, index) => (
+                  <li key={index}>{module.title}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="course-about"></div>
+          <div className="course-actions">
+            <button type="button" onClick={() => setStep(step - 1)}>
+              Back
+            </button>
+            <button type="submit">Create Course</button>
+          </div>
+        </div>
+      );
   }
 }

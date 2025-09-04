@@ -401,3 +401,46 @@
     }
   }
 }
+
+.create-course-step-3 {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+
+  .summary {
+    grid-row: 1 / 2;
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr;
+    grid-template-rows: 80px 1fr;
+
+    
+    .name {
+      background-color: lightblue;
+      grid-row: 1/2;
+      grid-column: 1/4;
+    }
+    .basic-info {
+      background-color: pink;
+      grid-column: 1/2;
+    }
+    .modules {
+      grid-column: 2/4;
+      background-color: lightgoldenrodyellow;
+      padding: 20px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--charlestone-green) transparent;
+    }
+  }
+
+  .course-about {
+    height: calc(100vh - 60px);
+    border: 1px solid #217aef;
+    grid-row: 2 / 3;
+  }
+
+  .course-actions {
+    height: calc(100vh - 60px);
+    border: 1px solid #217aef;
+    grid-row: 3 / 4;
+  }
+}
