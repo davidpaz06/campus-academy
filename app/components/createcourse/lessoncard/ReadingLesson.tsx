@@ -1,7 +1,6 @@
 import "./lessonCard.css";
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import ReactDOM from "react-dom";
-import ReactMarkdown from "react-markdown";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import "@/components/markdown.css";
 
@@ -102,7 +101,7 @@ export default function ReadingLesson({ setCourse, course, moduleIndex, lessonIn
               Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
             }
           /> */}
-          <ReactMarkdown>{markdown}</ReactMarkdown>
+          <div>{markdown}</div>
         </div>
       )}
 
@@ -158,14 +157,7 @@ export default function ReadingLesson({ setCourse, course, moduleIndex, lessonIn
               </div>
 
               <div className="full-preview">
-                <ReactMde
-                  value={markdown}
-                  selectedTab="preview"
-                  classes={{
-                    preview: "preview",
-                  }}
-                  generateMarkdownPreview={(markdown) => Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)}
-                />
+                <div className="preview">{markdown}</div>
               </div>
               <div className="modal-edit-reading-footer">
                 <span className="modal-chip-primary">{getWordCount(markdown)} words</span>
