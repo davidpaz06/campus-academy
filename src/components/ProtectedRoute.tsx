@@ -26,6 +26,7 @@ export default function ProtectedRoute({ children, requireAuth = true, redirectT
 
   // If route requires auth but user is not authenticated
   if (requireAuth && !isAuthenticated) {
+    // return <Navigate to={redirectTo} state={{ from: location.pathname }} replace />;
     return <Navigate to={redirectTo} state={{ from: location.pathname }} replace />;
   }
 

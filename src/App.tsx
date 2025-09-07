@@ -10,6 +10,11 @@ import Landing from "./pages/Landing";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 
+//Register subpages
+// import RegisterStudent from "./pages/auth/register/RegisterStudent";
+// import RegisterTeacher from "./pages/auth/register/RegisterTeacher";
+import RegisterInstitution from "./pages/auth/register/RegisterInstitution";
+
 // Private Pages
 import Dashboard from "./pages/dashboard/Dashboard";
 import AcademyMain from "./pages/academy/AcademyMain";
@@ -38,6 +43,17 @@ export default function App() {
               element={
                 <ProtectedRoute requireAuth={false}>
                   <Register />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+
+          <Route element={<PublicLayout background={2} stripe={2} options={false} isStatic={false} />}>
+            <Route
+              path="/register/institution"
+              element={
+                <ProtectedRoute requireAuth={false}>
+                  <RegisterInstitution />
                 </ProtectedRoute>
               }
             />

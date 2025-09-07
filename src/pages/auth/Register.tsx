@@ -19,7 +19,7 @@ const roles = [
     key: "school",
     label: "School",
     icon: <Icon className="option-icon" icon="material-symbols:apartment-rounded" />,
-    route: "/create-institution",
+    route: "/register/institution",
   },
 ];
 
