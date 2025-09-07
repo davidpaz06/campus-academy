@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import PublicLayout from "@/layouts/PublicLayout";
@@ -6,8 +5,6 @@ import Landing from "@/pages/Landing";
 import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
 import { ROUTES } from "@/constants";
-import viteLogo from "/vite.svg";
-import "./App.css";
 
 function App() {
   return (
