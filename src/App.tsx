@@ -1,7 +1,7 @@
 import "./styles/variables.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
-// import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import PublicLayout from "./layouts/PublicLayout";
 import InternalLayout from "./layouts/InternalLayout";
 
@@ -9,12 +9,10 @@ import InternalLayout from "./layouts/InternalLayout";
 import Landing from "./pages/Landing";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-// import CreateInstitution from "./pages/CreateInstitution";
 
 // Private Pages
 import Dashboard from "./pages/dashboard/Dashboard";
 import AcademyMain from "./pages/academy/AcademyMain";
-// import CreateCourse from "./pages/create-course/CreateCourse";
 
 export default function App() {
   return (
@@ -27,23 +25,32 @@ export default function App() {
           </Route>
 
           <Route element={<PublicLayout background={1} options={false} />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route
+              path="/login"
+              element={
+                <ProtectedRoute requireAuth={false}>
+                  <Login />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <ProtectedRoute requireAuth={false}>
+                  <Register />
+                </ProtectedRoute>
+              }
+            />
           </Route>
 
-          <Route element={<PublicLayout background={2} stripe={2} options={false} />}>
-            {/* <Route path="/create-institution" element={<CreateInstitution />} /> */}
-          </Route>
+          {/* RUTAS PRIVADAS PROTEGIDAS */}
+          <Route element={<ProtectedRoute requireAuth={true} />}>
+            <Route path="/dashboard" element={<Dashboard />} />
 
-          {/* RUTAS PRIVADAS */}
-          {/* <Route element={<ProtectedRoute />}> */}
-          <Route path="/dashboard" element={<Dashboard />} />
-
-          <Route element={<InternalLayout />}>
-            <Route path="/academy" element={<AcademyMain />} />
-            {/* <Route path="/create-course" element={<CreateCourse />} /> */}
+            <Route element={<InternalLayout />}>
+              <Route path="/academy" element={<AcademyMain />} />
+            </Route>
           </Route>
-          {/* </Route> */}
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { authService } from "@/services/auth";
-import type { User, LoginCredentials, RegisterData } from "@/types";
+import { User } from "@/types/user";
 
 interface AuthState {
   user: User | null;
@@ -9,57 +9,51 @@ interface AuthState {
   error: string | null;
 }
 
-type AuthAction =
-  | { type: "AUTH_START" }
-  | { type: "AUTH_SUCCESS"; payload: User }
-  | { type: "AUTH_ERROR"; payload: string }
-  | { type: "LOGOUT" }
-  | { type: "CLEAR_ERROR" };
+interface LoginCredentials {
+  username: string;
+  password: string;
+}
 
 interface AuthContextType extends AuthState {
   login: (credentials: LoginCredentials) => Promise<void>;
-  register: (data: RegisterData) => Promise<void>;
   logout: () => Promise<void>;
-  clearError: () => void;
+  register: (userData: any) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+type AuthAction =
+  | { type: "AUTH_START" }
+  | { type: "AUTH_SUCCESS"; payload: User }
+  | { type: "AUTH_ERROR"; payload: string }
+  | { type: "LOGOUT" };
+
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case "AUTH_START":
-      return {
-        ...state,
-        isLoading: true,
-        error: null,
-      };
+      return { ...state, isLoading: true, error: null };
     case "AUTH_SUCCESS":
       return {
         ...state,
-        user: action.payload,
-        isAuthenticated: true,
         isLoading: false,
+        isAuthenticated: true,
+        user: action.payload,
         error: null,
       };
     case "AUTH_ERROR":
       return {
         ...state,
-        user: null,
-        isAuthenticated: false,
         isLoading: false,
+        isAuthenticated: false,
+        user: null,
         error: action.payload,
       };
     case "LOGOUT":
       return {
         ...state,
-        user: null,
-        isAuthenticated: false,
         isLoading: false,
-        error: null,
-      };
-    case "CLEAR_ERROR":
-      return {
-        ...state,
+        isAuthenticated: false,
+        user: null,
         error: null,
       };
     default:
@@ -68,7 +62,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
 };
 
 interface AuthProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
@@ -98,61 +92,57 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (credentials: LoginCredentials) => {
     try {
       dispatch({ type: "AUTH_START" });
+
+      // Login normal a través del servicio
       const response = await authService.login(credentials);
       dispatch({ type: "AUTH_SUCCESS", payload: response.user });
-    } catch (error) {
-      dispatch({
-        type: "AUTH_ERROR",
-        payload: error instanceof Error ? error.message : "Login failed",
-      });
-      throw error;
-    }
-  };
-
-  const register = async (data: RegisterData) => {
-    try {
-      dispatch({ type: "AUTH_START" });
-      const response = await authService.register(data);
-      dispatch({ type: "AUTH_SUCCESS", payload: response.user });
-    } catch (error) {
-      dispatch({
-        type: "AUTH_ERROR",
-        payload: error instanceof Error ? error.message : "Registration failed",
-      });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Login failed";
+      dispatch({ type: "AUTH_ERROR", payload: errorMessage });
       throw error;
     }
   };
 
   const logout = async () => {
     try {
-      await authService.logout();
+      localStorage.removeItem("campus_auth_token");
+      localStorage.removeItem("campus_user");
+
+      try {
+        await authService.logout();
+      } catch (error) {
+        console.warn("Logout service error (ignored):", error);
+      }
+
+      dispatch({ type: "LOGOUT" });
     } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
       dispatch({ type: "LOGOUT" });
     }
   };
 
-  const clearError = () => {
-    dispatch({ type: "CLEAR_ERROR" });
+  const register = async (userData: any) => {
+    try {
+      dispatch({ type: "AUTH_START" });
+      const response = await authService.register(userData);
+      dispatch({ type: "AUTH_SUCCESS", payload: response.user });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Registration failed";
+      dispatch({ type: "AUTH_ERROR", payload: errorMessage });
+      throw error;
+    }
   };
 
-  return (
-    <AuthContext.Provider
-      value={{
-        ...state,
-        login,
-        register,
-        logout,
-        clearError,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  const value: AuthContextType = {
+    ...state,
+    login,
+    logout,
+    register,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");

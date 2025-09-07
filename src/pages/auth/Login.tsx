@@ -1,31 +1,46 @@
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import "./Login.css";
 
 type LoginForm = {
-  email?: string;
+  username?: string;
   password?: string;
 };
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [form, setForm] = useState<Partial<LoginForm>>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const from = location.state?.from || "/dashboard";
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, from]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (!form.email || !form.password) {
-      setError("Please enter both email and password.");
+
+    if (!form.username || !form.password) {
+      setError("Please enter both username and password.");
       return;
     }
+
     setLoading(true);
+
     try {
-      await login({ email: form.email, password: form.password });
+      await login({
+        username: form.username,
+        password: form.password,
+      });
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message || "Login failed. Please try again.");
@@ -35,9 +50,6 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
-
-    alert(JSON.stringify(form, null, 2));
-    navigate("/dashboard");
   };
 
   return (
@@ -47,14 +59,15 @@ export default function Login() {
           <form className="login-form" onSubmit={handleSubmit}>
             <h1 className="login-title">Sign in</h1>
             <div className="login-group">
-              <label htmlFor="email">Username or mail address</label>
+              <label htmlFor="username">Username</label>
               <input
-                id="email"
-                type="email"
-                value={form.email ?? ""}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                id="username"
+                type="text"
+                placeholder="Enter your username"
+                value={form.username ?? ""}
+                onChange={(e) => setForm({ ...form, username: e.target.value })}
                 required
-                autoComplete="email"
+                autoComplete="username"
                 disabled={loading}
               />
             </div>
@@ -63,6 +76,7 @@ export default function Login() {
               <input
                 id="password"
                 type="password"
+                placeholder="Enter your password"
                 value={form.password ?? ""}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 required
@@ -70,10 +84,12 @@ export default function Login() {
                 disabled={loading}
               />
             </div>
-            {error && <div className="login-error text-[1rem] text-[#ff3b30] mb-[1rem]">{error}</div>}
+
+            {error && <div className="login-error">{error}</div>}
+
             <div className="login-actions">
               <button className="login-btn" type="submit" disabled={loading}>
-                {loading ? "Loading..." : "Confirm"}
+                {loading ? "Signing in..." : "Sign in"}
               </button>
             </div>
           </form>
