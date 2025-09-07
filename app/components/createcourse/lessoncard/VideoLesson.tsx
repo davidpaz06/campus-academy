@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { supabase } from "@/supabaseClient";
+// import { supabase } from "@/supabaseClient";
 
 import type { CourseProps } from "@/interfaces/createCourseInterfaces";
-import { getVideoStorageKey, getLesson, removeLessonFromModule } from "@/utils/courseUtils";
+// import { getVideoStorageKey, getLesson, removeLessonFromModule } from "@/utils/courseUtils";
+import { getLesson, removeLessonFromModule } from "@/utils/courseUtils";
 
 import EditableText from "@/components/EditableText";
 import ContextMenu from "@/components/ContextMenu";
-import "./lessonCard.css";
+import "./LessonCard.css";
 
 function secondsToMinutes(duration: number | undefined): React.ReactNode {
   if (typeof duration !== "number" || isNaN(duration)) return "0:00";
@@ -74,12 +75,30 @@ export default function VideoLesson({ setCourse, course, moduleIndex, lessonInde
               if (file) {
                 setUploading(true);
                 setLoading(true);
-                const filePath = getVideoStorageKey({
-                  courseName: course.info?.name ?? "course",
-                  moduleIndex: moduleIndex ?? 0,
-                  lessonIndex: lessonIndex ?? 0,
-                  fileName: file.name,
-                });
+
+                // TODO: Implementar upload de video cuando se configure Supabase
+                // const filePath = getVideoStorageKey({
+                //   courseName: course.info?.name ?? "course",
+                //   moduleIndex: moduleIndex ?? 0,
+                //   lessonIndex: lessonIndex ?? 0,
+                //   fileName: file.name,
+                // });
+
+                // Simular upload por ahora
+                setTimeout(() => {
+                  setUploading(false);
+                  setLoading(false);
+                  // Por ahora solo mostrar el archivo seleccionado
+                  const url = URL.createObjectURL(file);
+                  if (typeof lesson.file !== "undefined") {
+                    lesson.file = url;
+                    setVideoUrl(url);
+                    setFile(url);
+                  }
+                }, 2000);
+
+                /* 
+                // Lógica original de Supabase - comentada temporalmente
                 const { data, error } = await supabase.storage.from("Campus Academy Storage").upload(filePath, file, {
                   cacheControl: "3600",
                   upsert: false,
@@ -94,6 +113,7 @@ export default function VideoLesson({ setCourse, course, moduleIndex, lessonInde
                     }
                   }
                 }
+                */
               }
             }}
           />
@@ -126,7 +146,7 @@ export default function VideoLesson({ setCourse, course, moduleIndex, lessonInde
             height: "100%",
           }}
         >
-          <div className="loader"></div>
+          <div className="loader">Loading...</div>
         </div>
       ) : (
         <video
@@ -145,7 +165,14 @@ export default function VideoLesson({ setCourse, course, moduleIndex, lessonInde
           id="video-url"
           type="url"
           value={videoUrl}
-          onChange={(e) => setVideoUrl(e.target.value)}
+          onChange={(e) => {
+            setVideoUrl(e.target.value);
+            // Actualizar también el archivo del lesson
+            if (lesson) {
+              lesson.file = e.target.value;
+              setCourse({ ...course });
+            }
+          }}
           placeholder="markdown"
           className="video-lesson-input"
         />
@@ -155,7 +182,14 @@ export default function VideoLesson({ setCourse, course, moduleIndex, lessonInde
         <label>Video file:</label>
         <textarea
           value={file}
-          onChange={(e) => setFile(e.target.value)}
+          onChange={(e) => {
+            setFile(e.target.value);
+            // Actualizar también el archivo del lesson
+            if (lesson) {
+              lesson.file = e.target.value;
+              setCourse({ ...course });
+            }
+          }}
           placeholder="markdown"
           rows={5}
           className="video-lesson-textarea"
