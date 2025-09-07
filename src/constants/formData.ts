@@ -153,21 +153,106 @@ export const STUDY_AREA_OPTIONS = [
 ] as const;
 
 export const SPECIALIZATION_OPTIONS = [
-  { idx: 0, specialization_id: 1, specialization_name: "Computer Science & Programming" },
-  { idx: 1, specialization_id: 2, specialization_name: "Mathematics" },
-  { idx: 2, specialization_id: 3, specialization_name: "Science (Biology, Chemistry, Physics)" },
-  { idx: 3, specialization_id: 4, specialization_name: "English & Literature" },
-  { idx: 4, specialization_id: 5, specialization_name: "History & Social Studies" },
-  { idx: 5, specialization_id: 6, specialization_name: "Foreign Languages" },
-  { idx: 6, specialization_id: 7, specialization_name: "Arts & Design" },
-  { idx: 7, specialization_id: 8, specialization_name: "Business & Economics" },
-  { idx: 8, specialization_id: 9, specialization_name: "Engineering" },
-  { idx: 9, specialization_id: 10, specialization_name: "Health & Medicine" },
-  { idx: 10, specialization_id: 11, specialization_name: "Physical Education & Sports" },
-  { idx: 11, specialization_id: 12, specialization_name: "Music & Performing Arts" },
-  { idx: 12, specialization_id: 13, specialization_name: "Psychology & Counseling" },
-  { idx: 13, specialization_id: 14, specialization_name: "Special Education" },
-  { idx: 14, specialization_id: 15, specialization_name: "Other" },
+  {
+    idx: 0,
+    specialization_id: 1,
+    specialization_name: "Computer Science & Programming",
+    specialization_description:
+      "Teaching programming languages, software development, algorithms, and computer science fundamentals.",
+  },
+  {
+    idx: 1,
+    specialization_id: 2,
+    specialization_name: "Mathematics",
+    specialization_description: "Teaching algebra, geometry, calculus, statistics, and advanced mathematical concepts.",
+  },
+  {
+    idx: 2,
+    specialization_id: 3,
+    specialization_name: "Science (Biology, Chemistry, Physics)",
+    specialization_description: "Teaching natural sciences including laboratory work and scientific research methods.",
+  },
+  {
+    idx: 3,
+    specialization_id: 4,
+    specialization_name: "English & Literature",
+    specialization_description: "Teaching language arts, writing, reading comprehension, and literary analysis.",
+  },
+  {
+    idx: 4,
+    specialization_id: 5,
+    specialization_name: "History & Social Studies",
+    specialization_description: "Teaching historical events, social sciences, civics, and cultural studies.",
+  },
+  {
+    idx: 5,
+    specialization_id: 6,
+    specialization_name: "Foreign Languages",
+    specialization_description: "Teaching second languages including grammar, conversation, and cultural context.",
+  },
+  {
+    idx: 6,
+    specialization_id: 7,
+    specialization_name: "Arts & Design",
+    specialization_description: "Teaching visual arts, design principles, creativity, and artistic expression.",
+  },
+  {
+    idx: 7,
+    specialization_id: 8,
+    specialization_name: "Business & Economics",
+    specialization_description: "Teaching business principles, economics, entrepreneurship, and financial literacy.",
+  },
+  {
+    idx: 8,
+    specialization_id: 9,
+    specialization_name: "Engineering",
+    specialization_description: "Teaching engineering principles, problem-solving, and technical design.",
+  },
+  {
+    idx: 9,
+    specialization_id: 10,
+    specialization_name: "Health & Medicine",
+    specialization_description: "Teaching health sciences, medical concepts, and healthcare practices.",
+  },
+  {
+    idx: 10,
+    specialization_id: 11,
+    specialization_name: "Physical Education & Sports",
+    specialization_description: "Teaching physical fitness, sports, and promoting healthy lifestyles.",
+  },
+  {
+    idx: 11,
+    specialization_id: 12,
+    specialization_name: "Music & Performing Arts",
+    specialization_description: "Teaching music theory, instruments, performance, and artistic expression.",
+  },
+  {
+    idx: 12,
+    specialization_id: 13,
+    specialization_name: "Psychology & Counseling",
+    specialization_description: "Teaching psychology, human behavior, and providing educational guidance.",
+  },
+  {
+    idx: 13,
+    specialization_id: 14,
+    specialization_name: "Special Education",
+    specialization_description: "Teaching students with special needs and adapting educational methods.",
+  },
+  {
+    idx: 14,
+    specialization_id: 15,
+    specialization_name: "Other",
+    specialization_description: "Other educational specializations not listed above.",
+  },
+] as const;
+
+export const EXPERIENCE_LEVEL_OPTIONS = [
+  { idx: 0, experience_id: 1, experience_years: 0, experience_name: "New Teacher (0-1 years)" },
+  { idx: 1, experience_id: 2, experience_years: 2, experience_name: "Early Career (2-5 years)" },
+  { idx: 2, experience_id: 3, experience_years: 6, experience_name: "Mid Career (6-10 years)" },
+  { idx: 3, experience_id: 4, experience_years: 11, experience_name: "Experienced (11-15 years)" },
+  { idx: 4, experience_id: 5, experience_years: 16, experience_name: "Senior Teacher (16-20 years)" },
+  { idx: 5, experience_id: 6, experience_years: 21, experience_name: "Veteran Teacher (21+ years)" },
 ] as const;
 
 // SECCIONES DEL FORMULARIO

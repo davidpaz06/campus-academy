@@ -60,17 +60,17 @@ export interface RegisterInstitution {
 }
 
 export interface RegisterStudent {
-  email: "string";
-  username: "string";
-  password: "string";
-  profileId: 4;
-  institutionId: "string";
-  personFirstName: "string";
-  personMiddleName: "string";
-  personSurname: "string";
-  personSecondSurname: "string";
-  personPhone: "string";
-  personBirthDate: "2024-06-20";
+  email: string;
+  username: string;
+  password: string;
+  profileId: number;
+  institutionId: string;
+  personFirstName: string;
+  personMiddleName: string;
+  personSurname: string;
+  personSecondSurname: string;
+  personPhone: string;
+  personBirthDate: string;
 
   studyAreaId: number;
   academicLevelId: number;
@@ -83,21 +83,21 @@ export interface RegisterTeacher {
   email: string;
   username: string;
   password: string;
-  first_name: string;
-  last_name: string;
-  profile_id: string;
-  specialization_id: number;
-  experience_years: number;
+  profileId: number;
+  institutionId: string;
+  personFirstName: string;
+  personMiddleName: string;
+  personSurname: string;
+  personSecondSurname: string;
+  personPhone: string;
+  personBirthDate: string;
 
-  teacher_country: string;
-  teacher_state: string;
-  teacher_city: string;
-  teacher_phone?: string;
-
-  birth_date?: string;
-  gender?: string;
-  institution_code?: string;
-  bio?: string;
+  specializationId: number;
+  experienceYears: number;
   linkedin?: string;
-  portfolio_website?: string;
+  portfolioWebsite?: string;
+
+  personCountry: string;
+  personState: string;
+  personCity: string;
 }

@@ -12,7 +12,7 @@ import Register from "./pages/auth/Register";
 
 //Register subpages
 import RegisterStudent from "./pages/auth/register/RegisterStudent";
-// import RegisterTeacher from "./pages/auth/register/RegisterTeacher";
+import RegisterTeacher from "./pages/auth/register/RegisterTeacher";
 import RegisterInstitution from "./pages/auth/register/RegisterInstitution";
 
 // Private Pages
@@ -39,12 +39,12 @@ export default function App() {
               }
             />
             <Route path="/register" element={<Register />} />
-            {/* <Route path="/register/teacher" element={<RegisterTeacher />} /> */}
           </Route>
 
           <Route element={<PublicLayout background={2} stripe={2} options={false} isStatic={false} />}>
-            <Route path="/register/institution" element={<RegisterInstitution />} />
             <Route path="/register/student" element={<RegisterStudent />} />
+            <Route path="/register/teacher" element={<RegisterTeacher />} />
+            <Route path="/register/institution" element={<RegisterInstitution />} />
           </Route>
 
           {/* RUTAS PRIVADAS PROTEGIDAS */}

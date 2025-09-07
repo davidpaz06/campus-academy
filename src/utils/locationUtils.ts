@@ -14,15 +14,14 @@ export const validateEmail = (email: string): boolean => {
   return emailRegex.test(email);
 };
 
-export const validateURL = (url: string): boolean => {
-  if (!url) return true; // URL opcional
+export function validateURL(url: string): boolean {
   try {
-    new URL(url.startsWith("http") ? url : `https://${url}`);
+    new URL(url);
     return true;
   } catch {
     return false;
   }
-};
+}
 
 export const formatSocialMediaHandle = (handle: string, platform: string): string => {
   if (!handle) return "";
