@@ -148,3 +148,16 @@
     resize: none;
   }
 }
+
+/* Comentar estilos de react-mde */
+/*
+@import "react-mde/lib/styles/css/react-mde-all.css";
+*/
+
+/* Mantener otros estilos de markdown */
+
+/* En cualquier archivo que importe react-mde: */
+/* import ReactMde from "react-mde"; */
+/* import "react-mde/lib/styles/css/react-mde-all.css"; */
+
+/* Reemplazar con textarea temporal o comentar la funcionalidad */

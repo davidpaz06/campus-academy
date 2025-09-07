@@ -1,8 +1,6 @@
 import "./lessonCard.css";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import ReactMde from "react-mde";
-
 import ReactMarkdown from "react-markdown";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import "@/components/markdown.css";
@@ -14,26 +12,15 @@ import { getWordCount } from "@/utils/markdownUtils";
 import EditableText from "@/components/EditableText";
 import ContextMenu from "@/components/ContextMenu";
 
-export default function ReadingLesson({
-  setCourse,
-  course,
-  moduleIndex,
-  lessonIndex,
-}: CourseProps) {
+export default function ReadingLesson({ setCourse, course, moduleIndex, lessonIndex }: CourseProps) {
   const lesson = getLesson({ course, moduleIndex, lessonIndex });
-  const [markdown, setMarkdown] = useState<string>(
-    lesson?.file || "Upload a File or Start writing your lesson..."
-  );
+  const [markdown, setMarkdown] = useState<string>(lesson?.file || "Upload a File or Start writing your lesson...");
   const [content, setContent] = useState<string>(markdown);
   const [showModal, setShowModal] = useState(false);
 
   const handleMarkdownChange = (value: string) => {
     setMarkdown(value);
-    if (
-      setCourse &&
-      typeof moduleIndex === "number" &&
-      typeof lessonIndex === "number"
-    ) {
+    if (setCourse && typeof moduleIndex === "number" && typeof lessonIndex === "number") {
       const updatedCourse: CourseProps["course"] = { ...course };
       updatedCourse.modules[moduleIndex].lessons[lessonIndex].file = value;
       setCourse(updatedCourse);
@@ -47,14 +34,9 @@ export default function ReadingLesson({
       <EditableText
         value={lesson?.title || ""}
         onChange={(newTitle) => {
-          if (
-            typeof moduleIndex === "number" &&
-            typeof lessonIndex === "number" &&
-            setCourse
-          ) {
+          if (typeof moduleIndex === "number" && typeof lessonIndex === "number" && setCourse) {
             const updatedCourse: CourseProps["course"] = { ...course };
-            updatedCourse.modules[moduleIndex].lessons[lessonIndex].title =
-              newTitle;
+            updatedCourse.modules[moduleIndex].lessons[lessonIndex].title = newTitle;
             setCourse(updatedCourse);
           }
         }}
@@ -93,23 +75,14 @@ export default function ReadingLesson({
       <div className="lesson-footer">
         <span className="lesson-duration">{duration}</span>
         <ContextMenu
-          options={[
-            { label: "Delete", value: "delete", className: "lesson-delete" },
-          ]}
+          options={[{ label: "Delete", value: "delete", className: "lesson-delete" }]}
           position="top"
           direction="left"
           onSelect={(value) => {
             if (value === "delete") {
-              if (
-                typeof moduleIndex === "number" &&
-                typeof lessonIndex === "number" &&
-                setCourse
-              ) {
+              if (typeof moduleIndex === "number" && typeof lessonIndex === "number" && setCourse) {
                 const updatedCourse = { ...course };
-                updatedCourse.modules[moduleIndex].lessons.splice(
-                  lessonIndex,
-                  1
-                );
+                updatedCourse.modules[moduleIndex].lessons.splice(lessonIndex, 1);
                 setCourse(updatedCourse);
               }
             }
@@ -122,13 +95,14 @@ export default function ReadingLesson({
         </div>
       ) : (
         <div className="lesson-file">
-          <ReactMde
+          {/* <ReactMde
             value={markdown}
             selectedTab="preview"
             generateMarkdownPreview={(markdown) =>
               Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
             }
-          />
+          /> */}
+          <ReactMarkdown>{markdown}</ReactMarkdown>
         </div>
       )}
 
@@ -145,8 +119,7 @@ export default function ReadingLesson({
                     document.activeElement.classList.contains("mde-text")
                   ) {
                     e.preventDefault();
-                    const textarea =
-                      document.activeElement as HTMLTextAreaElement;
+                    const textarea = document.activeElement as HTMLTextAreaElement;
                     const value = textarea.value;
                     const { selectionStart, selectionEnd } = textarea;
                     const before = value.slice(0, selectionStart);
@@ -154,13 +127,12 @@ export default function ReadingLesson({
                     const newValue = before + "\n" + after;
                     setMarkdown(newValue);
                     setTimeout(() => {
-                      textarea.selectionStart = textarea.selectionEnd =
-                        selectionStart + 1;
+                      textarea.selectionStart = textarea.selectionEnd = selectionStart + 1;
                     }, 0);
                   }
                 }}
               >
-                <ReactMde
+                {/* <ReactMde
                   value={markdown}
                   onChange={setMarkdown}
                   toolbarButtonComponent={[[]]}
@@ -175,6 +147,13 @@ export default function ReadingLesson({
                   classes={{
                     textArea: "custom-mde-textarea",
                   }}
+                /> */}
+                <textarea
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  placeholder="Enter your reading content here..."
+                  rows={10}
+                  style={{ width: "100%", minHeight: "200px" }}
                 />
               </div>
 
@@ -185,19 +164,13 @@ export default function ReadingLesson({
                   classes={{
                     preview: "preview",
                   }}
-                  generateMarkdownPreview={(markdown) =>
-                    Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)
-                  }
+                  generateMarkdownPreview={(markdown) => Promise.resolve(<ReactMarkdown>{markdown}</ReactMarkdown>)}
                 />
               </div>
               <div className="modal-edit-reading-footer">
-                <span className="modal-chip-primary">
-                  {getWordCount(markdown)} words
-                </span>
+                <span className="modal-chip-primary">{getWordCount(markdown)} words</span>
                 {calculateReadingTime(markdown) !== "" ? (
-                  <span className="modal-chip-primary">
-                    {calculateReadingTime(markdown)} read
-                  </span>
+                  <span className="modal-chip-primary">{calculateReadingTime(markdown)} read</span>
                 ) : null}
               </div>
               <div className="reading-modal-preview-footer">
@@ -219,10 +192,7 @@ export default function ReadingLesson({
                   Save
                 </span>
               </div>
-              <button
-                className="reading-modal-close-button"
-                onClick={() => setShowModal(false)}
-              >
+              <button className="reading-modal-close-button" onClick={() => setShowModal(false)}>
                 X
               </button>
             </div>
