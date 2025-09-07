@@ -1,19 +1,19 @@
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom"; // ✅ Agregar Link
 import { useState } from "react";
 import "./Login.css";
 
 type LoginForm = {
-  username?: string;
-  password?: string;
+  username: string;
+  password: string;
 };
 
 export default function Login() {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [form, setForm] = useState<Partial<LoginForm>>({});
+  const [form, setForm] = useState<LoginForm>({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -96,7 +96,18 @@ export default function Login() {
         </div>
         <div className="login-footer">
           <p>
-            Don't have an account? <a href="/register">Sign up</a>
+            Don't have an account?{" "}
+            <Link to="/register/student" className="register-link">
+              Sign up as Student
+            </Link>{" "}
+            |{" "}
+            <Link to="/register/teacher" className="register-link">
+              Sign up as Teacher
+            </Link>{" "}
+            |{" "}
+            <Link to="/register/institution" className="register-link">
+              Sign up as Institution
+            </Link>
           </p>
         </div>
       </div>
