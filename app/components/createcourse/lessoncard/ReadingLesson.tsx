@@ -1,4 +1,4 @@
-import "./lessonCard.css";
+import "./LessonCard.css";
 import { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 
