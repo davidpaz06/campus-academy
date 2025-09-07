@@ -44,6 +44,13 @@ export default function CreateCourse() {
 
   const [activeModule, setActiveModule] = useState<number>(0);
 
+  // Usar useEffect para resetear al step inicial cuando sea necesario
+  useEffect(() => {
+    if (step < 1 || step > 3) {
+      setStep(InitialStep);
+    }
+  }, [step]);
+
   switch (step) {
     case 1:
       return (
@@ -84,6 +91,16 @@ export default function CreateCourse() {
       );
 
     default:
-      return setStep(InitialStep);
+      // Retornar JSX válido en lugar de void
+      return (
+        <form className="create-course-step-1" onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
+          <CreateCourseInfo setCourse={setCourse} course={course} />
+          <section className="button-container">
+            <button className="create-course-button" type="button" onClick={() => setStep(step + 1)}>
+              Next
+            </button>
+          </section>
+        </form>
+      );
   }
 }
