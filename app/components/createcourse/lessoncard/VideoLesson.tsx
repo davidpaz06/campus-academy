@@ -23,12 +23,12 @@ export default function VideoLesson({ setCourse, course, moduleIndex, lessonInde
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [videoUrl, setVideoUrl] = useState<string>(lesson?.file || "");
-  const [description, setDescription] = useState<string>(lesson?.description || "");
+  const [file, setFile] = useState<string>(lesson?.file || "");
 
   useEffect(() => {
     if (lesson) {
       setVideoUrl(lesson.file);
-      setDescription(lesson.description);
+      setFile(lesson.file);
     }
   }, [lesson]);
 
@@ -151,11 +151,11 @@ export default function VideoLesson({ setCourse, course, moduleIndex, lessonInde
         />
       </div>
 
-      <div className="video-description-section">
-        <label>Video Description:</label>
+      <div className="video-file-section">
+        <label>Video file:</label>
         <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={file}
+          onChange={(e) => setFile(e.target.value)}
           placeholder="markdown"
           rows={5}
           className="video-lesson-textarea"

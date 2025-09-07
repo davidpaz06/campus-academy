@@ -1,8 +1,6 @@
 import "./lessonCard.css";
 import { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import "react-mde/lib/styles/css/react-mde-all.css";
-import "@/components/markdown.css";
 
 import type { CourseProps } from "@/interfaces/createCourseInterfaces";
 import { calculateReadingTime, getLesson } from "@/utils/courseUtils";
