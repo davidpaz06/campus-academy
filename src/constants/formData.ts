@@ -23,27 +23,65 @@ export const CONTACT_FIELDS = [
 //OPTIONS FOR SELECT FIELDS
 
 export const PROFILE_OPTIONS = [
-  { value: "", label: "Select role" },
-  { value: "1", label: "Student" },
-  { value: "2", label: "Teacher" },
-  { value: "3", label: "Admin" },
+  { idx: 1, profile_id: 2, profile_name: "Institution Admin", profile_hierarchy: 2 },
+  { idx: 2, profile_id: 3, profile_name: "Teacher", profile_hierarchy: 3 },
+  { idx: 3, profile_id: 4, profile_name: "Student", profile_hierarchy: 4 },
 ] as const;
 
 export const INSTITUTION_TYPE_OPTIONS = [
-  { value: "", label: "Select institution type" },
-  { value: "K-12", label: "K-12" },
-  { value: "University", label: "University" },
-  { value: "Technical", label: "Technical Institute" },
-  { value: "Vocational", label: "Vocational School" },
+  {
+    idx: 0,
+    institution_type_id: 1,
+    institution_type_name: "University",
+    institution_type_description:
+      "An university is an institution of higher education and research which awards academic degrees in various academic disciplines. Universities typically offer undergraduate and postgraduate programs.",
+  },
+  {
+    idx: 1,
+    institution_type_id: 2,
+    institution_type_name: "Technical Institute",
+    institution_type_description:
+      "A technical institute is an educational institution that specializes in providing vocational education and training in technical fields.",
+  },
+  {
+    idx: 2,
+    institution_type_id: 3,
+    institution_type_name: "Online Platform",
+    institution_type_description:
+      "An online platform is a digital space that offers educational courses and resources through the internet.",
+  },
+  {
+    idx: 3,
+    institution_type_id: 4,
+    institution_type_name: "K-12 School",
+    institution_type_description:
+      "K12 education, or kindergarten through 12th grade (K-12), refers to the educational journey that spans from kindergarten, typically starting at around age five, through to twelfth grade, usually ending around age 18.",
+  },
+  {
+    idx: 4,
+    institution_type_id: 5,
+    institution_type_name: "Training Center",
+    institution_type_description:
+      "A training center is an institution that provides vocational training and education to individuals seeking to acquire specific skills for their careers. It can also be meant for corpoarate training serving as a capacitation center for employees and interns.",
+  },
+  {
+    idx: 5,
+    institution_type_id: 6,
+    institution_type_name: "Other",
+    institution_type_description:
+      "Personalized education knows no boundaries. From private tutoring to specialized workshops, this category encompasses a wide range of educational experiences.",
+  },
 ] as const;
 
 export const GRADING_SYSTEM_OPTIONS = [
-  { value: "", label: "Select grading system" },
-  { value: "20-point scale", label: "20-point scale" },
-  { value: "10-point scale", label: "10-point scale" },
-  { value: "100-point scale", label: "100-point scale" },
-  { value: "A-F scale", label: "A-F scale" },
-  { value: "Pass/Fail", label: "Pass/Fail" },
+  { idx: 0, grading_system_id: 1, grading_system_name: "4.0 GPA Scale" },
+  { idx: 1, grading_system_id: 2, grading_system_name: "Letter Grade System (A–F)" },
+  { idx: 2, grading_system_id: 3, grading_system_name: "100-Point Percentage Scale" },
+  { idx: 3, grading_system_id: 4, grading_system_name: "100-Point Point Scale" },
+  { idx: 4, grading_system_id: 5, grading_system_name: "20-Point Scale" },
+  { idx: 5, grading_system_id: 6, grading_system_name: "10-point Scale" },
+  { idx: 6, grading_system_id: 7, grading_system_name: "5-Point Scale" },
+  { idx: 7, grading_system_id: 8, grading_system_name: "Other" },
 ] as const;
 
 export const FORM_SECTIONS = {

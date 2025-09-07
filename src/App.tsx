@@ -1,9 +1,9 @@
-import "./styles/variables.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicLayout from "./layouts/PublicLayout";
 import InternalLayout from "./layouts/InternalLayout";
+import "./styles/variables.css";
 
 // Public Pages
 import Landing from "./pages/Landing";

@@ -38,20 +38,21 @@ export interface InstitutionRegisterData extends RegisterData {
 }
 
 export interface RegisterInstitution {
-  person_first_name: string;
-  person_surname: string;
+  email: string;
+  username: string;
+  password: string;
   institution_name: string;
-  profile_id: string;
-  institution_type: string;
-  grading_system: string;
   institution_description: string;
+  profile_id: string;
+  institution_type_id: number;
+  grading_system_id: number;
 
-  country: string;
-  region: string;
-  city: string;
-  address: string;
-  business_email: string;
-  phone: string;
+  institution_country: string;
+  institution_state: string;
+  institution_address: string;
+  institution_phone: string;
+
+  institution_city: string;
   website: string;
   instagram: string;
   facebook: string;
