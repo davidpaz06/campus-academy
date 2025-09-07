@@ -1,41 +1,40 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { Icon } from "@iconify/react";
-import CreateInstitution from "./CreateInstitution";
-import "./Register.css";
+import { useAuth } from "../../context/AuthContext";
+import { Navigate } from "react-router-dom";
 
-import { useEffect } from "react";
+import "./Register.css";
 import Card from "@/components/Card";
 
 const roles = [
   {
     key: "student",
     label: "Student",
-    icon: (
-      <Icon icon="material-symbols:school-rounded" className="option-icon" />
-    ),
+    icon: <Icon icon="material-symbols:school-rounded" className="option-icon" />,
     route: "/register/student",
   },
   {
     key: "teacher",
     label: "Teacher",
-    icon: (
-      <Icon className="option-icon" icon="material-symbols:cases-rounded" />
-    ),
+    icon: <Icon className="option-icon" icon="material-symbols:cases-rounded" />,
     route: "/register/teacher",
   },
   {
     key: "school",
     label: "School",
-    icon: (
-      <Icon className="option-icon" icon="material-symbols:apartment-rounded" />
-    ),
+    icon: <Icon className="option-icon" icon="material-symbols:apartment-rounded" />,
     route: "/create-institution",
   },
 ];
 
-const Register = () => {
+const Register: React.FC = () => {
   const navigate = useNavigate();
+  const { user} = useAuth();
+
+  if (user) {
+    return <Navigate to="/hub" replace />;
+  }
 
   return (
     <div className="register-role-container">
@@ -43,11 +42,7 @@ const Register = () => {
         <h1 className="register-role-title">Select your role</h1>
         <div className="register-role-options">
           {roles.map((role) => (
-            <button
-              key={role.key}
-              onClick={() => navigate(role.route)}
-              className={`register-role-btn`}
-            >
+            <button key={role.key} onClick={() => navigate(role.route)} className={`register-role-btn`}>
               {role.icon}
               <span className="register-role-label">{role.label}</span>
             </button>

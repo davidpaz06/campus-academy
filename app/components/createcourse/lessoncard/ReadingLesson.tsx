@@ -1,5 +1,5 @@
 import "./lessonCard.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import "react-mde/lib/styles/css/react-mde-all.css";
 import "@/components/markdown.css";
@@ -16,6 +16,13 @@ export default function ReadingLesson({ setCourse, course, moduleIndex, lessonIn
   const [markdown, setMarkdown] = useState<string>(lesson?.file || "Upload a File or Start writing your lesson...");
   const [content, setContent] = useState<string>(markdown);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (lesson?.file !== content) {
+      setContent(lesson.file);
+    }
+  }, [lesson?.file]);
 
   const handleMarkdownChange = (value: string) => {
     setMarkdown(value);
@@ -25,7 +32,7 @@ export default function ReadingLesson({ setCourse, course, moduleIndex, lessonIn
       setCourse(updatedCourse);
     }
   };
-  const [loading, setLoading] = useState(false);
+
   const duration = lesson?.file ? calculateReadingTime(lesson.file) : "";
 
   return (
