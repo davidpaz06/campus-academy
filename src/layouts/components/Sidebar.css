@@ -1,0 +1,118 @@
+/* Sidebar modal and overlay styles */
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(30, 40, 60, 0.35);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  animation: fadeInOverlay 0.3s ease;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.sidebar-modal {
+  background: #fff;
+  min-width: 300px;
+  max-width: 350px;
+  height: 100vh;
+  box-shadow: 2px 0 16px rgba(60, 100, 180, 0.13);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  display: grid;
+  grid-template-rows: 60px 1fr 60px;
+  padding: 0;
+  transform: translateX(-40px);
+  opacity: 0;
+  animation: slideInSidebar 0.3s cubic-bezier(0.4, 0.8, 0.4, 1) forwards;
+  z-index: 1001;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid #e9e7e9;
+  height: 60px;
+}
+
+.sidebar-header h1 {
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  color: var(--academy-primary);
+}
+
+.sidebar-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.sidebar-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-content li {
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+  color: #888;
+}
+
+.sidebar-content a {
+  color: var(--charlestone-green);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  transition: all ease 0.2s;
+}
+.sidebar-content li:hover {
+  cursor: pointer;
+
+  a {
+    color: var(--academy-primary);
+    text-decoration: underline;
+  }
+}
+.sidebar-content li.active a {
+  color: var(--academy-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.sidebar-options {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e9e7e9;
+
+  .option {
+    height: 32px;
+    width: 32px;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--academy-primary);
+    }
+  }
+}
+
+@keyframes slideInSidebar {
+  from {
+    transform: translateX(-40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

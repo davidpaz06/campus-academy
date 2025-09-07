@@ -1,0 +1,9 @@
+footer {
+  background: var(--charlestone-green);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 0;
+  gap: 1rem;
+}
