@@ -1,0 +1,16 @@
+export const ROUTES = {
+  HOME: "/",
+  LOGIN: "/login",
+  REGISTER: "/register",
+  DASHBOARD: "/dashboard",
+  COURSES: "/courses",
+  COURSE_DETAIL: (id: string) => `/courses/${id}`,
+  CREATE_COURSE: "/courses/create",
+  EDIT_COURSE: (id: string) => `/courses/${id}/edit`,
+  PRODUCTS: "/products",
+  SOLUTIONS: "/solutions",
+  COMMUNITY: "/community",
+  DOCS: "/docs",
+  PRICING: "/pricing",
+  CONTACT: "/contact",
+} as const;
