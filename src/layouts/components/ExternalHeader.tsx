@@ -14,7 +14,7 @@ export default function ExternalHeader({ options = false }: ExternalHeaderProps)
     <header className="external-header">
       <div className="header-content">
         <div className="logo-section">
-          <Link to="/" className="logo-link">
+          <Link to="/" className="nav-link">
             <h1 className="logo">Campus</h1>
           </Link>
         </div>
@@ -41,7 +41,9 @@ export default function ExternalHeader({ options = false }: ExternalHeaderProps)
         <div className="header-options">
           {options ? (
             <div className="options">
-              <button onClick={() => navigate("/login")}>Enter Campus</button>
+              <button className="external-button" onClick={() => navigate("/login")}>
+                Enter Campus
+              </button>
               <Icon className="user-avatar" icon="material-symbols:person-rounded" onClick={() => navigate("/login")} />
             </div>
           ) : null}

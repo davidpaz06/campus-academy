@@ -5,6 +5,7 @@ import Landing from "@/pages/Landing";
 import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
 import { ROUTES } from "@/constants";
+import "./styles/variables.css";
 
 function App() {
   return (
