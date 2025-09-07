@@ -1,0 +1,41 @@
+@import "./RegisterInstitution.css";
+
+/* Heredamos todos los estilos de RegisterInstitution y solo sobrescribimos lo necesario */
+
+/* Ajustes específicos para estudiantes */
+.create-institution-content h1 {
+  color: var(--campus-primary);
+}
+
+.institution-card {
+  border-color: var(--campus-primary);
+}
+
+.location-card {
+  border-color: var(--campus-primary);
+}
+
+.send-btn {
+  background: var(--campus-primary);
+}
+
+.send-btn:hover {
+  background: var(--campus-secondary);
+}
+
+/* Estilos específicos para campos de fecha */
+.institution-card input[type="date"],
+.location-card input[type="date"] {
+  cursor: pointer;
+}
+
+.institution-card input[type="date"]::-webkit-calendar-picker-indicator,
+.location-card input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: opacity(0.7);
+}
+
+.institution-card input[type="date"]:hover::-webkit-calendar-picker-indicator,
+.location-card input[type="date"]:hover::-webkit-calendar-picker-indicator {
+  filter: opacity(1);
+}

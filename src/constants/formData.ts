@@ -84,6 +84,94 @@ export const GRADING_SYSTEM_OPTIONS = [
   { idx: 7, grading_system_id: 8, grading_system_name: "Other" },
 ] as const;
 
+export const ACADEMIC_LEVEL_OPTIONS = [
+  {
+    idx: 0,
+    academic_level_id: 1,
+    academic_level_name: "High School",
+    academic_level_description:
+      "Secondary education typically for students aged 14-18, preparing for college or vocational training.",
+  },
+  {
+    idx: 1,
+    academic_level_id: 2,
+    academic_level_name: "Associate Degree",
+    academic_level_description:
+      "Two-year undergraduate degree typically offered by community colleges and technical schools.",
+  },
+  {
+    idx: 2,
+    academic_level_id: 3,
+    academic_level_name: "Bachelor's Degree",
+    academic_level_description:
+      "Four-year undergraduate degree that provides comprehensive education in a specific field of study.",
+  },
+  {
+    idx: 3,
+    academic_level_id: 4,
+    academic_level_name: "Master's Degree",
+    academic_level_description:
+      "Graduate-level degree that typically requires 1-2 years of study beyond a bachelor's degree.",
+  },
+  {
+    idx: 4,
+    academic_level_id: 5,
+    academic_level_name: "Doctoral Degree",
+    academic_level_description:
+      "Highest level of academic degree, involving extensive research and original contribution to knowledge.",
+  },
+  {
+    idx: 5,
+    academic_level_id: 6,
+    academic_level_name: "Certificate Program",
+    academic_level_description: "Specialized training program focused on specific skills or knowledge areas.",
+  },
+  {
+    idx: 6,
+    academic_level_id: 7,
+    academic_level_name: "Other",
+    academic_level_description: "Alternative or non-traditional educational paths and learning experiences.",
+  },
+] as const;
+
+export const STUDY_AREA_OPTIONS = [
+  { idx: 0, study_area_id: 1, study_area_name: "Computer Science & Technology" },
+  { idx: 1, study_area_id: 2, study_area_name: "Business & Management" },
+  { idx: 2, study_area_id: 3, study_area_name: "Engineering" },
+  { idx: 3, study_area_id: 4, study_area_name: "Health & Medicine" },
+  { idx: 4, study_area_id: 5, study_area_name: "Arts & Design" },
+  { idx: 5, study_area_id: 6, study_area_name: "Social Sciences" },
+  { idx: 6, study_area_id: 7, study_area_name: "Natural Sciences" },
+  { idx: 7, study_area_id: 8, study_area_name: "Mathematics" },
+  { idx: 8, study_area_id: 9, study_area_name: "Languages & Literature" },
+  { idx: 9, study_area_id: 10, study_area_name: "Education" },
+  { idx: 10, study_area_id: 11, study_area_name: "Law" },
+  { idx: 11, study_area_id: 12, study_area_name: "Psychology" },
+  { idx: 12, study_area_id: 13, study_area_name: "Communications & Media" },
+  { idx: 13, study_area_id: 14, study_area_name: "Environmental Studies" },
+  { idx: 14, study_area_id: 15, study_area_name: "Other" },
+] as const;
+
+export const SPECIALIZATION_OPTIONS = [
+  { idx: 0, specialization_id: 1, specialization_name: "Computer Science & Programming" },
+  { idx: 1, specialization_id: 2, specialization_name: "Mathematics" },
+  { idx: 2, specialization_id: 3, specialization_name: "Science (Biology, Chemistry, Physics)" },
+  { idx: 3, specialization_id: 4, specialization_name: "English & Literature" },
+  { idx: 4, specialization_id: 5, specialization_name: "History & Social Studies" },
+  { idx: 5, specialization_id: 6, specialization_name: "Foreign Languages" },
+  { idx: 6, specialization_id: 7, specialization_name: "Arts & Design" },
+  { idx: 7, specialization_id: 8, specialization_name: "Business & Economics" },
+  { idx: 8, specialization_id: 9, specialization_name: "Engineering" },
+  { idx: 9, specialization_id: 10, specialization_name: "Health & Medicine" },
+  { idx: 10, specialization_id: 11, specialization_name: "Physical Education & Sports" },
+  { idx: 11, specialization_id: 12, specialization_name: "Music & Performing Arts" },
+  { idx: 12, specialization_id: 13, specialization_name: "Psychology & Counseling" },
+  { idx: 13, specialization_id: 14, specialization_name: "Special Education" },
+  { idx: 14, specialization_id: 15, specialization_name: "Other" },
+] as const;
+
+// SECCIONES DEL FORMULARIO
+
 export const FORM_SECTIONS = {
   INSTITUTION: {
     title: "1. Create an institution",
@@ -115,4 +203,47 @@ export const BENEFITS_LIST = [
   "Operability with Xavier's AI assistance",
   "Interaction with other institutions through Campus Social",
   "Campus expert's back up and mentoring",
+] as const;
+
+// Agregar nuevas secciones para Student y Teacher
+export const STUDENT_FORM_SECTIONS = {
+  REGISTRATION: {
+    title: "1. Student Registration",
+    description:
+      "Join our educational community as a student and unlock access to innovative learning experiences, AI-powered assistance, and collaborative tools designed to enhance your academic journey.",
+  },
+  PERSONAL: {
+    title: "2. Personal Information",
+    description:
+      "Complete your profile with personal information to help us provide you with a personalized learning experience tailored to your academic needs and goals.",
+  },
+} as const;
+
+export const TEACHER_FORM_SECTIONS = {
+  REGISTRATION: {
+    title: "1. Teacher Registration",
+    description:
+      "Join our educational platform as an educator and gain access to advanced teaching tools, AI assistance, and a global community of learners and fellow educators.",
+  },
+  PROFESSIONAL: {
+    title: "2. Professional Information",
+    description:
+      "Share your professional background and expertise to help us create the best teaching experience for you and your students.",
+  },
+} as const;
+
+export const STUDENT_BENEFITS_LIST = [
+  "AI-powered learning assistance",
+  "Interactive courses and materials",
+  "Collaboration with peers and educators",
+  "Progress tracking and analytics",
+  "Campus social network",
+] as const;
+
+export const TEACHER_BENEFITS_LIST = [
+  "Advanced teaching and grading tools",
+  "AI-powered content creation assistance",
+  "Student progress analytics",
+  "Collaboration with global educators",
+  "Professional development resources",
 ] as const;

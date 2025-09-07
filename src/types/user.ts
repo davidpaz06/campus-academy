@@ -58,3 +58,46 @@ export interface RegisterInstitution {
   facebook: string;
   twitter: string;
 }
+
+export interface RegisterStudent {
+  email: "string";
+  username: "string";
+  password: "string";
+  profileId: 4;
+  institutionId: "string";
+  personFirstName: "string";
+  personMiddleName: "string";
+  personSurname: "string";
+  personSecondSurname: "string";
+  personPhone: "string";
+  personBirthDate: "2024-06-20";
+
+  studyAreaId: number;
+  academicLevelId: number;
+  studentCountry: string;
+  studentState: string;
+  studentCity: string;
+}
+
+export interface RegisterTeacher {
+  email: string;
+  username: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+  profile_id: string;
+  specialization_id: number;
+  experience_years: number;
+
+  teacher_country: string;
+  teacher_state: string;
+  teacher_city: string;
+  teacher_phone?: string;
+
+  birth_date?: string;
+  gender?: string;
+  institution_code?: string;
+  bio?: string;
+  linkedin?: string;
+  portfolio_website?: string;
+}

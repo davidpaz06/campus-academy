@@ -11,7 +11,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 
 //Register subpages
-// import RegisterStudent from "./pages/auth/register/RegisterStudent";
+import RegisterStudent from "./pages/auth/register/RegisterStudent";
 // import RegisterTeacher from "./pages/auth/register/RegisterTeacher";
 import RegisterInstitution from "./pages/auth/register/RegisterInstitution";
 
@@ -38,25 +38,13 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/register"
-              element={
-                <ProtectedRoute requireAuth={false}>
-                  <Register />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/register" element={<Register />} />
+            {/* <Route path="/register/teacher" element={<RegisterTeacher />} /> */}
           </Route>
 
           <Route element={<PublicLayout background={2} stripe={2} options={false} isStatic={false} />}>
-            <Route
-              path="/register/institution"
-              element={
-                <ProtectedRoute requireAuth={false}>
-                  <RegisterInstitution />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/register/institution" element={<RegisterInstitution />} />
+            <Route path="/register/student" element={<RegisterStudent />} />
           </Route>
 
           {/* RUTAS PRIVADAS PROTEGIDAS */}
