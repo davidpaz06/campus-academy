@@ -167,6 +167,91 @@
   font-style: italic;
 }
 
+/* Video Lesson Styles */
+.video-lesson-container {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+}
+
+.video-lesson-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.video-lesson-header h3 {
+  margin: 0;
+  color: #374151;
+  font-size: 1.1rem;
+}
+
+.video-url-section {
+  margin-bottom: 1rem;
+}
+
+.video-url-section label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.video-lesson-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  background: #fefefe;
+  box-sizing: border-box;
+}
+
+.video-lesson-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.video-lesson-input::placeholder {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.video-description-section label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.video-lesson-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  background: #fefefe;
+  box-sizing: border-box;
+}
+
+.video-lesson-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.video-lesson-textarea::placeholder {
+  color: #9ca3af;
+  font-style: italic;
+}
+
 /* Modal Styles */
 .reading-modal {
   position: fixed;

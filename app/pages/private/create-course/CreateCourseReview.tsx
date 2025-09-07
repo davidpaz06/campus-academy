@@ -14,6 +14,28 @@ export default function CreateCourseReview({
 }: CourseProps & { setStep: (step: number) => void; step: number }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Si hay algún preview de markdown, reemplazarlo con:
+  const renderTextContent = (content: string) => {
+    return (
+      <div className="text-preview">
+        <textarea
+          value={content}
+          readOnly
+          placeholder="markdown"
+          rows={5}
+          style={{
+            width: "100%",
+            padding: "0.5rem",
+            border: "1px solid #e5e7eb",
+            borderRadius: "4px",
+            backgroundColor: "#f9fafb",
+            resize: "none",
+          }}
+        />
+      </div>
+    );
+  };
+
   return (
     <>
       <div className="summary">

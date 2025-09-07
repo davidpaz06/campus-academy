@@ -1,15 +1,23 @@
-// Limpia el markdown y cuenta palabras reales
-export function getWordCount(md: string): number {
-  if (!md) return 0;
-  // Elimina sintaxis markdown básica
-  let clean = md
-    .replace(/(```[\s\S]*?```)/g, " ") // code blocks
-    .replace(/`[^`]*`/g, " ") // inline code
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ") // images
-    .replace(/\[[^\]]*\]\([^)]*\)/g, " ") // links
-    .replace(/[#>*_~`\-]/g, " ") // markdown symbols
-    .replace(/\d+\./g, " ") // ordered lists
-    .replace(/\s+/g, " ") // extra spaces
-    .trim();
-  return clean ? clean.split(" ").filter(Boolean).length : 0;
-}
+// Funciones de texto simplificadas - sin procesamiento de markdown
+
+export const getWordCount = (text: string): number => {
+  return text
+    .trim()
+    .split(/\s+/)
+    .filter((word) => word.length > 0).length;
+};
+
+export const getReadingTime = (text: string): number => {
+  const wordsPerMinute = 200;
+  const wordCount = getWordCount(text);
+  return Math.ceil(wordCount / wordsPerMinute);
+};
+
+export const formatText = (text: string): string => {
+  return text;
+};
+
+export const processMarkdown = (text: string): string => {
+  // Función simplificada que retorna el texto tal como está
+  return text;
+};

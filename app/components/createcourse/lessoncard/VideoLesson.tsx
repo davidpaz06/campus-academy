@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "@/supabaseClient";
 
 import type { CourseProps } from "@/interfaces/createCourseInterfaces";
@@ -22,6 +22,15 @@ export default function VideoLesson({ setCourse, course, moduleIndex, lessonInde
   const [duration, setDuration] = useState<number | undefined>(0);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [videoUrl, setVideoUrl] = useState<string>(lesson?.file || "");
+  const [description, setDescription] = useState<string>(lesson?.description || "");
+
+  useEffect(() => {
+    if (lesson) {
+      setVideoUrl(lesson.file);
+      setDescription(lesson.description);
+    }
+  }, [lesson]);
 
   const handleLoadedMetadata = (e: React.SyntheticEvent<HTMLVideoElement>) => {
     const videoDuration = e.currentTarget.duration;
@@ -129,6 +138,29 @@ export default function VideoLesson({ setCourse, course, moduleIndex, lessonInde
           onCanPlay={() => setLoading(false)}
         ></video>
       )}
+
+      <div className="video-url-section">
+        <label htmlFor="video-url">Video URL:</label>
+        <input
+          id="video-url"
+          type="url"
+          value={videoUrl}
+          onChange={(e) => setVideoUrl(e.target.value)}
+          placeholder="markdown"
+          className="video-lesson-input"
+        />
+      </div>
+
+      <div className="video-description-section">
+        <label>Video Description:</label>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="markdown"
+          rows={5}
+          className="video-lesson-textarea"
+        />
+      </div>
     </>
   );
 }
