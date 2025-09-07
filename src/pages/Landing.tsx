@@ -1,19 +1,22 @@
+import "./Landing.css";
+
 export default function Landing() {
   return (
-    <div
-      style={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <h1>Bienvenido a Campus Academy</h1>
-      <p>Tu plataforma de aprendizaje</p>
-      <div>
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
+    <div className="landing-container">
+      <div className="landing-content">
+        <h1 className="landing-title">Bienvenido a Campus Academy</h1>
+        <p className="landing-subtitle">
+          Tu plataforma de aprendizaje completa donde estudiantes, profesores e instituciones se conectan para crear
+          experiencias educativas extraordinarias.
+        </p>
+        <div className="landing-buttons">
+          <a href="/login" className="landing-btn landing-btn-primary">
+            Iniciar Sesión
+          </a>
+          <a href="/register" className="landing-btn landing-btn-secondary">
+            Registrarse
+          </a>
+        </div>
       </div>
     </div>
   );
