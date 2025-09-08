@@ -95,7 +95,7 @@ export interface RegisterTeacher {
   personSurname: string;
   personSecondSurname: string;
   personPhone: string;
-  personBirthDate: string;
+  personBirthdate: string; // ❌ Cambiar de personBirthdate a personBirthDate
 
   specializationId: number;
   experienceYears: number;

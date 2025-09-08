@@ -208,10 +208,6 @@
 
 /* Estilo específico para el prefijo de teléfono */
 
-.form-row .phone-prefix {
-  border-right: none;
-}
-
 .phone-prefix {
   min-width: 100px;
   max-width: 100px;

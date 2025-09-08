@@ -383,7 +383,7 @@ export default function RegisterStudent() {
                 ))}
               </select>
 
-              <div className="form-row phone-row">
+              <div className="form-row">
                 <select
                   value={selectedPrefix}
                   onChange={handlePrefixChange}

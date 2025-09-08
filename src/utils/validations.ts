@@ -169,15 +169,12 @@ export const validateForm = (
       const result = validator(data[field]);
 
       if (!result.isValid) {
-        // ✅ Formatear error con nombre del campo más legible
-        const fieldDisplayName = formatFieldName(field);
-        errors.push(`${fieldDisplayName}: ${result.error}`);
+        errors.push(`${result.error}`);
       }
 
       validatedData[field] = result.value;
     } catch (error) {
-      const fieldDisplayName = formatFieldName(field);
-      errors.push(`${fieldDisplayName}: Validation error`);
+      errors.push(`Validation error`);
     }
   });
 
@@ -259,5 +256,29 @@ export const validateInstitutionForm = (data: any) => {
     instagram: (value) => validators.optional(value, 100),
     facebook: (value) => validators.optional(value, 100),
     twitter: (value) => validators.optional(value, 100),
+  });
+};
+
+// ✅ Agregar validación para teachers
+export const validateTeacherForm = (data: any) => {
+  return validateForm(data, {
+    email: validators.email,
+    username: validators.username,
+    password: validators.password,
+    profileId: (value) => validators.requiredId(value, "Profile"),
+    personFirstName: (value) => validators.requiredName(value, "First name"),
+    personSurname: (value) => validators.requiredName(value, "Last name"),
+    personMiddleName: (value) => validators.optionalName(value, "Middle name"),
+    personSecondSurname: (value) => validators.optionalName(value, "Second surname"),
+    personPhone: validators.phone,
+    personBirthdate: validators.birthDate,
+    specializationId: (value) => validators.requiredId(value, "Specialization"),
+    experienceYears: (value) => validators.requiredId(value, "Experience years"),
+    institutionId: (value) => validators.uuid(value, "Institution"),
+    personCountry: (value) => validators.optional(value, 100),
+    personState: (value) => validators.optional(value, 100),
+    personCity: (value) => validators.optional(value, 100),
+    linkedin: (value) => validators.optional(value, 200),
+    portfolioWebsite: (value) => validators.optional(value, 200),
   });
 };

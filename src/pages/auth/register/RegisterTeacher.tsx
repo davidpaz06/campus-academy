@@ -2,146 +2,211 @@ import { useState, useCallback } from "react";
 import type { RegisterTeacher } from "@/types/user";
 import Footer from "@/layouts/components/Footer";
 import { useLocationData } from "@/hooks/useLocationData";
-import { validateEmail, formatPhoneNumber, validateURL } from "@/utils/locationUtils";
+import { useFetch } from "@/hooks/useFetch";
 import { SPECIALIZATION_OPTIONS, EXPERIENCE_LEVEL_OPTIONS } from "@/constants/formData";
+import { useAlertContext } from "@/context/AlertContext";
+import { validateTeacherForm, ValidationError } from "@/utils/validations";
 import InstitutionSearch from "@/components/forms/InstitutionSearch";
 import "./RegisterTeacher.css";
 
+const DEFAULT_FORM: Partial<RegisterTeacher> = {
+  profileId: 3, // Teacher profile
+  email: "",
+  username: "",
+  password: "",
+  personFirstName: "",
+  personMiddleName: "",
+  personSurname: "",
+  personSecondSurname: "",
+  personBirthdate: "",
+  personPhone: "+1 ",
+  specializationId: undefined,
+  experienceYears: undefined,
+  institutionId: "",
+  personCountry: "",
+  personState: "",
+  personCity: "",
+  linkedin: "",
+  portfolioWebsite: "",
+};
+
 export default function RegisterTeacher() {
-  const [form, setForm] = useState<Partial<RegisterTeacher>>({
-    profileId: 3, // Teacher por defecto
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [form, setForm] = useState<Partial<RegisterTeacher>>(DEFAULT_FORM);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Estados para UI
   const [selectedSpecialization, setSelectedSpecialization] = useState<number | null>(null);
+  const [selectedPrefix, setSelectedPrefix] = useState("+1");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [selectedStateIso, setSelectedStateIso] = useState("");
 
   const {
     countries,
     states,
     cities,
+    phoneCountries,
     loading: locationLoading,
-    error: locationError,
     loadStatesForCountry,
     loadCitiesForState,
   } = useLocationData();
 
+  const { post } = useFetch();
+  const { success, error, loading, removeAlert } = useAlertContext();
+
+  const resetForm = useCallback(() => {
+    setForm(DEFAULT_FORM);
+    setSelectedSpecialization(null);
+    setSelectedPrefix("+1");
+    setPhoneNumber("");
+    setSelectedStateIso("");
+  }, []);
+
+  const updatePersonPhone = useCallback((prefix: string, number: string) => {
+    const cleanNumber = number.replace(/\D/g, "");
+    setForm((prev) => ({ ...prev, personPhone: cleanNumber ? `${prefix} ${cleanNumber}` : `${prefix} ` }));
+  }, []);
+
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+      const { name, value } = e.target;
+
+      // Solo limpiar username de caracteres no permitidos
+      if (name === "username") {
+        setForm((prev) => ({ ...prev, [name]: value.replace(/[^a-zA-Z0-9_]/g, "") }));
+        return;
+      }
+
+      if (name === "specializationId" || name === "experienceYears") {
+        const numValue = value ? parseInt(value) : undefined;
+        setForm((prev) => ({ ...prev, [name]: numValue }));
+
+        if (name === "specializationId") {
+          setSelectedSpecialization(numValue || null);
+        }
+      } else {
+        setForm((prev) => ({ ...prev, [name]: value }));
+      }
+    },
+    []
+  );
+
   const handleCountryChange = useCallback(
     async (e: React.ChangeEvent<HTMLSelectElement>) => {
       const countryCode = e.target.value;
+
       setForm((prev) => ({
         ...prev,
         personCountry: countryCode,
         personState: "",
         personCity: "",
       }));
+      setSelectedStateIso("");
 
-      if (countryCode) {
-        await loadStatesForCountry(countryCode);
+      if (!countryCode) return;
+
+      await loadStatesForCountry(countryCode);
+
+      const selectedCountry = countries.find((c) => c.iso2 === countryCode);
+      if (selectedCountry?.phonecode) {
+        const newPrefix = `+${selectedCountry.phonecode}`;
+        setSelectedPrefix(newPrefix);
+        updatePersonPhone(newPrefix, phoneNumber);
       }
     },
-    [loadStatesForCountry]
+    [loadStatesForCountry, countries, phoneNumber, updatePersonPhone]
   );
 
   const handleStateChange = useCallback(
     async (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const stateCode = e.target.value;
-      const country = form.personCountry; // ✅ Cambio: personCountry
+      const stateIso = e.target.value;
+      const selectedState = states.find((state) => state.iso2 === stateIso);
+      const stateName = selectedState?.name || "";
+
+      setSelectedStateIso(stateIso);
       setForm((prev) => ({
         ...prev,
-        personState: stateCode, // ✅ Cambio: personState
+        personState: stateName,
         personCity: "",
       }));
 
-      if (stateCode && country) {
-        await loadCitiesForState(country, stateCode);
+      if (stateIso && form.personCountry) {
+        await loadCitiesForState(form.personCountry, stateIso);
       }
     },
-    [form.personCountry, loadCitiesForState]
+    [form.personCountry, loadCitiesForState, states]
   );
 
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-      const { name, value } = e.target;
-
-      let formattedValue: string | number = value;
-      if (name === "personPhone") {
-        formattedValue = formatPhoneNumber(value);
-      } else if (name === "specializationId") {
-        // ✅ Cambio: specializationId
-        formattedValue = parseInt(value) || "";
-        setSelectedSpecialization(parseInt(value) || null);
-      } else if (name === "experienceYears") {
-        // ✅ Cambio: experienceYears
-        formattedValue = parseInt(value) || "";
-      }
-
-      setForm((prev) => ({ ...prev, [name]: formattedValue }));
-
-      if (errors[name]) {
-        setErrors((prev) => ({ ...prev, [name]: "" }));
-      }
+  const handlePrefixChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const newPrefix = e.target.value;
+      setSelectedPrefix(newPrefix);
+      updatePersonPhone(newPrefix, phoneNumber);
     },
-    [errors]
+    [phoneNumber, updatePersonPhone]
   );
 
-  const validateForm = useCallback((): boolean => {
-    const newErrors: Record<string, string> = {};
+  const handlePhoneNumberChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newNumber = e.target.value.replace(/\D/g, "");
+      setPhoneNumber(newNumber);
+      updatePersonPhone(selectedPrefix, newNumber);
+    },
+    [selectedPrefix, updatePersonPhone]
+  );
 
-    if (!form.email) newErrors.email = "Email is required";
-    if (!form.username) newErrors.username = "Username is required";
-    if (!form.password) newErrors.password = "Password is required";
-    if (!form.personFirstName) newErrors.personFirstName = "First name is required";
-    if (!form.personSurname) newErrors.personSurname = "Surname is required";
-    if (!form.personBirthDate) newErrors.personBirthDate = "Birth date is required";
-    if (!form.specializationId) newErrors.specializationId = "Specialization is required"; // ✅ Cambio
-    if (!form.experienceYears) newErrors.experienceYears = "Experience years is required"; // ✅ Cambio
-    if (!form.institutionId) newErrors.institutionId = "Institution is required";
-
-    // Validar email
-    const emailValue = typeof form.email === "string" ? form.email.replace(/"/g, "") : form.email;
-    if (emailValue && !validateEmail(emailValue)) {
-      newErrors.email = "Please enter a valid email";
-    }
-
-    // Validar URLs opcionales
-    if (form.linkedin && !validateURL(form.linkedin)) {
-      // ✅ Cambio: linkedin
-      newErrors.linkedin = "Please enter a valid LinkedIn URL";
-    }
-
-    if (form.portfolioWebsite && !validateURL(form.portfolioWebsite)) {
-      // ✅ Cambio: portfolioWebsite
-      newErrors.portfolioWebsite = "Please enter a valid portfolio website URL";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [form]);
+  const handleInstitutionSelect = useCallback((institution: any) => {
+    setForm((prev) => ({
+      ...prev,
+      institutionId: institution?.institutionId ? String(institution.institutionId) : "",
+    }));
+  }, []);
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
+    async (e: React.FormEvent) => {
       e.preventDefault();
+      setIsSubmitting(true);
 
-      if (!validateForm()) {
-        return;
+      const loadingId = loading("Registering teacher...", {
+        title: "Creating Account",
+        dismissible: false,
+      });
+
+      try {
+        const validatedData = validateTeacherForm({ ...form, profileId: 3 });
+        console.log("Sending teacher data:", validatedData);
+
+        await post("https://campus-api-gateway.onrender.com/api/auth/register", validatedData, "json");
+
+        removeAlert(loadingId);
+        success("Teacher registered successfully!", {
+          title: "Registration Complete",
+          duration: 8000,
+        });
+
+        resetForm();
+      } catch (err) {
+        removeAlert(loadingId);
+
+        if (err instanceof ValidationError) {
+          error(err.errors, { title: "Please check your information", duration: 0 });
+        } else {
+          const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
+          error(errorMessage, { title: "Registration Error", duration: 0 });
+        }
+
+        console.error("Registration failed:", err);
+      } finally {
+        setIsSubmitting(false);
       }
-
-      console.log("Teacher form submitted:", form);
     },
-    [form, validateForm]
+    [form, post, loading, success, error, removeAlert, resetForm]
   );
 
-  // Obtener la descripción de la especialización seleccionada
   const selectedSpecializationDescription = selectedSpecialization
     ? SPECIALIZATION_OPTIONS.find((opt) => opt.specialization_id === selectedSpecialization)?.specialization_description
     : null;
 
-  // Handler para institución
-  const handleInstitutionSelect = useCallback((institution: any) => {
-    setForm((prev) => ({
-      ...prev,
-      institutionId: institution?.institutionId || "",
-    }));
-  }, []);
+  const isLocationDisabled = locationLoading || isSubmitting;
 
   return (
     <div className="create-institution-container">
@@ -171,52 +236,87 @@ export default function RegisterTeacher() {
                 </div>
               )}
             </div>
+
             <div className="institution-card">
-              <input name="email" type="email" placeholder="Email" value={form.email || ""} onChange={handleChange} />
+              <input
+                name="email"
+                type="email"
+                placeholder="Email"
+                value={form.email || ""}
+                onChange={handleChange}
+                disabled={isSubmitting}
+                maxLength={50}
+              />
+
               <div className="form-row">
-                <input name="username" placeholder="Username" value={form.username || ""} onChange={handleChange} />
+                <input
+                  name="username"
+                  placeholder="Username"
+                  value={form.username || ""}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                  maxLength={25}
+                  minLength={3}
+                  pattern="[a-zA-Z0-9_]+"
+                  title="Username can only contain letters, numbers, and underscores"
+                />
                 <input
                   name="password"
                   type="password"
-                  placeholder="Password"
+                  placeholder="Password (min 8 characters)"
                   value={form.password || ""}
                   onChange={handleChange}
+                  disabled={isSubmitting}
+                  minLength={8}
                 />
               </div>
+
               <div className="form-row">
                 <input
                   name="personFirstName"
                   placeholder="First Name"
                   value={form.personFirstName || ""}
                   onChange={handleChange}
+                  disabled={isSubmitting}
+                  maxLength={25}
+                  minLength={2}
                 />
                 <input
                   name="personMiddleName"
                   placeholder="Middle Name (optional)"
                   value={form.personMiddleName || ""}
                   onChange={handleChange}
+                  disabled={isSubmitting}
+                  maxLength={25}
                 />
               </div>
+
               <div className="form-row">
                 <input
                   name="personSurname"
-                  placeholder="Surname"
+                  placeholder="Last Name"
                   value={form.personSurname || ""}
                   onChange={handleChange}
+                  disabled={isSubmitting}
+                  maxLength={25}
+                  minLength={2}
                 />
                 <input
                   name="personSecondSurname"
-                  placeholder="Second Surname (optional)"
+                  placeholder="Second Last Name (optional)"
                   value={form.personSecondSurname || ""}
                   onChange={handleChange}
+                  disabled={isSubmitting}
+                  maxLength={25}
                 />
               </div>
+
               <div className="form-row">
                 <select
-                  name="specializationId" // ✅ Cambio: specializationId
+                  name="specializationId"
                   value={form.specializationId || ""}
                   onChange={handleChange}
-                  aria-label="Specialization"
+                  disabled={isSubmitting}
                 >
                   <option value="">Select specialization</option>
                   {SPECIALIZATION_OPTIONS.map((opt) => (
@@ -226,10 +326,10 @@ export default function RegisterTeacher() {
                   ))}
                 </select>
                 <select
-                  name="experienceYears" // ✅ Cambio: experienceYears
+                  name="experienceYears"
                   value={form.experienceYears || ""}
                   onChange={handleChange}
-                  aria-label="Experience Years"
+                  disabled={isSubmitting}
                 >
                   <option value="">Years of experience</option>
                   {EXPERIENCE_LEVEL_OPTIONS.map((opt) => (
@@ -239,11 +339,12 @@ export default function RegisterTeacher() {
                   ))}
                 </select>
               </div>
+
               <InstitutionSearch
                 value={null}
                 onSelect={handleInstitutionSelect}
                 placeholder="Search for your institution"
-                disabled={false}
+                disabled={isSubmitting}
               />
             </div>
           </div>
@@ -253,11 +354,10 @@ export default function RegisterTeacher() {
             <div className="location-card">
               <div className="form-row">
                 <select
-                  name="personCountry" // ✅ Cambio: personCountry
+                  name="personCountry"
                   value={form.personCountry || ""}
                   onChange={handleCountryChange}
-                  aria-label="Country"
-                  disabled={locationLoading}
+                  disabled={isLocationDisabled}
                 >
                   <option value="">Select country</option>
                   {countries.map((country) => (
@@ -267,11 +367,10 @@ export default function RegisterTeacher() {
                   ))}
                 </select>
                 <select
-                  name="personState" // ✅ Cambio: personState
-                  value={form.personState || ""}
+                  name="personState"
+                  value={selectedStateIso}
                   onChange={handleStateChange}
-                  aria-label="Region"
-                  disabled={!form.personCountry || locationLoading}
+                  disabled={!form.personCountry || isLocationDisabled}
                 >
                   <option value="">Select region</option>
                   {states.map((state) => (
@@ -280,13 +379,12 @@ export default function RegisterTeacher() {
                     </option>
                   ))}
                 </select>
-              </div>
-              <div className="form-row">
+
                 <select
-                  name="personCity" // ✅ Cambio: personCity
+                  name="personCity"
                   value={form.personCity || ""}
                   onChange={handleChange}
-                  disabled={!form.personState || locationLoading}
+                  disabled={!form.personState || isLocationDisabled}
                 >
                   <option value="">Select city</option>
                   {cities.map((city) => (
@@ -295,30 +393,64 @@ export default function RegisterTeacher() {
                     </option>
                   ))}
                 </select>
-                <input name="personPhone" placeholder="Phone" value={form.personPhone || ""} onChange={handleChange} />
               </div>
+
+              <div className="form-row">
+                <select
+                  value={selectedPrefix}
+                  onChange={handlePrefixChange}
+                  disabled={isLocationDisabled}
+                  className="phone-prefix"
+                  title="Select country code"
+                >
+                  {phoneCountries.map((country) => (
+                    <option key={country.code} value={country.prefix}>
+                      {country.prefix}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="tel"
+                  placeholder="Phone number"
+                  value={phoneNumber}
+                  onChange={handlePhoneNumberChange}
+                  disabled={isSubmitting}
+                  minLength={7}
+                  maxLength={20}
+                  title="Phone number must be in valid international format"
+                />
+              </div>
+
               <input
-                name="personBirthDate"
+                name="personBirthdate"
                 type="date"
                 placeholder="Birth Date"
-                value={form.personBirthDate || ""}
+                value={form.personBirthdate || ""}
                 onChange={handleChange}
+                disabled={isSubmitting}
+                max={new Date().toISOString().split("T")[0]}
               />
+
               <div className="form-row">
                 <input
-                  name="linkedin" // ✅ Cambio: linkedin
+                  name="linkedin"
                   placeholder="LinkedIn Profile (optional)"
                   value={form.linkedin || ""}
                   onChange={handleChange}
+                  disabled={isSubmitting}
+                  maxLength={200}
                 />
                 <input
-                  name="portfolioWebsite" // ✅ Cambio: portfolioWebsite
+                  name="portfolioWebsite"
                   placeholder="Portfolio Website (optional)"
                   value={form.portfolioWebsite || ""}
                   onChange={handleChange}
+                  disabled={isSubmitting}
+                  maxLength={200}
                 />
               </div>
             </div>
+
             <div className="location-info">
               <p>
                 Share your professional background and expertise to help us create the best teaching experience for you
@@ -344,10 +476,11 @@ export default function RegisterTeacher() {
 
           <div className="submit-section">
             <h2>Ready to inspire the next generation?</h2>
-            <button className="send-btn" type="submit">
-              Register as Teacher
+            <button className="send-btn" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Creating Account..." : "Register as Teacher"}
             </button>
           </div>
+
           <div className="submit-footer">
             <p>
               Once you complete registration, you'll receive a confirmation email with instructions to verify your
