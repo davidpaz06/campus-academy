@@ -332,3 +332,12 @@ export const TEACHER_BENEFITS_LIST = [
   "Collaboration with global educators",
   "Professional development resources",
 ] as const;
+
+// ✅ Agregar opciones de género
+export const GENDER_OPTIONS = [
+  { value: "", label: "Select gender (optional)" },
+  { value: "male", label: "Male" },
+  { value: "female", label: "Female" },
+  // { value: "other", label: "Other" },
+  // { value: "prefer-not-to-say", label: "Prefer not to say" },
+];

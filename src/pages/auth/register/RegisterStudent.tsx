@@ -3,7 +3,7 @@ import type { RegisterStudent } from "@/types/user";
 import Footer from "@/layouts/components/Footer";
 import { useLocationData } from "@/hooks/useLocationData";
 import { useFetch } from "@/hooks/useFetch";
-import { ACADEMIC_LEVEL_OPTIONS, STUDY_AREA_OPTIONS } from "@/constants/formData";
+import { ACADEMIC_LEVEL_OPTIONS, STUDY_AREA_OPTIONS, GENDER_OPTIONS } from "@/constants/formData";
 import { useAlertContext } from "@/context/AlertContext";
 import { validateStudentForm, ValidationError } from "@/utils/validations";
 import InstitutionSearch from "@/components/forms/InstitutionSearch";
@@ -369,56 +369,70 @@ export default function RegisterStudent() {
                 </select>
               </div>
 
-              <div className="form-row">
+              <select
+                name="studentCity"
+                value={form.studentCity || ""}
+                onChange={handleChange}
+                disabled={!form.studentState || isLocationDisabled}
+              >
+                <option value="">Select city</option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.name}>
+                    {city.name}
+                  </option>
+                ))}
+              </select>
+
+              <div className="form-row phone-row">
                 <select
-                  name="studentCity"
-                  value={form.studentCity || ""}
-                  onChange={handleChange}
-                  disabled={!form.studentState || isLocationDisabled}
+                  value={selectedPrefix}
+                  onChange={handlePrefixChange}
+                  disabled={isLocationDisabled}
+                  className="phone-prefix"
+                  title="Select country code"
                 >
-                  <option value="">Select city</option>
-                  {cities.map((city) => (
-                    <option key={city.id} value={city.name}>
-                      {city.name}
+                  {phoneCountries.map((country) => (
+                    <option key={country.code} value={country.prefix}>
+                      {country.prefix}
                     </option>
                   ))}
                 </select>
-                <div className="phone-container">
-                  <select
-                    value={selectedPrefix}
-                    onChange={handlePrefixChange}
-                    disabled={isLocationDisabled}
-                    className="phone-prefix"
-                    title="Select country code"
-                  >
-                    {phoneCountries.map((country) => (
-                      <option key={country.code} value={country.prefix}>
-                        {country.prefix}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="tel"
-                    placeholder="Phone number"
-                    value={phoneNumber}
-                    onChange={handlePhoneNumberChange}
-                    disabled={isSubmitting}
-                    minLength={7} // ✅ Min 7 caracteres total
-                    maxLength={20} // ✅ Para el número sin prefijo
-                    title="Phone number must be in valid international format"
-                  />
-                </div>
+                <input
+                  type="tel"
+                  placeholder="Phone number"
+                  value={phoneNumber}
+                  onChange={handlePhoneNumberChange}
+                  disabled={isSubmitting}
+                  minLength={7} // ✅ Min 7 caracteres total
+                  maxLength={20} // ✅ Para el número sin prefijo
+                  title="Phone number must be in valid international format"
+                />
               </div>
 
-              <input
-                name="personBirthdate"
-                type="date"
-                placeholder="Birth Date"
-                value={form.personBirthdate || ""}
-                onChange={handleChange}
-                disabled={isSubmitting}
-                max={new Date().toISOString().split("T")[0]} // ✅ No fechas futuras
-              />
+              <div className="form-row">
+                <select
+                  name="personGender"
+                  value={form.personGender || ""}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                >
+                  {GENDER_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+
+                <input
+                  name="personBirthdate"
+                  type="date"
+                  placeholder="Birth Date"
+                  value={form.personBirthdate || ""}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                  max={new Date().toISOString().split("T")[0]} // ✅ No fechas futuras
+                />
+              </div>
             </div>
 
             <div className="location-info">
