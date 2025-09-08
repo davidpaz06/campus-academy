@@ -41,22 +41,26 @@ export interface RegisterInstitution {
   email: string;
   username: string;
   password: string;
-  institution_name: string;
-  institution_description: string;
-  profile_id: string;
-  institution_type_id: number;
-  grading_system_id: number;
+  profileId: number;
 
-  institution_country: string;
-  institution_state: string;
-  institution_address: string;
-  institution_phone: string;
+  institutionName: string;
+  institutionTypeId: number;
+  institutionDescription?: string;
+  gradingSystemId: number;
 
-  institution_city: string;
-  website: string;
-  instagram: string;
-  facebook: string;
-  twitter: string;
+  institutionCountry: string;
+  institutionState: string;
+  institutionCity: string;
+  institutionAddress: string;
+  institutionPhone?: string;
+
+  website?: string;
+  instagram?: string;
+  facebook?: string;
+  twitter?: string;
+
+  paymentAmount: number;
+  paymentTypeId: number;
 }
 
 export interface RegisterStudent {

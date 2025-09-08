@@ -2,134 +2,231 @@ import { useState, useCallback } from "react";
 import type { RegisterInstitution } from "@/types/user";
 import Footer from "@/layouts/components/Footer";
 import { useLocationData } from "@/hooks/useLocationData";
-import { validateEmail, validateURL, formatPhoneNumber } from "@/utils/locationUtils";
-import {
-  PROFILE_OPTIONS,
-  INSTITUTION_TYPE_OPTIONS,
-  GRADING_SYSTEM_OPTIONS,
-  FORM_SECTIONS,
-  BENEFITS_LIST,
-} from "@/constants/formData";
+import { useFetch } from "@/hooks/useFetch";
+import { INSTITUTION_TYPE_OPTIONS, GRADING_SYSTEM_OPTIONS, FORM_SECTIONS, BENEFITS_LIST } from "@/constants/formData";
+import { useAlertContext } from "@/context/AlertContext";
 import "./RegisterInstitution.css";
 
-export default function RegisterInstitution() {
-  const [form, setForm] = useState<Partial<RegisterInstitution>>({
-    profile_id: "2", // Institution Admin por defecto
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [selectedInstitutionType, setSelectedInstitutionType] = useState<number | null>(null);
+const DEFAULT_FORM_VALUES: Partial<RegisterInstitution> = {
+  profileId: 2,
+  paymentAmount: 0,
+  paymentTypeId: 1,
 
+  institutionPhone: "+1 ",
+  email: "",
+  username: "",
+  password: "",
+  institutionName: "",
+  institutionTypeId: undefined,
+  gradingSystemId: undefined,
+  institutionDescription: "",
+  website: "",
+  instagram: "",
+  facebook: "",
+  twitter: "",
+  institutionCountry: "",
+  institutionState: "",
+  institutionCity: "",
+  institutionAddress: "",
+};
+
+export default function RegisterInstitution() {
+  // ✅ Estados agrupados por funcionalidad
+  const [form, setForm] = useState<Partial<RegisterInstitution>>(DEFAULT_FORM_VALUES);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Estados para UI
+  const [selectedInstitutionType, setSelectedInstitutionType] = useState<number | null>(null);
+  const [selectedPrefix, setSelectedPrefix] = useState("+1");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [selectedStateIso, setSelectedStateIso] = useState("");
+
+  // ✅ Hooks agrupados
   const {
     countries,
     states,
     cities,
+    phoneCountries,
     loading: locationLoading,
-    error: locationError,
     loadStatesForCountry,
     loadCitiesForState,
   } = useLocationData();
+  const { post } = useFetch();
+  const { success, error, loading, removeAlert } = useAlertContext();
 
-  const handleCountryChange = useCallback(
-    async (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const countryCode = e.target.value;
-      setForm((prev) => ({
-        ...prev,
-        institution_country: countryCode,
-        institution_state: "",
-        institution_city: "",
-      }));
+  // ✅ Función de reset limpia
+  const resetForm = useCallback(() => {
+    setForm(DEFAULT_FORM_VALUES);
+    setSelectedInstitutionType(null);
+    setSelectedPrefix("+1");
+    setPhoneNumber("");
+    setSelectedStateIso("");
+  }, []);
 
-      if (countryCode) {
-        await loadStatesForCountry(countryCode);
-      }
-    },
-    [loadStatesForCountry]
-  );
+  // ✅ Función para actualizar teléfono simplificada
+  const updateInstitutionPhone = useCallback((prefix: string, number: string) => {
+    const cleanNumber = number.replace(/\D/g, "");
+    const fullPhone = cleanNumber ? `${prefix} ${cleanNumber}` : `${prefix} `;
+    setForm((prev) => ({ ...prev, institutionPhone: fullPhone }));
+  }, []);
 
-  const handleStateChange = useCallback(
-    async (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const stateCode = e.target.value;
-      const country = form.institution_country;
-      setForm((prev) => ({
-        ...prev,
-        institution_state: stateCode,
-        institution_city: "",
-      }));
-
-      if (stateCode && country) {
-        await loadCitiesForState(country, stateCode);
-      }
-    },
-    [form.institution_country, loadCitiesForState]
-  );
-
+  // ✅ Handlers organizados y simplificados
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
 
-      let formattedValue: string | number = value;
-      if (name === "institution_phone") {
-        formattedValue = formatPhoneNumber(value);
-      } else if (name === "institution_type_id") {
-        formattedValue = parseInt(value) || "";
-        setSelectedInstitutionType(parseInt(value) || null);
-      } else if (name === "grading_system_id") {
-        formattedValue = parseInt(value) || "";
-      }
+      if (name === "institutionTypeId" || name === "gradingSystemId") {
+        const numValue = value ? parseInt(value) : undefined;
+        setForm((prev) => ({ ...prev, [name]: numValue }));
 
-      setForm((prev) => ({ ...prev, [name]: formattedValue }));
-
-      if (errors[name]) {
-        setErrors((prev) => ({ ...prev, [name]: "" }));
+        if (name === "institutionTypeId") {
+          setSelectedInstitutionType(numValue || null);
+        }
+      } else {
+        setForm((prev) => ({ ...prev, [name]: value }));
       }
     },
-    [errors]
+    []
   );
 
-  const validateForm = useCallback((): boolean => {
-    const newErrors: Record<string, string> = {};
+  const handleCountryChange = useCallback(
+    async (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const countryCode = e.target.value;
 
-    if (!form.email) newErrors.email = "Email is required";
-    if (!form.username) newErrors.username = "Username is required";
-    if (!form.password) newErrors.password = "Password is required";
-    if (!form.institution_name) newErrors.institution_name = "Institution name is required";
-    if (!form.institution_type_id) newErrors.institution_type_id = "Institution type is required";
-    if (!form.grading_system_id) newErrors.grading_system_id = "Grading system is required";
-    if (!form.institution_country) newErrors.institution_country = "Country is required";
-    if (!form.institution_state) newErrors.institution_state = "State is required";
-    if (!form.institution_city) newErrors.institution_city = "City is required";
-    if (!form.institution_address) newErrors.institution_address = "Address is required";
+      setForm((prev) => ({
+        ...prev,
+        institutionCountry: countryCode,
+        institutionState: "",
+        institutionCity: "",
+      }));
+      setSelectedStateIso("");
 
-    if (form.email && !validateEmail(form.email)) {
-      newErrors.email = "Please enter a valid email";
-    }
+      if (!countryCode) return;
 
-    if (form.website && !validateURL(form.website)) {
-      newErrors.website = "Please enter a valid URL";
-    }
+      await loadStatesForCountry(countryCode);
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [form]);
+      // Auto-seleccionar prefijo del país
+      const selectedCountry = countries.find((c) => c.iso2 === countryCode);
+      if (selectedCountry?.phonecode) {
+        const newPrefix = `+${selectedCountry.phonecode}`;
+        setSelectedPrefix(newPrefix);
+        updateInstitutionPhone(newPrefix, phoneNumber);
+      }
+    },
+    [loadStatesForCountry, countries, phoneNumber, updateInstitutionPhone]
+  );
+
+  const handleStateChange = useCallback(
+    async (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const stateIso = e.target.value;
+      const selectedState = states.find((state) => state.iso2 === stateIso);
+      const stateName = selectedState?.name || "";
+
+      setSelectedStateIso(stateIso);
+      setForm((prev) => ({
+        ...prev,
+        institutionState: stateName,
+        institutionCity: "",
+      }));
+
+      if (stateIso && form.institutionCountry) {
+        await loadCitiesForState(form.institutionCountry, stateIso);
+      }
+    },
+    [form.institutionCountry, loadCitiesForState, states]
+  );
+
+  const handlePrefixChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const newPrefix = e.target.value;
+      setSelectedPrefix(newPrefix);
+      updateInstitutionPhone(newPrefix, phoneNumber);
+    },
+    [phoneNumber, updateInstitutionPhone]
+  );
+
+  const handlePhoneNumberChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newNumber = e.target.value.replace(/\D/g, "");
+      setPhoneNumber(newNumber);
+      updateInstitutionPhone(selectedPrefix, newNumber);
+    },
+    [selectedPrefix, updateInstitutionPhone]
+  );
+
+  // ✅ Preparación de datos para envío simplificada
+  const prepareFormData = useCallback(
+    () => ({
+      ...form,
+      institutionTypeId: form.institutionTypeId && form.institutionTypeId > 0 ? form.institutionTypeId : 1,
+      gradingSystemId: form.gradingSystemId && form.gradingSystemId > 0 ? form.gradingSystemId : 1,
+      profileId: 2,
+      paymentAmount: 0,
+      paymentTypeId: 1,
+      // Asegurar que todos los campos string tengan valores
+      email: form.email || "",
+      username: form.username || "",
+      password: form.password || "",
+      institutionName: form.institutionName || "",
+      institutionDescription: form.institutionDescription || "",
+      institutionCountry: form.institutionCountry || "",
+      institutionState: form.institutionState || "",
+      institutionCity: form.institutionCity || "",
+      institutionAddress: form.institutionAddress || "",
+      institutionPhone: form.institutionPhone || "",
+      website: form.website || "",
+      instagram: form.instagram || "",
+      facebook: form.facebook || "",
+      twitter: form.twitter || "",
+    }),
+    [form]
+  );
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
+    async (e: React.FormEvent) => {
       e.preventDefault();
+      setIsSubmitting(true);
 
-      if (!validateForm()) {
-        return;
+      const loadingId = loading("Registering institution...", {
+        title: "Creating Account",
+        dismissible: false,
+      });
+
+      try {
+        const formData = prepareFormData();
+        console.log("Sending form data:", formData);
+
+        await post("https://campus-api-gateway.onrender.com/api/institutions", formData, "json");
+
+        removeAlert(loadingId);
+        success("Institution registered successfully! Check your email for verification.", {
+          title: "Registration Complete",
+          duration: 8000,
+        });
+
+        resetForm();
+      } catch (err) {
+        removeAlert(loadingId);
+        const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
+        error(`Registration failed: ${errorMessage}`, {
+          title: "Registration Error",
+          duration: 0,
+        });
+        console.error("Registration failed:", err);
+      } finally {
+        setIsSubmitting(false);
       }
-
-      console.log("Form submitted:", form);
     },
-    [form, validateForm]
+    [prepareFormData, post, loading, success, error, removeAlert, resetForm]
   );
 
-  // Obtener la descripción del tipo de institución seleccionado
+  // ✅ Valores derivados
   const selectedTypeDescription = selectedInstitutionType
     ? INSTITUTION_TYPE_OPTIONS.find((opt) => opt.institution_type_id === selectedInstitutionType)
         ?.institution_type_description
     : null;
+
+  const isLocationDisabled = locationLoading || isSubmitting;
 
   return (
     <div className="create-institution-container">
@@ -156,30 +253,49 @@ export default function RegisterInstitution() {
                 </div>
               )}
             </div>
+
             <div className="institution-card">
               <div className="form-row">
-                <input name="email" type="email" placeholder="Email" value={form.email || ""} onChange={handleChange} />
-                <input name="username" placeholder="Username" value={form.username || ""} onChange={handleChange} />
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  value={form.email || ""}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                />
+                <input
+                  name="username"
+                  placeholder="Username"
+                  value={form.username || ""}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                />
               </div>
+
               <input
                 name="password"
                 type="password"
                 placeholder="Password"
                 value={form.password || ""}
                 onChange={handleChange}
+                disabled={isSubmitting}
               />
+
               <input
-                name="institution_name"
+                name="institutionName"
                 placeholder="Institution name"
-                value={form.institution_name || ""}
+                value={form.institutionName || ""}
                 onChange={handleChange}
+                disabled={isSubmitting}
               />
+
               <div className="form-row">
                 <select
-                  name="institution_type_id"
-                  value={form.institution_type_id || ""}
+                  name="institutionTypeId"
+                  value={form.institutionTypeId || ""}
                   onChange={handleChange}
-                  aria-label="Institution Type"
+                  disabled={isSubmitting}
                 >
                   <option value="">Select institution type</option>
                   {INSTITUTION_TYPE_OPTIONS.map((opt) => (
@@ -189,10 +305,10 @@ export default function RegisterInstitution() {
                   ))}
                 </select>
                 <select
-                  name="grading_system_id"
-                  value={form.grading_system_id || ""}
+                  name="gradingSystemId"
+                  value={form.gradingSystemId || ""}
                   onChange={handleChange}
-                  aria-label="Grading System"
+                  disabled={isSubmitting}
                 >
                   <option value="">Select grading system</option>
                   {GRADING_SYSTEM_OPTIONS.map((opt) => (
@@ -202,11 +318,13 @@ export default function RegisterInstitution() {
                   ))}
                 </select>
               </div>
+
               <textarea
-                name="institution_description"
+                name="institutionDescription"
                 placeholder="Institution description (optional)"
-                value={form.institution_description || ""}
+                value={form.institutionDescription || ""}
                 onChange={handleChange}
+                disabled={isSubmitting}
               />
             </div>
           </div>
@@ -216,11 +334,10 @@ export default function RegisterInstitution() {
             <div className="location-card">
               <div className="form-row">
                 <select
-                  name="institution_country"
-                  value={form.institution_country || ""}
+                  name="institutionCountry"
+                  value={form.institutionCountry || ""}
                   onChange={handleCountryChange}
-                  aria-label="Country"
-                  disabled={locationLoading}
+                  disabled={isLocationDisabled}
                 >
                   <option value="">Select country</option>
                   {countries.map((country) => (
@@ -230,11 +347,10 @@ export default function RegisterInstitution() {
                   ))}
                 </select>
                 <select
-                  name="institution_state"
-                  value={form.institution_state || ""}
+                  name="institutionState"
+                  value={selectedStateIso}
                   onChange={handleStateChange}
-                  aria-label="Region"
-                  disabled={!form.institution_country || locationLoading}
+                  disabled={!form.institutionCountry || isLocationDisabled}
                 >
                   <option value="">Select region</option>
                   {states.map((state) => (
@@ -244,12 +360,13 @@ export default function RegisterInstitution() {
                   ))}
                 </select>
               </div>
+
               <div className="form-row">
                 <select
-                  name="institution_city"
-                  value={form.institution_city || ""}
+                  name="institutionCity"
+                  value={form.institutionCity || ""}
                   onChange={handleChange}
-                  disabled={!form.institution_state || locationLoading}
+                  disabled={!form.institutionState || isLocationDisabled}
                 >
                   <option value="">Select city</option>
                   {cities.map((city) => (
@@ -259,27 +376,72 @@ export default function RegisterInstitution() {
                   ))}
                 </select>
                 <input
-                  name="institution_address"
+                  name="institutionAddress"
                   placeholder="Address"
-                  value={form.institution_address || ""}
+                  value={form.institutionAddress || ""}
                   onChange={handleChange}
+                  disabled={isSubmitting}
                 />
               </div>
-              <input
-                name="institution_phone"
-                placeholder="Phone"
-                value={form.institution_phone || ""}
-                onChange={handleChange}
-              />
-              <div className="form-row">
-                <input name="website" placeholder="Website" value={form.website || ""} onChange={handleChange} />
-                <input name="instagram" placeholder="Instagram" value={form.instagram || ""} onChange={handleChange} />
+
+              <div className="form-row phone-row">
+                <select
+                  value={selectedPrefix}
+                  onChange={handlePrefixChange}
+                  disabled={isLocationDisabled}
+                  className="phone-prefix"
+                  title="Select country code"
+                >
+                  {phoneCountries.map((country) => (
+                    <option key={country.code} value={country.prefix}>
+                      {country.prefix}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="tel"
+                  placeholder="Phone number"
+                  value={phoneNumber}
+                  onChange={handlePhoneNumberChange}
+                  disabled={isSubmitting}
+                />
               </div>
+
               <div className="form-row">
-                <input name="facebook" placeholder="Facebook" value={form.facebook || ""} onChange={handleChange} />
-                <input name="twitter" placeholder="Twitter" value={form.twitter || ""} onChange={handleChange} />
+                <input
+                  name="website"
+                  placeholder="Website"
+                  value={form.website || ""}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                />
+                <input
+                  name="instagram"
+                  placeholder="Instagram"
+                  value={form.instagram || ""}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div className="form-row">
+                <input
+                  name="facebook"
+                  placeholder="Facebook"
+                  value={form.facebook || ""}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                />
+                <input
+                  name="twitter"
+                  placeholder="Twitter"
+                  value={form.twitter || ""}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                />
               </div>
             </div>
+
             <div className="location-info">
               <p>{FORM_SECTIONS.LOCATION.description}</p>
               <p>
@@ -300,10 +462,11 @@ export default function RegisterInstitution() {
 
           <div className="submit-section">
             <h2>Ready to take the next step on your education?</h2>
-            <button className="send-btn" type="submit">
-              Send
+            <button className="send-btn" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Creating Account..." : "Send"}
             </button>
           </div>
+
           <div className="submit-footer">
             <p>
               Once form completion, we will check on your submission to verify your request. We will contact you through

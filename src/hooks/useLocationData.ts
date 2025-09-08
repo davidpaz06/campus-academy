@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react"; // ✅ Solo agregar useMemo
 
 interface Country {
   id: number;
@@ -36,10 +36,19 @@ interface City {
   longitude: string;
 }
 
+// ✅ Agregar interface para phoneCountries
+interface PhoneCountry {
+  code: string;
+  name: string;
+  prefix: string;
+  numericCode: number;
+}
+
 interface UseLocationDataResult {
   countries: Country[];
   states: State[];
   cities: City[];
+  phoneCountries: PhoneCountry[]; // ✅ Solo agregar esta línea
   loading: boolean;
   error: string | null;
   loadStatesForCountry: (countryCode: string) => Promise<void>;
@@ -55,6 +64,31 @@ export function useLocationData(): UseLocationDataResult {
   const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // ✅ Agregar función para generar lista de prefijos únicos
+  const phoneCountries = useMemo(() => {
+    const uniquePrefixes = new Map();
+
+    countries
+      .filter((country) => country.phonecode)
+      .forEach((country) => {
+        const prefix = `+${country.phonecode}`;
+        const numericCode = parseInt(country.phonecode);
+
+        // Solo agregar si no existe o si el nombre del país es más corto (preferencia)
+        if (!uniquePrefixes.has(prefix) || country.name.length < uniquePrefixes.get(prefix).name.length) {
+          uniquePrefixes.set(prefix, {
+            code: country.iso2,
+            name: country.name,
+            prefix: prefix,
+            numericCode: numericCode,
+          });
+        }
+      });
+
+    // Convertir Map a array y ordenar por valor numérico
+    return Array.from(uniquePrefixes.values()).sort((a, b) => a.numericCode - b.numericCode);
+  }, [countries]);
 
   // Función para hacer fetch con la estructura exacta de la API
   const fetchLocationData = async (endpoint: string) => {
@@ -149,6 +183,7 @@ export function useLocationData(): UseLocationDataResult {
     countries,
     states,
     cities,
+    phoneCountries, // ✅ Solo agregar esta línea
     loading,
     error,
     loadStatesForCountry,

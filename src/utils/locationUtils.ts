@@ -47,3 +47,13 @@ export const validateRequired = (value: string, fieldName: string): string | nul
   }
   return null;
 };
+
+export function validatePhoneFormat(phone: string): boolean {
+  // Remover espacios, guiones, paréntesis
+  const cleanPhone = phone.replace(/[\s\-\(\)]/g, "");
+
+  // Formato: +1234567890 o 1234567890 (mínimo 10 dígitos, máximo 15)
+  const phoneRegex = /^[\+]?[1-9][\d]{9,14}$/;
+
+  return phoneRegex.test(cleanPhone);
+}

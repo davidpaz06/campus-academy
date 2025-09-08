@@ -205,3 +205,27 @@
   flex-direction: column;
   justify-content: center;
 }
+
+/* Estilo específico para el prefijo de teléfono */
+
+.phone-prefix {
+  min-width: 100px;
+  max-width: 100px;
+  flex-shrink: 0;
+}
+
+.form-row .phone-prefix + input {
+  flex: 1;
+}
+
+.form-row .phone-prefix {
+  border-right: none;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .phone-prefix {
+    min-width: 120px;
+    max-width: 120px;
+  }
+}

@@ -18,44 +18,51 @@ import RegisterInstitution from "./pages/auth/register/RegisterInstitution";
 // Private Pages
 import Dashboard from "./pages/dashboard/Dashboard";
 import AcademyMain from "./pages/academy/AcademyMain";
+import Alert from "./components/ui/Alert";
+import { AlertProvider } from "./context/AlertContext";
+import AlertContainer from "./components/ui/AlertContainer";
 
 export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
-          {/* RUTAS PUBLICAS */}
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<Landing />} />
-          </Route>
-
-          <Route element={<PublicLayout background={1} options={false} />}>
-            <Route
-              path="/login"
-              element={
-                <ProtectedRoute requireAuth={false}>
-                  <Login />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/register" element={<Register />} />
-          </Route>
-
-          <Route element={<PublicLayout background={2} stripe={2} options={false} isStatic={false} />}>
-            <Route path="/register/student" element={<RegisterStudent />} />
-            <Route path="/register/teacher" element={<RegisterTeacher />} />
-            <Route path="/register/institution" element={<RegisterInstitution />} />
-          </Route>
-
-          {/* RUTAS PRIVADAS PROTEGIDAS */}
-          <Route element={<ProtectedRoute requireAuth={true} />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-
-            <Route element={<InternalLayout />}>
-              <Route path="/academy" element={<AcademyMain />} />
+        <AlertProvider>
+          <Routes>
+            {/* RUTAS PUBLICAS */}
+            <Route element={<PublicLayout />}>
+              <Route path="/" element={<Landing />} />
             </Route>
-          </Route>
-        </Routes>
+
+            <Route element={<PublicLayout background={1} options={false} />}>
+              <Route
+                path="/login"
+                element={
+                  <ProtectedRoute requireAuth={false}>
+                    <Login />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/register" element={<Register />} />
+            </Route>
+
+            <Route element={<PublicLayout background={2} stripe={2} options={false} isStatic={false} />}>
+              <Route path="/register/student" element={<RegisterStudent />} />
+              <Route path="/register/teacher" element={<RegisterTeacher />} />
+              <Route path="/register/institution" element={<RegisterInstitution />} />
+            </Route>
+
+            {/* RUTAS PRIVADAS PROTEGIDAS */}
+            <Route element={<ProtectedRoute requireAuth={true} />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+
+              <Route element={<InternalLayout />}>
+                <Route path="/academy" element={<AcademyMain />} />
+              </Route>
+            </Route>
+          </Routes>
+
+          <AlertContainer />
+        </AlertProvider>
       </BrowserRouter>
     </AuthProvider>
   );
