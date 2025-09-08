@@ -4,28 +4,21 @@ export interface AlertItem {
   id: string;
   type: "success" | "error" | "warning" | "info" | "loading";
   title?: string;
-  message: string;
+  message: string | string[]; // ✅ Cambiar de string a string | string[]
   duration?: number;
   showIcon?: boolean;
   dismissible?: boolean;
+  onDismiss?: () => void;
 }
 
 export function useAlert() {
   const [alerts, setAlerts] = useState<AlertItem[]>([]);
 
-  const generateId = () => `alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
   const addAlert = useCallback((alert: Omit<AlertItem, "id">) => {
-    const newAlert: AlertItem = {
-      id: generateId(),
-      showIcon: true,
-      dismissible: true,
-      duration: alert.type === "loading" ? 0 : 5000,
-      ...alert,
-    };
-
+    const id = Date.now().toString();
+    const newAlert: AlertItem = { ...alert, id };
     setAlerts((prev) => [...prev, newAlert]);
-    return newAlert.id;
+    return id;
   }, []);
 
   const removeAlert = useCallback((id: string) => {
@@ -40,38 +33,38 @@ export function useAlert() {
     setAlerts([]);
   }, []);
 
-  // Métodos de conveniencia
+  // ✅ Actualizar todas las funciones helper para aceptar string | string[]
   const success = useCallback(
-    (message: string, options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => {
+    (message: string | string[], options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => {
       return addAlert({ type: "success", message, ...options });
     },
     [addAlert]
   );
 
   const error = useCallback(
-    (message: string, options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => {
-      return addAlert({ type: "error", message, duration: 0, ...options });
+    (message: string | string[], options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => {
+      return addAlert({ type: "error", message, ...options });
     },
     [addAlert]
   );
 
   const warning = useCallback(
-    (message: string, options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => {
+    (message: string | string[], options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => {
       return addAlert({ type: "warning", message, ...options });
     },
     [addAlert]
   );
 
   const info = useCallback(
-    (message: string, options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => {
+    (message: string | string[], options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => {
       return addAlert({ type: "info", message, ...options });
     },
     [addAlert]
   );
 
   const loading = useCallback(
-    (message: string, options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => {
-      return addAlert({ type: "loading", message, duration: 0, dismissible: false, ...options });
+    (message: string | string[], options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => {
+      return addAlert({ type: "loading", message, ...options });
     },
     [addAlert]
   );

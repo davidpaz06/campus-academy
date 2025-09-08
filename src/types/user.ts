@@ -70,12 +70,13 @@ export interface RegisterStudent {
   profileId: number;
   institutionId: string;
   personFirstName: string;
-  personMiddleName: string;
+  personMiddleName?: string;
   personSurname: string;
-  personSecondSurname: string;
+  personSecondSurname?: string;
   personPhone: string;
-  personBirthDate: string;
+  personBirthdate: string; // ❌ Cambiar de personBirthdate a personBirthDate
 
+  personGender: string;
   studyAreaId: number;
   academicLevelId: number;
   studentCountry: string;

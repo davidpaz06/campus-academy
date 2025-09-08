@@ -6,8 +6,8 @@ export type AlertType = "success" | "error" | "warning" | "info" | "loading";
 export interface AlertProps {
   type: AlertType;
   title?: string;
-  message: string;
-  duration?: number; // en milisegundos, 0 = no auto-cerrar
+  message: string | string[];
+  duration?: number;
   showIcon?: boolean;
   dismissible?: boolean;
   onDismiss?: () => void;
@@ -58,12 +58,14 @@ export default function Alert({
     setTimeout(() => {
       setIsVisible(false);
       onDismiss?.();
-    }, 300); // Duración de la animación
+    }, 300);
   };
 
   if (!isVisible) return null;
 
   const alertTitle = title || alertTitles[type];
+
+  const messageArray = Array.isArray(message) ? message : [message];
 
   return (
     <div
@@ -73,14 +75,20 @@ export default function Alert({
     >
       <div className="alert-content">
         {showIcon && (
-          <div className="alert-icon">
+          <div className="alert-icon" onClick={handleDismiss}>
             <span className={type === "loading" ? "alert-spinner" : ""}>{alertIcons[type]}</span>
           </div>
         )}
 
         <div className="alert-body">
           {alertTitle && <div className="alert-title">{alertTitle}</div>}
-          <div className="alert-message">{message}</div>
+          <div className="alert-message">
+            {messageArray.map((msg, index) => (
+              <div key={index} className="alert-message-line">
+                • {msg}
+              </div>
+            ))}
+          </div>
         </div>
 
         {dismissible && type !== "loading" && (

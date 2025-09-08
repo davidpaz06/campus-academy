@@ -2,131 +2,199 @@ import { useState, useCallback } from "react";
 import type { RegisterStudent } from "@/types/user";
 import Footer from "@/layouts/components/Footer";
 import { useLocationData } from "@/hooks/useLocationData";
-import { validateEmail, formatPhoneNumber } from "@/utils/locationUtils";
+import { useFetch } from "@/hooks/useFetch";
 import { ACADEMIC_LEVEL_OPTIONS, STUDY_AREA_OPTIONS } from "@/constants/formData";
+import { useAlertContext } from "@/context/AlertContext";
+import { validateStudentForm, ValidationError } from "@/utils/validations";
 import InstitutionSearch from "@/components/forms/InstitutionSearch";
 import "./RegisterStudent.css";
 
+const DEFAULT_FORM: Partial<RegisterStudent> = {
+  profileId: 4,
+
+  email: "",
+  username: "",
+  password: "",
+  personFirstName: "",
+  personMiddleName: "",
+  personSurname: "",
+  personSecondSurname: "",
+  personBirthdate: "",
+  personPhone: "+1 ",
+
+  personGender: "",
+  academicLevelId: undefined,
+  studyAreaId: undefined,
+  institutionId: "",
+  studentCountry: "",
+  studentState: "",
+  studentCity: "",
+};
+
 export default function RegisterStudent() {
-  const [form, setForm] = useState<Partial<RegisterStudent>>({
-    profileId: 4,
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [form, setForm] = useState<Partial<RegisterStudent>>(DEFAULT_FORM);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Estados para UI
   const [selectedAcademicLevel, setSelectedAcademicLevel] = useState<number | null>(null);
+  const [selectedPrefix, setSelectedPrefix] = useState("+1");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [selectedStateIso, setSelectedStateIso] = useState("");
 
   const {
     countries,
     states,
     cities,
+    phoneCountries,
     loading: locationLoading,
-    error: locationError,
     loadStatesForCountry,
     loadCitiesForState,
   } = useLocationData();
 
-  const handleCountryChange = useCallback(
-    async (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const countryCode = e.target.value;
-      setForm((prev) => ({
-        ...prev,
-        studentCountry: countryCode,
-        studentState: "",
-        studentCity: "",
-      }));
+  const { post } = useFetch();
+  const { success, error, loading, removeAlert } = useAlertContext();
 
-      if (countryCode) {
-        await loadStatesForCountry(countryCode);
-      }
-    },
-    [loadStatesForCountry]
-  );
+  const resetForm = useCallback(() => {
+    setForm(DEFAULT_FORM);
+    setSelectedAcademicLevel(null);
+    setSelectedPrefix("+1");
+    setPhoneNumber("");
+    setSelectedStateIso("");
+  }, []);
 
-  const handleStateChange = useCallback(
-    async (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const stateCode = e.target.value;
-      const country = form.studentCountry;
-      setForm((prev) => ({
-        ...prev,
-        studentState: stateCode,
-        studentCity: "",
-      }));
+  const updatePersonPhone = useCallback((prefix: string, number: string) => {
+    const cleanNumber = number.replace(/\D/g, "");
+    setForm((prev) => ({ ...prev, personPhone: cleanNumber ? `${prefix} ${cleanNumber}` : `${prefix} ` }));
+  }, []);
 
-      if (stateCode && country) {
-        await loadCitiesForState(country, stateCode);
-      }
-    },
-    [form.studentCountry, loadCitiesForState]
-  );
-
+  // ✅ handleChange simplificado - sin validaciones frontend
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
 
-      let formattedValue: string | number = value;
-      if (name === "personPhone") {
-        formattedValue = formatPhoneNumber(value);
-      } else if (name === "academicLevelId") {
-        formattedValue = parseInt(value) || "";
-        setSelectedAcademicLevel(parseInt(value) || null);
-      } else if (name === "studyAreaId") {
-        formattedValue = parseInt(value) || "";
-      }
-
-      setForm((prev) => ({ ...prev, [name]: formattedValue }));
-
-      if (errors[name]) {
-        setErrors((prev) => ({ ...prev, [name]: "" }));
-      }
-    },
-    [errors]
-  );
-
-  const validateForm = useCallback((): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!form.email) newErrors.email = "Email is required";
-    if (!form.username) newErrors.username = "Username is required";
-    if (!form.password) newErrors.password = "Password is required";
-    if (!form.personFirstName) newErrors.personFirstName = "First name is required";
-    if (!form.personSurname) newErrors.personSurname = "Surname is required";
-    if (!form.personBirthDate) newErrors.personBirthDate = "Birth date is required";
-    if (!form.institutionId) newErrors.institutionId = "Institution is required";
-
-    // Validar email si está presente (remover comillas de la interfaz)
-    const emailValue = typeof form.email === "string" ? form.email.replace(/"/g, "") : form.email;
-    if (emailValue && !validateEmail(emailValue)) {
-      newErrors.email = "Please enter a valid email";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [form]);
-
-  const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
-
-      if (!validateForm()) {
+      // Solo limpiar username de caracteres no permitidos
+      if (name === "username") {
+        setForm((prev) => ({ ...prev, [name]: value.replace(/[^a-zA-Z0-9_]/g, "") }));
         return;
       }
 
-      console.log("Student form submitted:", form);
+      if (name === "academicLevelId" || name === "studyAreaId") {
+        const numValue = value ? parseInt(value) : undefined;
+        setForm((prev) => ({ ...prev, [name]: numValue }));
+
+        if (name === "academicLevelId") {
+          setSelectedAcademicLevel(numValue || null);
+        }
+      } else {
+        setForm((prev) => ({ ...prev, [name]: value }));
+      }
     },
-    [form, validateForm]
+    []
   );
 
-  // Obtener la descripción del nivel académico seleccionado
+  const handleCountryChange = useCallback(
+    async (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const countryCode = e.target.value;
+
+      setForm((prev) => ({ ...prev, studentCountry: countryCode, studentState: "", studentCity: "" }));
+      setSelectedStateIso("");
+
+      if (!countryCode) return;
+
+      await loadStatesForCountry(countryCode);
+
+      const selectedCountry = countries.find((c) => c.iso2 === countryCode);
+      if (selectedCountry?.phonecode) {
+        const newPrefix = `+${selectedCountry.phonecode}`;
+        setSelectedPrefix(newPrefix);
+        updatePersonPhone(newPrefix, phoneNumber);
+      }
+    },
+    [loadStatesForCountry, countries, phoneNumber, updatePersonPhone]
+  );
+
+  const handleStateChange = useCallback(
+    async (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const stateIso = e.target.value;
+      const selectedState = states.find((state) => state.iso2 === stateIso);
+      const stateName = selectedState?.name || "";
+
+      setSelectedStateIso(stateIso);
+      setForm((prev) => ({ ...prev, studentState: stateName, studentCity: "" }));
+
+      if (stateIso && form.studentCountry) {
+        await loadCitiesForState(form.studentCountry, stateIso);
+      }
+    },
+    [form.studentCountry, loadCitiesForState, states]
+  );
+
+  const handlePrefixChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const newPrefix = e.target.value;
+      setSelectedPrefix(newPrefix);
+      updatePersonPhone(newPrefix, phoneNumber);
+    },
+    [phoneNumber, updatePersonPhone]
+  );
+
+  const handlePhoneNumberChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newNumber = e.target.value.replace(/\D/g, "");
+      setPhoneNumber(newNumber);
+      updatePersonPhone(selectedPrefix, newNumber);
+    },
+    [selectedPrefix, updatePersonPhone]
+  );
+
+  const handleInstitutionSelect = useCallback((institution: any) => {
+    setForm((prev) => ({
+      ...prev,
+      institutionId: institution?.institutionId ? String(institution.institutionId) : "",
+    }));
+  }, []);
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      setIsSubmitting(true);
+
+      const loadingId = loading("Registering student...", { title: "Creating Account", dismissible: false });
+
+      try {
+        const validatedData = validateStudentForm({ ...form, profileId: 4 });
+
+        await post("https://campus-api-gateway.onrender.com/api/auth/register", validatedData, "json");
+
+        removeAlert(loadingId);
+        success("Student registered successfully!", { title: "Registration Complete", duration: 8000 });
+
+        resetForm();
+      } catch (err) {
+        removeAlert(loadingId);
+
+        if (err instanceof ValidationError) {
+          // ✅ Pasar el array directamente para mostrar como lista
+          error(err.errors, { title: "Please check your information", duration: 0 });
+        } else {
+          const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
+          error(errorMessage, { title: "Registration Error", duration: 0 });
+        }
+
+        console.error("Registration failed:", err);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [form, post, loading, success, error, removeAlert, resetForm]
+  );
+
+  // ✅ Valores derivados
   const selectedLevelDescription = selectedAcademicLevel
     ? ACADEMIC_LEVEL_OPTIONS.find((opt) => opt.academic_level_id === selectedAcademicLevel)?.academic_level_description
     : null;
 
-  // Agregar handler para institución (actualizar)
-  const handleInstitutionSelect = useCallback((institution: any) => {
-    setForm((prev) => ({
-      ...prev,
-      institutionId: institution?.institutionId || "", // Cambiar de id a institutionId
-    }));
-  }, []);
+  const isLocationDisabled = locationLoading || isSubmitting;
 
   return (
     <div className="create-institution-container">
@@ -156,52 +224,87 @@ export default function RegisterStudent() {
                 </div>
               )}
             </div>
+
             <div className="institution-card">
-              <input name="email" type="email" placeholder="Email" value={form.email || ""} onChange={handleChange} />
+              <input
+                name="email"
+                type="email"
+                placeholder="Email"
+                value={form.email || ""}
+                onChange={handleChange}
+                disabled={isSubmitting}
+                maxLength={50} // ✅ Max 50 caracteres
+              />
+
               <div className="form-row">
-                <input name="username" placeholder="Username" value={form.username || ""} onChange={handleChange} />
+                <input
+                  name="username"
+                  placeholder="Username"
+                  value={form.username || ""}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                  maxLength={25} // ✅ Max 25 caracteres
+                  minLength={3} // ✅ Min 3 caracteres
+                  pattern="[a-zA-Z0-9_]+" // ✅ Solo letras, números y underscores
+                  title="Username can only contain letters, numbers, and underscores"
+                />
                 <input
                   name="password"
                   type="password"
-                  placeholder="Password"
+                  placeholder="Password (min 8 characters)"
                   value={form.password || ""}
                   onChange={handleChange}
+                  disabled={isSubmitting}
+                  minLength={8} // ✅ Min 8 caracteres
                 />
               </div>
+
               <div className="form-row">
                 <input
                   name="personFirstName"
                   placeholder="First Name"
                   value={form.personFirstName || ""}
                   onChange={handleChange}
+                  disabled={isSubmitting}
+                  maxLength={25} // ✅ Max 25 caracteres
+                  minLength={2} // ✅ Min 2 caracteres
                 />
                 <input
                   name="personMiddleName"
                   placeholder="Middle Name (optional)"
                   value={form.personMiddleName || ""}
                   onChange={handleChange}
+                  disabled={isSubmitting}
+                  maxLength={25} // ✅ Max 25 caracteres
                 />
               </div>
+
               <div className="form-row">
                 <input
                   name="personSurname"
-                  placeholder="Surname"
+                  placeholder="Last Name"
                   value={form.personSurname || ""}
                   onChange={handleChange}
+                  disabled={isSubmitting}
+                  maxLength={25} // ✅ Max 25 caracteres
+                  minLength={2} // ✅ Min 2 caracteres
                 />
                 <input
                   name="personSecondSurname"
-                  placeholder="Second Surname (optional)"
+                  placeholder="Second Last Name (optional)"
                   value={form.personSecondSurname || ""}
                   onChange={handleChange}
+                  disabled={isSubmitting}
+                  maxLength={25} // ✅ Max 25 caracteres
                 />
               </div>
+
               <div className="form-row">
                 <select
                   name="academicLevelId"
                   value={form.academicLevelId || ""}
                   onChange={handleChange}
-                  aria-label="Academic Level"
+                  disabled={isSubmitting}
                 >
                   <option value="">Select academic level</option>
                   {ACADEMIC_LEVEL_OPTIONS.map((opt) => (
@@ -214,7 +317,7 @@ export default function RegisterStudent() {
                   name="studyAreaId"
                   value={form.studyAreaId || ""}
                   onChange={handleChange}
-                  aria-label="Study Area"
+                  disabled={isSubmitting}
                 >
                   <option value="">Select study area</option>
                   {STUDY_AREA_OPTIONS.map((opt) => (
@@ -224,11 +327,12 @@ export default function RegisterStudent() {
                   ))}
                 </select>
               </div>
+
               <InstitutionSearch
                 value={null}
                 onSelect={handleInstitutionSelect}
                 placeholder="Search for your institution"
-                disabled={false}
+                disabled={isSubmitting}
               />
             </div>
           </div>
@@ -241,8 +345,7 @@ export default function RegisterStudent() {
                   name="studentCountry"
                   value={form.studentCountry || ""}
                   onChange={handleCountryChange}
-                  aria-label="Country"
-                  disabled={locationLoading}
+                  disabled={isLocationDisabled}
                 >
                   <option value="">Select country</option>
                   {countries.map((country) => (
@@ -253,10 +356,9 @@ export default function RegisterStudent() {
                 </select>
                 <select
                   name="studentState"
-                  value={form.studentState || ""}
+                  value={selectedStateIso}
                   onChange={handleStateChange}
-                  aria-label="Region"
-                  disabled={!form.studentCountry || locationLoading}
+                  disabled={!form.studentCountry || isLocationDisabled}
                 >
                   <option value="">Select region</option>
                   {states.map((state) => (
@@ -266,12 +368,13 @@ export default function RegisterStudent() {
                   ))}
                 </select>
               </div>
+
               <div className="form-row">
                 <select
                   name="studentCity"
                   value={form.studentCity || ""}
                   onChange={handleChange}
-                  disabled={!form.studentState || locationLoading}
+                  disabled={!form.studentState || isLocationDisabled}
                 >
                   <option value="">Select city</option>
                   {cities.map((city) => (
@@ -280,16 +383,44 @@ export default function RegisterStudent() {
                     </option>
                   ))}
                 </select>
-                <input name="personPhone" placeholder="Phone" value={form.personPhone || ""} onChange={handleChange} />
+                <div className="phone-container">
+                  <select
+                    value={selectedPrefix}
+                    onChange={handlePrefixChange}
+                    disabled={isLocationDisabled}
+                    className="phone-prefix"
+                    title="Select country code"
+                  >
+                    {phoneCountries.map((country) => (
+                      <option key={country.code} value={country.prefix}>
+                        {country.prefix}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="tel"
+                    placeholder="Phone number"
+                    value={phoneNumber}
+                    onChange={handlePhoneNumberChange}
+                    disabled={isSubmitting}
+                    minLength={7} // ✅ Min 7 caracteres total
+                    maxLength={20} // ✅ Para el número sin prefijo
+                    title="Phone number must be in valid international format"
+                  />
+                </div>
               </div>
+
               <input
-                name="personBirthDate"
+                name="personBirthdate"
                 type="date"
                 placeholder="Birth Date"
-                value={form.personBirthDate || ""}
+                value={form.personBirthdate || ""}
                 onChange={handleChange}
+                disabled={isSubmitting}
+                max={new Date().toISOString().split("T")[0]} // ✅ No fechas futuras
               />
             </div>
+
             <div className="location-info">
               <p>
                 Complete your profile with personal information to help us provide you with a personalized learning
@@ -315,10 +446,11 @@ export default function RegisterStudent() {
 
           <div className="submit-section">
             <h2>Ready to start your learning journey?</h2>
-            <button className="send-btn" type="submit">
-              Register as Student
+            <button className="send-btn" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Creating Account..." : "Register as Student"}
             </button>
           </div>
+
           <div className="submit-footer">
             <p>
               Once you complete registration, you'll receive a confirmation email with instructions to verify your

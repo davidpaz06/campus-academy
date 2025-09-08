@@ -7,11 +7,11 @@ interface AlertContextType {
   removeAlert: (id: string) => void;
   updateAlert: (id: string, updates: Partial<Omit<AlertItem, "id">>) => void;
   clearAll: () => void;
-  success: (message: string, options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => string;
-  error: (message: string, options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => string;
-  warning: (message: string, options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => string;
-  info: (message: string, options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => string;
-  loading: (message: string, options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => string;
+  success: (message: string | string[], options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => string; // ✅ Cambiar string a string | string[]
+  error: (message: string | string[], options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => string; // ✅ Cambiar string a string | string[]
+  warning: (message: string | string[], options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => string; // ✅ Cambiar string a string | string[]
+  info: (message: string | string[], options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => string; // ✅ Cambiar string a string | string[]
+  loading: (message: string | string[], options?: Partial<Omit<AlertItem, "id" | "type" | "message">>) => string; // ✅ Cambiar string a string | string[]
 }
 
 const AlertContext = createContext<AlertContextType | undefined>(undefined);
