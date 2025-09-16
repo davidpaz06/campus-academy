@@ -8,6 +8,7 @@ import { useAlertContext } from "@/context/AlertContext";
 import { validateTeacherForm, ValidationError } from "@/utils/validations";
 import InstitutionSearch from "@/components/forms/InstitutionSearch";
 import "./RegisterTeacher.css";
+import { useNavigate } from "react-router-dom";
 
 const DEFAULT_FORM: Partial<RegisterTeacher> = {
   profileId: 3, // Teacher profile
@@ -31,6 +32,8 @@ const DEFAULT_FORM: Partial<RegisterTeacher> = {
 };
 
 export default function RegisterTeacher() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState<Partial<RegisterTeacher>>(DEFAULT_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -184,6 +187,7 @@ export default function RegisterTeacher() {
         });
 
         resetForm();
+        navigate("/login");
       } catch (err) {
         removeAlert(loadingId);
 

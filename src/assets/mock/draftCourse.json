@@ -1,0 +1,70 @@
+{
+  "id": "",
+  "info": {
+    "name": "React Native",
+    "about": "A description about the course",
+    "description": "React Native development for beginners",
+    "instructor": "Lodestar Solutions",
+    "skills": [
+      "Backend Development",
+      "Frontend Development",
+      "React",
+      "React Native",
+      "JSX",
+      "UI/UX",
+      "TSX",
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "Node.js",
+      "Deployment",
+      "Framework",
+      "Bootstrap"
+    ]
+  },
+  "modules": [
+    {
+      "title": "Introducction to React",
+      "lessons": [
+        {
+          "title": "Introducction to Course",
+          "type": "Video",
+          "file": "https://jberbbpslngklbsakuzz.supabase.co/storage/v1/object/public/Campus%20Academy%20Storage/videos/default-lesson-video.mp4",
+          "duration": 0
+        },
+        {
+          "title": "React Native",
+          "type": "Reading",
+          "file": "# DESPLIEGUE DE UN SOFTWARE COMO SERVICIO EN CALIDAD DE REFUERZO A LA EDUCACIÓN PERSONALIZADA\n\n**Autores:**  \nDavid Alberto Paz Portocarrero, Santiago Enrique Troconis Ferrer  \nUniversidad Rafael Urdaneta, Facultad de Ingeniería. Escuela de Computación.  \nMaracaibo, Venezuela  \n\n**Recibido:** 01-08-2025  \n**Aceptado:** 11-09-2025  \n\n---\n\n## RESUMEN (250 palabras)\nLa fragmentación de plataformas educativas SaaS actuales (Moodle, Google Classroom) limita la implementación efectiva de la educación personalizada. Este estudio desarrolló un SaaS unificado mediante metodología SDLC, integrando cuatro pilares ausentes: 1) cooperación social estudiantil, 2) adaptabilidad curricular institucional, 3) respaldo académico-administrativo, y 4) IA contextualizada. Se validaron requerimientos mediante encuesta a 62 estudiantes de 8 universidades (España, EE.UU., Venezuela), donde el 78% priorizó proyectos prácticos sobre evaluaciones teóricas y el 65% demandó IA educativa. El sistema implementa modelo relacional PostgreSQL, frontend con principios de usabilidad (Rams/Nielsen) y backend con control granular institucional. Resultados demuestran que la solución provee un entorno personalizado que refuerza el aprendizaje autónomo y colaborativo, cumpliendo con los principios pedagógicos de García Hoz.\n\n**Palabras clave:** SaaS educativo, educación personalizada, cloud computing, inteligencia artificial, aprendizaje colaborativo.\n\n## ABSTRACT\nCurrent educational SaaS platforms (Moodle, Google Classroom) exhibit fragmentation that hinders personalized education. This study developed a unified SaaS using SDLC methodology, integrating four missing pillars: 1) student social cooperation, 2) institutional curricular adaptability, 3) academic-administrative backing, and 4) contextualized AI. Requirements were validated through a survey of 62 students from 8 universities (Spain, USA, Venezuela), where 78% prioritized practical projects over theoretical assessments and 65% demanded educational AI. The system implements a PostgreSQL relational model, usability-centered frontend (Rams/Nielsen), and institutionally granular backend. Results demonstrate the solution provides a personalized environment enhancing autonomous and collaborative learning, aligning with García Hoz's pedagogical principles.\n\n**Keywords:** Educational SaaS, personalized education, cloud computing, artificial intelligence, collaborative learning.\n\n---\n\n## 1. INTRODUCCIÓN (2 páginas)\n### 1.1 Contexto tecnopedagógico\nLa pandemia COVID-19 aceleró la adopción de plataformas SaaS educativas, pero estas operan de forma fragmentada. Según AWS (2022), el modelo SaaS elimina la gestión de infraestructura, permitiendo enfocarse en la experiencia educativa. Sin embargo, análisis comparativo revela vacíos críticos en 6 plataformas líderes:\n\n| Plataforma    | Cooperación social | Adaptabilidad curricular | Respaldo institucional | IA contextualizada |\n|--------------|-------------------|-------------------------|------------------------|-------------------|\n| Moodle       | Limitada          | Manual                  | Parcial                | No                |\n| Google Classroom | Básica         | No                      | No                     | No                |\n| Brainly      | **Alta**          | No                      | No                     | No                |\n| Coursera     | Baja              | **Alta**                | **Sí**                 | No                |\n| Codédex      | Media             | Media                   | No                     | **Sí**            |\n\n### 1.2 Fundamentos teóricos\nLa educación personalizada (García Hoz, 2019) se sustenta en tres pilares:\n1. **Identidad propia:** Reconocimiento de ritmos individuales\n2. **Apertura:** Interacción social significativa\n3. **Autonomía:** Desarrollo de proyectos personales\n\nEl SaaS desarrollado integra estos principios mediante aprendizaje basado en proyectos (Rojas, 2020) e IA generativa (Carbonell-García, 2023).\n\n### 1.3 Objetivos\n**General:** Desplegar SaaS para reforzar educación personalizada.  \n**Específicos:**  \n1. Validar requerimientos mediante estudio de necesidades  \n2. Diseñar modelo relacional PostgreSQL  \n3. Implementar frontend con UX optimizada  \n4. Desarrollar backend con control granular  \n5. Realizar pruebas de estrés/integración  \n\n---\n\n## 2. METODOLOGÍA (3 páginas)\n### 2.1 Enfoque mixto\n- **Investigación descriptiva:** Encuesta estructurada a 62 estudiantes (Fig. 1)\n- **Desarrollo ágil:** Ciclo SDLC con 7 fases (Fig. 2)\n- **Validación:** Entrevistas a pedagogos e ingenieros\n\n### 2.2 Población y muestra\n**Criterios de inclusión:**  \n- Estudiantes activos o recién egresados (≤1 año)  \n- 8 universidades internacionales  \n- Distribución por carrera (Fig. 3)  \n\n**Técnicas de recolección:**  \n- Cuestionario digital (Google Forms)  \n- Observación participante  \n- Análisis documental  \n\n---\n\n## 3. RESULTADOS (10 páginas)\n### 3.1 Hallazgos de encuesta (Fig. 4)\n```python\n# Datos representativos (62 encuestados)\ndemandas = {\n    \"Proyectos prácticos\": 78.3%, \n    \"IA educativa\": 65.2%,\n    \"Dinámicas interactivas\": 81.7%\n}"
+        },
+        {
+          "title": "Virtual Dom",
+          "type": "Reading",
+          "file": ""
+        },
+        {
+          "title": "React Components",
+          "type": "Video",
+          "file": "https://jberbbpslngklbsakuzz.supabase.co/storage/v1/object/public/Campus%20Academy%20Storage/videos/default-lesson-video.mp4",
+          "duration": 0
+        }
+      ]
+    },
+    {
+      "title": "Frontend Development",
+      "lessons": [
+        {
+          "title": "What is TSX and JSX",
+          "type": "Reading",
+          "file": ""
+        },
+        {
+          "title": "CSS Styles",
+          "type": "Video",
+          "file": "https://jberbbpslngklbsakuzz.supabase.co/storage/v1/object/public/Campus%20Academy%20Storage/videos/default-lesson-video.mp4",
+          "duration": 0
+        }
+      ]
+    }
+  ]
+}

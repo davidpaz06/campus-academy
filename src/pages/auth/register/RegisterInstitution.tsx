@@ -6,6 +6,7 @@ import { useFetch } from "@/hooks/useFetch";
 import { INSTITUTION_TYPE_OPTIONS, GRADING_SYSTEM_OPTIONS, FORM_SECTIONS, BENEFITS_LIST } from "@/constants/formData";
 import { useAlertContext } from "@/context/AlertContext";
 import "./RegisterInstitution.css";
+import { useNavigate } from "react-router";
 
 const DEFAULT_FORM_VALUES: Partial<RegisterInstitution> = {
   profileId: 2,
@@ -31,6 +32,8 @@ const DEFAULT_FORM_VALUES: Partial<RegisterInstitution> = {
 };
 
 export default function RegisterInstitution() {
+  const navigate = useNavigate();
+
   // ✅ Estados agrupados por funcionalidad
   const [form, setForm] = useState<Partial<RegisterInstitution>>(DEFAULT_FORM_VALUES);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -205,6 +208,7 @@ export default function RegisterInstitution() {
         });
 
         resetForm();
+        navigate("/login");
       } catch (err) {
         removeAlert(loadingId);
         const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";

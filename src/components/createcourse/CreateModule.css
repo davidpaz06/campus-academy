@@ -1,0 +1,27 @@
+.create-lessons {
+  display: flex;
+  gap: var(--spacing-xxl);
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 50px;
+}
+
+.create-lesson-options {
+  display: flex;
+  gap: var(--spacing-xxl);
+}
+
+.create-lessons .create-lesson-icon {
+  color: var(--charlestone-green, #1a3c34);
+  font-size: 2rem;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.create-lessons .create-lesson-icon:hover {
+  color: var(--academy-primary, #217aef);
+  transform: scale(1.12);
+}

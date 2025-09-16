@@ -1,32 +1,37 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/context/AuthContext";
+import { AlertProvider } from "./context/AlertContext";
+import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicLayout from "./layouts/PublicLayout";
 import InternalLayout from "./layouts/InternalLayout";
 import "./styles/variables.css";
 
-// Public Pages
+// PUBLIC PAGES
 import Landing from "./pages/Landing";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 
-//Register subpages
+// Register
 import RegisterStudent from "./pages/auth/register/RegisterStudent";
 import RegisterTeacher from "./pages/auth/register/RegisterTeacher";
 import RegisterInstitution from "./pages/auth/register/RegisterInstitution";
 
-// Private Pages
+// ---------------------------------------------------------
+
+// PRIVATE PAGES
 import Dashboard from "./pages/dashboard/Dashboard";
 import AcademyMain from "./pages/academy/AcademyMain";
-import Alert from "./components/ui/Alert";
-import { AlertProvider } from "./context/AlertContext";
 import AlertContainer from "./components/ui/AlertContainer";
+
+// COURSES
+// Create Course
+import CreateCourse from "@/pages/create-course/CreateCourse";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <AlertProvider>
+    <AlertProvider>
+      <AuthProvider>
+        <BrowserRouter>
           <Routes>
             {/* RUTAS PUBLICAS */}
             <Route element={<PublicLayout />}>
@@ -57,13 +62,14 @@ export default function App() {
 
               <Route element={<InternalLayout />}>
                 <Route path="/academy" element={<AcademyMain />} />
+                <Route path="/course/create" element={<CreateCourse />} />
               </Route>
             </Route>
           </Routes>
 
           <AlertContainer />
-        </AlertProvider>
-      </BrowserRouter>
-    </AuthProvider>
+        </BrowserRouter>
+      </AuthProvider>
+    </AlertProvider>
   );
 }

@@ -1,30 +1,66 @@
 export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: "student" | "instructor" | "admin";
+  campusUserId: string; // ✅ Coincide con JWT
+  profileId: number; // ✅ Coincide con JWT
+  email?: string;
+  username?: string;
+  firstName?: string;
+  lastName?: string;
   avatar?: string;
-  createdAt: string;
-  updatedAt: string;
+  institutionId?: string;
+  institutionName?: string;
+  profileName?: string;
 }
 
+// ✅ Interface AuthResponse
 export interface AuthResponse {
   user: User;
   token: string;
   refreshToken: string;
 }
 
-export interface LoginCredentials {
+// ✅ Interfaces de registro corregidas
+export interface RegisterStudent {
+  email: string;
   username: string;
   password: string;
+  profileId: number;
+  institutionId: string;
+  personFirstName: string;
+  personMiddleName?: string;
+  personSurname: string;
+  personSecondSurname?: string;
+  personPhone: string;
+  personBirthdate: string; // ✅ Consistente
+  personGender: string;
+  studyAreaId: number;
+  academicLevelId: number;
+  studentCountry: string;
+  studentState: string;
+  studentCity: string;
 }
 
-export interface RegisterData {
-  name: string;
+export interface RegisterTeacher {
   email: string;
+  username: string;
   password: string;
+  profileId: number;
+  institutionId: string;
+  personFirstName: string;
+  personMiddleName?: string;
+  personSurname: string;
+  personSecondSurname?: string;
+  personPhone: string;
+  personBirthdate: string; // ✅ Consistente
+  specializationId: number;
+  experienceYears: number;
+  linkedin?: string;
+  portfolioWebsite?: string;
+  personCountry: string;
+  personState: string;
+  personCity: string;
 }
 
+// ✅ Mantener InstitutionRegisterData
 export interface InstitutionRegisterData extends RegisterData {
   institution_type: string;
   grading_system: string;
@@ -37,6 +73,7 @@ export interface InstitutionRegisterData extends RegisterData {
   phone_number?: string;
 }
 
+// ✅ Interfaces faltantes
 export interface RegisterInstitution {
   email: string;
   username: string;
@@ -63,46 +100,32 @@ export interface RegisterInstitution {
   paymentTypeId: number;
 }
 
-export interface RegisterStudent {
-  email: string;
+// ✅ Interfaces de autenticación
+export interface LoginCredentials {
   username: string;
   password: string;
-  profileId: number;
-  institutionId: string;
-  personFirstName: string;
-  personMiddleName?: string;
-  personSurname: string;
-  personSecondSurname?: string;
-  personPhone: string;
-  personBirthdate: string; // ❌ Cambiar de personBirthdate a personBirthDate
-
-  personGender: string;
-  studyAreaId: number;
-  academicLevelId: number;
-  studentCountry: string;
-  studentState: string;
-  studentCity: string;
 }
 
-export interface RegisterTeacher {
+// ✅ Actualizar RegisterData para incluir campos requeridos
+export interface RegisterData {
   email: string;
   username: string;
   password: string;
+  profileId: number; // ✅ Agregar profileId
+  // Agregar otros campos comunes según necesites
+}
+
+// ✅ Agregar interface para JWT payload
+export interface JWTPayload {
+  campusUserId: string;
   profileId: number;
-  institutionId: string;
-  personFirstName: string;
-  personMiddleName: string;
-  personSurname: string;
-  personSecondSurname: string;
-  personPhone: string;
-  personBirthdate: string; // ❌ Cambiar de personBirthdate a personBirthDate
+  iat: number; // Issued at
+  exp: number; // Expiration time
+}
 
-  specializationId: number;
-  experienceYears: number;
-  linkedin?: string;
-  portfolioWebsite?: string;
-
-  personCountry: string;
-  personState: string;
-  personCity: string;
+// ✅ Agregar interface para profile types
+export interface Profile {
+  profileId: number;
+  profileName: string;
+  profileDescription?: string;
 }

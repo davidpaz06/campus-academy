@@ -4,71 +4,177 @@ import type { AuthResponse, LoginCredentials, RegisterData, User } from "@/types
 
 export class AuthService {
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const response = await apiService.post<AuthResponse>(API_ENDPOINTS.AUTH.LOGIN, credentials);
+    try {
+      const response = await apiService.post<{ accessToken: string }>(API_ENDPOINTS.AUTH.LOGIN, credentials);
 
-    // Store tokens and user data
-    localStorage.setItem(STORAGE_KEYS.TOKEN, response.token);
-    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken);
-    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user));
+      if (!response.accessToken) {
+        throw new Error("No access token received from server");
+      }
 
-    return response;
+      const payload = this.decodeToken(response.accessToken);
+
+      const user: User = {
+        campusUserId: payload.campusUserId,
+        profileId: payload.profileId,
+        username: credentials.username,
+      };
+
+      const authResponse: AuthResponse = {
+        token: response.accessToken,
+        refreshToken: "",
+        user: user,
+      };
+
+      this.storeAuthData(authResponse);
+
+      // ✅ Fetch adicional para obtener el nombre de la institución
+      if (user.institutionId) {
+        try {
+          const institutionResponse = await fetch(
+            `${process.env.REACT_APP_API_BASE_URL || "http://localhost:3000"}/institutions/${user.institutionId}`,
+            {
+              method: "GET",
+            }
+          );
+
+          if (institutionResponse.ok) {
+            const institutionData = await institutionResponse.json();
+            if (institutionData.success && institutionData.data?.institutionName) {
+              authResponse.user.institutionName = institutionData.data.institutionName;
+            }
+          } else {
+            console.warn("Failed to fetch institution name:", institutionResponse.statusText);
+          }
+        } catch (error) {
+          console.warn("Error fetching institution name:", error);
+        }
+      }
+
+      // ✅ Volver a guardar con el institutionName incluido
+      this.storeAuthData(authResponse);
+
+      return authResponse;
+    } catch (error) {
+      console.error("Login failed:", error);
+      throw error instanceof Error ? error : new Error("Login failed");
+    }
   }
 
   async register(data: RegisterData): Promise<AuthResponse> {
-    const response = await apiService.post<AuthResponse>(API_ENDPOINTS.AUTH.REGISTER, data);
+    try {
+      const response = await apiService.post<{ accessToken: string }>(API_ENDPOINTS.AUTH.REGISTER, data);
 
-    // Store tokens and user data
-    localStorage.setItem(STORAGE_KEYS.TOKEN, response.token);
-    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken);
-    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user));
+      if (!response.accessToken) {
+        throw new Error("Registration failed - no access token received");
+      }
 
-    return response;
+      const payload = this.decodeToken(response.accessToken);
+
+      const user: User = {
+        campusUserId: payload.campusUserId,
+        profileId: payload.profileId,
+      };
+
+      const authResponse: AuthResponse = {
+        token: response.accessToken,
+        refreshToken: "",
+        user: user,
+      };
+
+      // ✅ Guardar en cookies
+      this.storeAuthData(authResponse);
+
+      return authResponse;
+    } catch (error) {
+      console.error("Registration failed:", error);
+      throw error instanceof Error ? error : new Error("Registration failed");
+    }
   }
 
   async logout(): Promise<void> {
-    try {
-      await apiService.post(API_ENDPOINTS.AUTH.LOGOUT);
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
-      // Always clear local storage
-      localStorage.removeItem(STORAGE_KEYS.TOKEN);
-      localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-      localStorage.removeItem(STORAGE_KEYS.USER);
-    }
+    this.clearAuthData();
   }
 
   async refreshToken(): Promise<AuthResponse> {
-    const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
-    if (!refreshToken) {
-      throw new Error("No refresh token available");
+    throw new Error("Token refresh not supported by current API");
+  }
+
+  // ✅ Método helper para decodificar token
+  private decodeToken(token: string): any {
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      if (!payload.campusUserId || !payload.profileId || !payload.exp) {
+        throw new Error("Invalid token payload");
+      }
+      return payload;
+    } catch (error) {
+      throw new Error("Failed to decode token");
     }
-
-    const response = await apiService.post<AuthResponse>(API_ENDPOINTS.AUTH.REFRESH, { refreshToken });
-
-    // Update stored tokens
-    localStorage.setItem(STORAGE_KEYS.TOKEN, response.token);
-    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken);
-    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user));
-
-    return response;
   }
 
-  async getProfile(): Promise<User> {
-    return apiService.get<User>(API_ENDPOINTS.AUTH.PROFILE);
+  // ✅ Método helper para guardar datos en cookies
+  private storeAuthData(authResponse: AuthResponse): void {
+    const COOKIE_CONFIG = {
+      path: "/",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict" as const,
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+    };
+
+    const setCookie = (name: string, value: string) => {
+      let cookieString = `${name}=${encodeURIComponent(value)}`;
+      cookieString += `; path=${COOKIE_CONFIG.path}`;
+      cookieString += `; max-age=${COOKIE_CONFIG.maxAge}`;
+      if (COOKIE_CONFIG.secure) cookieString += "; secure";
+      cookieString += `; samesite=${COOKIE_CONFIG.sameSite}`;
+      document.cookie = cookieString;
+    };
+
+    setCookie("accessToken", authResponse.token);
+    setCookie("campus_user", JSON.stringify(authResponse.user));
   }
 
+  // ✅ Método helper para limpiar cookies
+  private clearAuthData(): void {
+    document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+    document.cookie = "campus_user=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+  }
+
+  // ✅ Métodos públicos para acceder a datos de cookies
   getStoredUser(): User | null {
-    const userData = localStorage.getItem(STORAGE_KEYS.USER);
-    return userData ? JSON.parse(userData) : null;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; campus_user=`);
+    if (parts.length === 2) {
+      try {
+        return JSON.parse(decodeURIComponent(parts.pop()?.split(";").shift() || ""));
+      } catch {
+        return null;
+      }
+    }
+    return null;
   }
 
   getStoredToken(): string | null {
-    return localStorage.getItem(STORAGE_KEYS.TOKEN);
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; accessToken=`);
+    if (parts.length === 2) {
+      return decodeURIComponent(parts.pop()?.split(";").shift() || "");
+    }
+    return null;
   }
 
   isAuthenticated(): boolean {
-    return !!this.getStoredToken();
+    const token = this.getStoredToken();
+    if (!token) return false;
+
+    try {
+      const payload = this.decodeToken(token);
+      const currentTime = Date.now() / 1000;
+      return payload.exp > currentTime;
+    } catch {
+      this.clearAuthData();
+      return false;
+    }
   }
 }
 

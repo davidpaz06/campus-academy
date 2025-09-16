@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, use } from "react";
 import type { RegisterStudent } from "@/types/user";
 import Footer from "@/layouts/components/Footer";
 import { useLocationData } from "@/hooks/useLocationData";
@@ -8,6 +8,7 @@ import { useAlertContext } from "@/context/AlertContext";
 import { validateStudentForm, ValidationError } from "@/utils/validations";
 import InstitutionSearch from "@/components/forms/InstitutionSearch";
 import "./RegisterStudent.css";
+import { useNavigate } from "react-router-dom";
 
 const DEFAULT_FORM: Partial<RegisterStudent> = {
   profileId: 4,
@@ -32,6 +33,8 @@ const DEFAULT_FORM: Partial<RegisterStudent> = {
 };
 
 export default function RegisterStudent() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState<Partial<RegisterStudent>>(DEFAULT_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -67,7 +70,6 @@ export default function RegisterStudent() {
     setForm((prev) => ({ ...prev, personPhone: cleanNumber ? `${prefix} ${cleanNumber}` : `${prefix} ` }));
   }, []);
 
-  // ✅ handleChange simplificado - sin validaciones frontend
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
@@ -170,6 +172,7 @@ export default function RegisterStudent() {
         success("Student registered successfully!", { title: "Registration Complete", duration: 8000 });
 
         resetForm();
+        navigate("/login");
       } catch (err) {
         removeAlert(loadingId);
 

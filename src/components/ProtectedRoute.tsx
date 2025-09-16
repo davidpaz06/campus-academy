@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Navigate, useLocation, Outlet } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 
@@ -6,36 +6,46 @@ interface ProtectedRouteProps {
   children?: React.ReactNode;
   requireAuth?: boolean;
   redirectTo?: string;
+  requiredProfiles?: number[]; // ✅ Nueva prop para verificar perfiles específicos
+  fallbackComponent?: React.ComponentType; // ✅ Componente de fallback personalizado
 }
 
-export default function ProtectedRoute({ children, requireAuth = true, redirectTo = "/login" }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading } = useAuth();
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  children,
+  requireAuth = true,
+  redirectTo = "/login",
+  requiredProfiles,
+  fallbackComponent: FallbackComponent,
+}) => {
+  const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
 
-  // Show loading spinner while checking authentication
-  if (isLoading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner">
-          <div className="loader"></div>
-          <p>Verificando autenticación...</p>
-        </div>
-      </div>
-    );
-  }
+  // ✅ Memoizar verificación de perfil para evitar cálculos innecesarios
+  const hasRequiredProfile = useMemo(() => {
+    if (!requiredProfiles || !user) return true;
+    return requiredProfiles.includes(user.profileId);
+  }, [requiredProfiles, user]);
 
-  // If route requires auth but user is not authenticated
+  // ✅ Verificar autenticación
   if (requireAuth && !isAuthenticated) {
-    // return <Navigate to={redirectTo} state={{ from: location.pathname }} replace />;
     return <Navigate to={redirectTo} state={{ from: location.pathname }} replace />;
   }
 
-  // If user is authenticated but trying to access public-only routes (login/register)
+  // ✅ Verificar perfil específico si se requiere
+  if (requireAuth && isAuthenticated && !hasRequiredProfile) {
+    // Podrías redirigir a una página de "acceso denegado" o dashboard
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // ✅ Redirigir usuarios autenticados de rutas públicas
   if (!requireAuth && isAuthenticated) {
     const from = location.state?.from || "/dashboard";
     return <Navigate to={from} replace />;
   }
 
-  // Return children if provided, otherwise use Outlet for nested routes
+  // ✅ Renderizar contenido
   return children ? <>{children}</> : <Outlet />;
-}
+};
+
+// ✅ Optimizar con React.memo para evitar re-renders innecesarios
+export default React.memo(ProtectedRoute);

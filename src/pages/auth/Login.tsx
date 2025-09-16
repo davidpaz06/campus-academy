@@ -1,6 +1,6 @@
 import { useAuth } from "@/context/AuthContext";
 import { useEffect } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom"; // ✅ Agregar Link
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useState } from "react";
 import "./Login.css";
 
@@ -10,12 +10,11 @@ type LoginForm = {
 };
 
 export default function Login() {
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, isLoading, error } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [form, setForm] = useState<LoginForm>({ username: "", password: "" });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [localLoading, setLocalLoading] = useState(false);
 
   const from = location.state?.from || "/dashboard";
 
@@ -27,37 +26,34 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
 
     if (!form.username || !form.password) {
-      setError("Please enter both username and password.");
       return;
     }
 
-    setLoading(true);
+    setLocalLoading(true);
 
     try {
       await login({
         username: form.username,
         password: form.password,
       });
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message || "Login failed. Please try again.");
-      } else {
-        setError("Login failed. Please try again.");
-      }
+    } catch (err) {
+      console.error("Login error:", err);
     } finally {
-      setLoading(false);
+      setLocalLoading(false);
     }
   };
+
+  const loading = localLoading || isLoading;
 
   return (
     <div className="login-container">
       <div className="login-content">
         <div className="login-card">
           <form className="login-form" onSubmit={handleSubmit}>
-            <h1 className="login-title">Sign in</h1>
+            <h1 className="login-title">Log in</h1>
+
             <div className="login-group">
               <label htmlFor="username">Username</label>
               <input
@@ -71,6 +67,7 @@ export default function Login() {
                 disabled={loading}
               />
             </div>
+
             <div className="login-group">
               <label htmlFor="password">Password</label>
               <input
@@ -85,28 +82,19 @@ export default function Login() {
               />
             </div>
 
-            {error && <div className="login-error">{error}</div>}
-
             <div className="login-actions">
               <button className="login-btn" type="submit" disabled={loading}>
-                {loading ? "Signing in..." : "Sign in"}
+                {loading ? "Logging in..." : "Log in"}
               </button>
             </div>
           </form>
         </div>
+
         <div className="login-footer">
           <p>
             Don't have an account?{" "}
-            <Link to="/register/student" className="register-link">
-              Sign up as Student
-            </Link>{" "}
-            |{" "}
-            <Link to="/register/teacher" className="register-link">
-              Sign up as Teacher
-            </Link>{" "}
-            |{" "}
-            <Link to="/register/institution" className="register-link">
-              Sign up as Institution
+            <Link to="/register" className="register-link">
+              Register
             </Link>
           </p>
         </div>

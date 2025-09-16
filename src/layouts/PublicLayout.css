@@ -4,6 +4,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
   box-sizing: border-box;
 }
 
@@ -12,6 +13,10 @@
   display: grid;
   grid-template-rows: 100px 1fr;
   grid-template-columns: 100%;
+
+  header {
+    grid-row: 1 / 2;
+  }
 
   main {
     display: flex;

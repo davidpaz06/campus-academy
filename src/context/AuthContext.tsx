@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { authService } from "@/services/auth";
+import { useAlertContext } from "@/context/AlertContext"; // ✅ Agregar
 import { User } from "@/types/user";
 
 interface AuthState {
@@ -73,14 +74,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     error: null,
   });
 
+  const { success, error: showError } = useAlertContext(); // ✅ Agregar hook de alertas
+
   useEffect(() => {
-    // Check if user is already authenticated on app start
-    const initAuth = () => {
-      const storedUser = authService.getStoredUser();
+    const initAuth = async () => {
+      const token = authService.getStoredToken();
       const isAuthenticated = authService.isAuthenticated();
 
-      if (isAuthenticated && storedUser) {
-        dispatch({ type: "AUTH_SUCCESS", payload: storedUser });
+      if (isAuthenticated && token) {
+        const storedUser = authService.getStoredUser();
+        if (storedUser) {
+          dispatch({ type: "AUTH_SUCCESS", payload: storedUser });
+        } else {
+          dispatch({ type: "LOGOUT" });
+        }
       } else {
         dispatch({ type: "LOGOUT" });
       }
@@ -92,42 +99,40 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (credentials: LoginCredentials) => {
     try {
       dispatch({ type: "AUTH_START" });
-
-      // Login normal a través del servicio
       const response = await authService.login(credentials);
+
       dispatch({ type: "AUTH_SUCCESS", payload: response.user });
+      success("Login successful!", { title: "Welcome back!" }); // ✅ Mostrar éxito
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Login failed";
       dispatch({ type: "AUTH_ERROR", payload: errorMessage });
+      showError(errorMessage, { title: "Login Failed" }); // ✅ Mostrar error
       throw error;
     }
   };
 
   const logout = async () => {
     try {
-      localStorage.removeItem("campus_auth_token");
-      localStorage.removeItem("campus_user");
-
-      try {
-        await authService.logout();
-      } catch (error) {
-        console.warn("Logout service error (ignored):", error);
-      }
-
-      dispatch({ type: "LOGOUT" });
+      await authService.logout();
     } catch (error) {
-      dispatch({ type: "LOGOUT" });
+      console.warn("Logout service error (ignored):", error);
     }
+
+    dispatch({ type: "LOGOUT" });
+    success("Logged out successfully", { title: "Goodbye!" }); // ✅ Mostrar éxito
   };
 
   const register = async (userData: any) => {
     try {
       dispatch({ type: "AUTH_START" });
       const response = await authService.register(userData);
+
       dispatch({ type: "AUTH_SUCCESS", payload: response.user });
+      success("Registration successful!", { title: "Welcome!" }); // ✅ Mostrar éxito
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : "Registration failed";
       dispatch({ type: "AUTH_ERROR", payload: errorMessage });
+      showError(errorMessage, { title: "Registration Failed" }); // ✅ Mostrar error
       throw error;
     }
   };

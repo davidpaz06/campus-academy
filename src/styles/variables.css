@@ -118,6 +118,8 @@ p {
 /* Loading Styles */
 .loading-container {
   display: flex;
+  justify-self: center;
+  align-self: center;
   justify-content: center;
   align-items: center;
   min-height: 100vh;

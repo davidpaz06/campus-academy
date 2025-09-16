@@ -21,7 +21,7 @@ export default function Sidebar() {
             <a href="/academy">Academy</a>
           </li>
           <li className={location.pathname === "/create-course" ? "active" : ""}>
-            <a href="/create-course">Create Course</a>
+            <a href="/course/create">Create Course</a>
           </li>
           <li className={location.pathname === "/courses" ? "active" : ""}>Browse Courses</li>
           <li className={location.pathname === "/xavier" ? "active" : ""}>Xavier</li>
